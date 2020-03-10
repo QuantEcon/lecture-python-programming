@@ -202,6 +202,7 @@
 \end{center}
 ((*- endif -*))
 
+% delete-till-here-book %
 ((* endblock maketitle *))
 
 
@@ -296,6 +297,7 @@
 
 
 ((* block bibliography *))
+% delete-from-here-book %
 ((*- if nb.metadata.get("latex_metadata", {}).get("bib_include", ""): -*))
 % Add a bibliography block to the postdoc
 \bibliographystyle{plain}
