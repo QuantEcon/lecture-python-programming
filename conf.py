@@ -449,7 +449,7 @@ jupyter_allow_html_only=True
 
 ## Theme specific variables
 jupyter_theme_path = 'theme/minimal'
-jupyter_template_path = 'theme/minimal/templates'
+jupyter_template_path = jupyter_theme_path + '/templates'
 
 ### pdf options
 jupyter_pdf_logo = "_static/img/qe-menubar-logo.png"
