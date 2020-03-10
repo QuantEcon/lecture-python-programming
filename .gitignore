@@ -1,0 +1,11 @@
+_build/
+dask-worker-space/
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+.DS_Store
+.DS_Store?
+**/.DS_Store
+venv/
+theme/quantecon
