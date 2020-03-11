@@ -448,8 +448,8 @@ jupyter_images_markdown = True
 jupyter_allow_html_only=True
 
 ## Theme specific variables
-jupyter_theme_path = 'theme/minimal'
-jupyter_template_path = jupyter_theme_path + '/templates'
+# jupyter_theme_path = 'theme/minimal'    #Specified in Makefile
+# jupyter_template_path = 'theme/minimal/templates'   #Specified in Makefile
 
 ### pdf options
 jupyter_pdf_logo = "_static/img/qe-menubar-logo.png"
