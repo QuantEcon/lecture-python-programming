@@ -298,9 +298,4 @@
 
 ((* block bibliography *))
 % delete-from-here-book %
-((*- if nb.metadata.get("latex_metadata", {}).get("bib_include", ""): -*))
-% Add a bibliography block to the postdoc
-\bibliographystyle{plain}
-\bibliography{((( nb.metadata.get("latex_metadata", {}).get("bib", "quant-econ") )))}
-((*- endif -*))
 ((* endblock bibliography *))
