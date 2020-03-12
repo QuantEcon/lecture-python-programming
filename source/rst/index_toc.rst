@@ -16,8 +16,7 @@
     about_lectures
     index_learning_python
     index_python_scientific_libraries
-    index_advanced_python_programming    
-    zreferences
+    index_advanced_python_programming
 
 
 .. toctree::
