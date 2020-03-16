@@ -9,3 +9,4 @@ dask-worker-space/
 **/.DS_Store
 venv/
 theme/lecture-python-programming.theme
+.prettierignore
