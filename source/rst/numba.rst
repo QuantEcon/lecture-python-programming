@@ -529,7 +529,8 @@ Compare speed with and without Numba when the sample size is large.
 Exercise 2
 ----------
 
-Later we'll learn all about :doc:`finite-state Markov chains <finite_markov>`.
+In the `Introduction to Quantitative Economics with Python <https://python-intro.quantecon.org>`__ lecture series you can 
+learn all about finite-state Markov chains.
 
 For now, let's just concentrate on simulating a very simple example of such a chain.
 
