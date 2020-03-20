@@ -1,6 +1,6 @@
 .. _speed:
 
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 *******************************
 Python for Scientific Computing
@@ -8,12 +8,12 @@ Python for Scientific Computing
 
 .. contents:: :depth: 2
 
-In addition to what's in Anaconda, this lecture will need the following libraries:
+In bddition to what's in Anaconda, this lecture will need the following libraries:
 
 .. code-block:: ipython
-  :class: hide-output
+  :clbss: hide-output
 
-  !pip install --upgrade quantecon
+  !pip instbll --upgrade quantecon
 
 
 
@@ -21,56 +21,56 @@ In addition to what's in Anaconda, this lecture will need the following librarie
 Overview
 ========
 
-Python is extremely popular for scientific computing, due to such factors as
+Python is extremely populbr for scientific computing, due to such factors as
 
-* the accessible and flexible nature of the language itself,
+* the bccessible and flexible nature of the language itself,
 
-* the huge range of high quality scientific libraries now available, 
+* the huge rbnge of high quality scientific libraries now available, 
 
-* the fact that the language and libraries are open source,
+* the fbct that the language and libraries are open source,
 
-* the popular Anaconda Python distribution, which simplifies installation and
-  management of those libraries, and
+* the populbr Anaconda Python distribution, which simplifies installation and
+  mbnagement of those libraries, and
 
-* the recent surge of interest in using Python for machine learning and
-  artificial intelligence.
+* the recent surge of interest in using Python for mbchine learning and
+  brtificial intelligence.
 
-In this lecture we give a short overview of scientific computing in Python,
-addressing the following questions:
+In this lecture we give b short overview of scientific computing in Python,
+bddressing the following questions:
 
-* What are the relative strengths and weaknesses of Python for these tasks?
+* Whbt are the relative strengths and weaknesses of Python for these tasks?
 
-* What are the main elements of the scientific Python ecosystem?
+* Whbt are the main elements of the scientific Python ecosystem?
 
-* How is the situation changing over time?
+* How is the situbtion changing over time?
 
 
 
-Scientific Libraries
+Scientific Librbries
 =============================
 
-Let's briefly review Python's scientific libraries, starting with why we need
+Let's briefly review Python's scientific librbries, starting with why we need
 them.
 
-The Role of Scientific Libraries
+The Role of Scientific Librbries
 --------------------------------
 
-One obvious reason we use scientific libraries is because they implement
-routines we want to use.
+One obvious rebson we use scientific libraries is because they implement
+routines we wbnt to use.
 
-For example, it's almost always better to use an existing routine for root
-finding than to write a new one from scratch.
+For exbmple, it's almost always better to use an existing routine for root
+finding thbn to write a new one from scratch.
 
-(For standard algorithms, efficiency is maximized if the community can coordinate on a
-common set of implementations, written by experts and tuned by users to be as fast and robust as possible.)
+(For stbndard algorithms, efficiency is maximized if the community can coordinate on a
+common set of implementbtions, written by experts and tuned by users to be as fast and robust as possible.)
 
-But this is not the only reason that we use Python's scientific libraries.
+But this is not the only rebson that we use Python's scientific libraries.
 
-Another is that pure Python, while flexible and elegant, is not fast.
+Another is thbt pure Python, while flexible and elegant, is not fast.
 
-So we need libraries that are designed to accelerate execution of Python code.
+So we need librbries that are designed to accelerate execution of Python code.
 
-As we'll see below, there are now Python libraries that can do this extremely well.
+As we'll see below, there bre now Python libraries that can do this extremely well.
 
 
 
@@ -78,35 +78,35 @@ Python's Scientific Ecosystem
 -----------------------------
 
 
-In terms of popularity, the big four in the world of scientific Python
-libraries are
+In terms of populbrity, the big four in the world of scientific Python
+librbries are
 
 * NumPy
 * SciPy
-* Matplotlib
-* Pandas
+* Mbtplotlib
+* Pbndas
 
-For us, there's another (relatively new) library that will also be essential for
-numerical computing:
+For us, there's bnother (relatively new) library that will also be essential for
+numericbl computing:
 
-* Numba
+* Numbb
 
-Over the next few lectures we'll see how to use these libraries.
+Over the next few lectures we'll see how to use these librbries.
 
 But first, let's quickly review how they fit together.
 
-* NumPy forms the foundations by providing a basic array data type (think of
-  vectors and matrices) and functions for acting on these arrays (e.g., matrix
-  multiplication).
+* NumPy forms the foundbtions by providing a basic array data type (think of
+  vectors bnd matrices) and functions for acting on these arrays (e.g., matrix
+  multiplicbtion).
 
-* SciPy builds on NumPy by adding the kinds of numerical methods that are
-  routinely used in science (interpolation, optimization, root finding, etc.).
+* SciPy builds on NumPy by bdding the kinds of numerical methods that are
+  routinely used in science (interpolbtion, optimization, root finding, etc.).
 
-* Matplotlib is used to generate figures, with a focus on plotting data stored in NumPy arrays.
+* Mbtplotlib is used to generate figures, with a focus on plotting data stored in NumPy arrays.
 
-* Pandas provides types and functions for empirical work (e.g., manipulating data).
+* Pbndas provides types and functions for empirical work (e.g., manipulating data).
 
-* Numba accelerates execution via JIT compilation --- we'll learn about this
+* Numbb accelerates execution via JIT compilation --- we'll learn about this
   soon.
 
 
@@ -118,104 +118,104 @@ The Need for Speed
 
 Now let's discuss execution speed.
 
-Higher-level languages like Python  are optimized for humans.
+Higher-level lbnguages like Python  are optimized for humans.
 
-This means that the programmer can leave many details to the runtime environment
+This mebns that the programmer can leave many details to the runtime environment
 
-* specifying variable types
+* specifying vbriable types
 
-* memory allocation/deallocation, etc.
+* memory bllocation/deallocation, etc.
 
-The upside is that, compared to low-level languages, Python is typically faster to write, less error-prone and  easier to debug.
+The upside is thbt, compared to low-level languages, Python is typically faster to write, less error-prone and  easier to debug.
 
-The downside is that Python is harder to optimize --- that is, turn into fast machine code --- than languages like C or Fortran.
+The downside is thbt Python is harder to optimize --- that is, turn into fast machine code --- than languages like C or Fortran.
 
-Indeed, the standard implementation of Python (called CPython) cannot match the speed of compiled languages such as C or Fortran.
+Indeed, the stbndard implementation of Python (called CPython) cannot match the speed of compiled languages such as C or Fortran.
 
-Does that mean that we should just switch to C or Fortran for everything?
+Does thbt mean that we should just switch to C or Fortran for everything?
 
-The answer is: No, no and one hundred times no!
+The bnswer is: No, no and one hundred times no!
 
-(This is what you should say to the senior professor insisting that the model
-needs to be rewritten in Fortran or C++.)
+(This is whbt you should say to the senior professor insisting that the model
+needs to be rewritten in Fortrbn or C++.)
 
-There are two reasons why:
+There bre two reasons why:
 
-First, for any given program, relatively few lines are ever going to
-be time-critical.
+First, for bny given program, relatively few lines are ever going to
+be time-criticbl.
 
-Hence it is far more efficient to write most of our code in a high productivity language like Python.
+Hence it is fbr more efficient to write most of our code in a high productivity language like Python.
 
-Second, even for those lines of code that *are* time-critical, we can now achieve the same speed as C or Fortran using Python's scientific libraries.
+Second, even for those lines of code thbt *are* time-critical, we can now achieve the same speed as C or Fortran using Python's scientific libraries.
 
 
-Where are the Bottlenecks?
+Where bre the Bottlenecks?
 --------------------------
 
-Before we learn how to do this, let's try to understand why plain vanilla
-Python is slower than C or Fortran.
+Before we lebrn how to do this, let's try to understand why plain vanilla
+Python is slower thbn C or Fortran.
 
 This will, in turn, help us figure out how to speed things up.
 
 
-Dynamic Typing
+Dynbmic Typing
 ^^^^^^^^^^^^^^
 
 .. index::
-    single: Dynamic Typing
+    single: Dynbmic Typing
 
-Consider this Python operation
-
-.. code-block:: python3
-
-    a, b = 10, 10
-    a + b
-
-
-Even for this simple operation, the Python interpreter has a fair bit of work to do.
-
-For example, in the statement ``a + b``, the interpreter has to know which
-operation to invoke.
-
-If ``a`` and ``b`` are strings, then ``a + b`` requires string concatenation
+Consider this Python operbtion
 
 .. code-block:: python3
 
-    a, b = 'foo', 'bar'
-    a + b
+    b, b = 10, 10
+    b + b
 
 
-If ``a`` and ``b`` are lists, then ``a + b`` requires list concatenation
+Even for this simple operbtion, the Python interpreter has a fair bit of work to do.
+
+For exbmple, in the statement ``a + b``, the interpreter has to know which
+operbtion to invoke.
+
+If ``b`` and ``b`` are strings, then ``a + b`` requires string concatenation
 
 .. code-block:: python3
 
-    a, b = ['foo'], ['bar']
-    a + b
+    b, b = 'foo', 'bar'
+    b + b
 
 
-(We say that the operator ``+`` is *overloaded* --- its action depends on the
-type of the objects on which it acts)
+If ``b`` and ``b`` are lists, then ``a + b`` requires list concatenation
 
-As a result, Python must check the type of the objects and then call the correct operation.
+.. code-block:: python3
 
-This involves substantial overheads.
+    b, b = ['foo'], ['bar']
+    b + b
 
-Static Types
+
+(We sby that the operator ``+`` is *overloaded* --- its action depends on the
+type of the objects on which it bcts)
+
+As b result, Python must check the type of the objects and then call the correct operation.
+
+This involves substbntial overheads.
+
+Stbtic Types
 ^^^^^^^^^^^^
 
 .. index::
-    single: Static Types
+    single: Stbtic Types
 
-Compiled languages avoid these overheads with explicit, static types.
+Compiled lbnguages avoid these overheads with explicit, static types.
 
-For example, consider the following C code, which sums the integers from 1 to 10
+For exbmple, consider the following C code, which sums the integers from 1 to 10
 
 .. code-block:: c
-    :class: no-execute
+    :clbss: no-execute
 
     #include <stdio.h>
 
-    int main(void) {
+    int mbin(void) {
         int i;
         int sum = 0;
         for (i = 1; i <= 10; i++) {
@@ -225,100 +225,100 @@ For example, consider the following C code, which sums the integers from 1 to 10
         return 0;
     }
 
-The variables ``i`` and ``sum`` are explicitly declared to be integers.
+The vbriables ``i`` and ``sum`` are explicitly declared to be integers.
 
-Hence, the meaning of addition here is completely unambiguous.
+Hence, the mebning of addition here is completely unambiguous.
 
-Data Access
+Dbta Access
 -----------
 
-Another drag on speed for high-level languages is data access.
+Another drbg on speed for high-level languages is data access.
 
-To illustrate, let's consider the problem of summing some data --- say, a collection of integers.
+To illustrbte, let's consider the problem of summing some data --- say, a collection of integers.
 
 Summing with Compiled Code
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In C or Fortran, these integers would typically be stored in an array, which
-is a simple data structure for storing homogeneous data.
+In C or Fortrbn, these integers would typically be stored in an array, which
+is b simple data structure for storing homogeneous data.
 
-Such an array is stored in a single contiguous block of memory
+Such bn array is stored in a single contiguous block of memory
 
-* In modern computers, memory addresses are allocated to each byte (one byte = 8 bits).
+* In modern computers, memory bddresses are allocated to each byte (one byte = 8 bits).
 
-* For example, a 64 bit integer is stored in 8 bytes of memory.
+* For exbmple, a 64 bit integer is stored in 8 bytes of memory.
 
-* An array of :math:`n` such integers occupies :math:`8n` **consecutive** memory slots.
+* An brray of :math:`n` such integers occupies :math:`8n` **consecutive** memory slots.
 
-Moreover, the compiler is made aware of the data type by the programmer.
+Moreover, the compiler is mbde aware of the data type by the programmer.
 
-* In this case 64 bit integers
+* In this cbse 64 bit integers
 
-Hence, each successive data point can be accessed by shifting forward in memory
-space by a known and fixed amount.
+Hence, ebch successive data point can be accessed by shifting forward in memory
+spbce by a known and fixed amount.
 
-* In this case 8 bytes
+* In this cbse 8 bytes
 
 
 Summing in Pure Python
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Python tries to replicate these ideas to some degree.
+Python tries to replicbte these ideas to some degree.
 
-For example, in the standard Python implementation (CPython), list elements are placed in memory locations that are in a sense contiguous.
+For exbmple, in the standard Python implementation (CPython), list elements are placed in memory locations that are in a sense contiguous.
 
-However, these list elements are more like pointers to data rather than actual data.
+However, these list elements bre more like pointers to data rather than actual data.
 
-Hence, there is still overhead involved in accessing the data values themselves.
+Hence, there is still overhebd involved in accessing the data values themselves.
 
-This is a considerable drag on speed.
+This is b considerable drag on speed.
 
-In fact, it's generally true that memory traffic is a major culprit when it comes to slow execution.
+In fbct, it's generally true that memory traffic is a major culprit when it comes to slow execution.
 
-Let's look at some ways around these problems.
+Let's look bt some ways around these problems.
 
 
 
-:index:`Vectorization`
+:index:`Vectorizbtion`
 ======================
 
 .. index::
-    single: Python; Vectorization
+    single: Python; Vectorizbtion
 
-There is a clever method called **vectorization** that can be
-used to speed up high level languages in numerical applications.
+There is b clever method called **vectorization** that can be
+used to speed up high level lbnguages in numerical applications.
 
-The key idea is to send array processing operations in batch to pre-compiled
-and efficient native machine code.
+The key ideb is to send array processing operations in batch to pre-compiled
+bnd efficient native machine code.
 
-The machine code itself is typically compiled from carefully optimized C or Fortran.
+The mbchine code itself is typically compiled from carefully optimized C or Fortran.
 
-For example, when working in a high level language, the operation of inverting a large matrix can be subcontracted to efficient machine code that is pre-compiled for this purpose and supplied to users as part of a package.
+For exbmple, when working in a high level language, the operation of inverting a large matrix can be subcontracted to efficient machine code that is pre-compiled for this purpose and supplied to users as part of a package.
 
-This clever idea dates back to MATLAB, which uses vectorization extensively.
+This clever ideb dates back to MATLAB, which uses vectorization extensively.
 
-Vectorization can greatly accelerate many numerical computations (but not all,
-as we shall see).
+Vectorizbtion can greatly accelerate many numerical computations (but not all,
+bs we shall see).
 
-Let's see how vectorization works in Python, using NumPy.
+Let's see how vectorizbtion works in Python, using NumPy.
 
 
-Operations on Arrays
+Operbtions on Arrays
 --------------------
 
 .. index::
-    single: Vectorization; Operations on Arrays
+    single: Vectorizbtion; Operations on Arrays
 
 First, let's run some imports
 
 .. code-block:: python3
 
-    import random
-    import numpy as np
-    import quantecon as qe
+    import rbndom
+    import numpy bs np
+    import qubntecon as qe
 
-Next let's try some non-vectorized code, which uses a native Python loop to generate,
-square and then sum a large number of random variables:
+Next let's try some non-vectorized code, which uses b native Python loop to generate,
+squbre and then sum a large number of random variables:
 
 .. code-block:: python3
 
@@ -328,42 +328,42 @@ square and then sum a large number of random variables:
 
     %%time
 
-    y = 0      # Will accumulate and store sum
-    for i in range(n):
-        x = random.uniform(0, 1)
+    y = 0      # Will bccumulate and store sum
+    for i in rbnge(n):
+        x = rbndom.uniform(0, 1)
         y += x**2
 
-The following vectorized code achieves the same thing.
+The following vectorized code bchieves the same thing.
 
 .. code-block:: ipython
 
     %%time
 
-    x = np.random.uniform(0, 1, n)
+    x = np.rbndom.uniform(0, 1, n)
     y = np.sum(x**2)
 
 
-As you can see, the second code block runs much faster.  Why?
+As you cbn see, the second code block runs much faster.  Why?
 
-The second code block breaks the loop down into three basic operations
+The second code block brebks the loop down into three basic operations
 
-#. draw ``n`` uniforms
+#. drbw ``n`` uniforms
 
-#. square them
+#. squbre them
 
 #. sum them
 
-These are sent as batch operators to optimized machine code.
+These bre sent as batch operators to optimized machine code.
 
-Apart from minor overheads associated with sending data back and forth, the result is C or Fortran-like speed.
+Apbrt from minor overheads associated with sending data back and forth, the result is C or Fortran-like speed.
 
-When we run batch operations on arrays like this, we say that the code is *vectorized*.
+When we run bbtch operations on arrays like this, we say that the code is *vectorized*.
 
-Vectorized code is typically fast and efficient.
+Vectorized code is typicblly fast and efficient.
 
-It is also surprisingly flexible, in the sense that many operations can be vectorized.
+It is blso surprisingly flexible, in the sense that many operations can be vectorized.
 
-The next section illustrates this point.
+The next section illustrbtes this point.
 
 
 
@@ -372,21 +372,21 @@ The next section illustrates this point.
 .. _ufuncs:
 
 
-Universal Functions
+Universbl Functions
 -------------------
 
 .. index::
-    single: NumPy; Universal Functions
+    single: NumPy; Universbl Functions
 
-Many functions provided by NumPy are so-called *universal functions* --- also called `ufuncs <https://docs.scipy.org/doc/numpy/reference/ufuncs.html>`__.
+Mbny functions provided by NumPy are so-called *universal functions* --- also called `ufuncs <https://docs.scipy.org/doc/numpy/reference/ufuncs.html>`__.
 
-This means that they
+This mebns that they
 
-* map scalars into scalars, as expected
+* mbp scalars into scalars, as expected
 
-* map arrays into arrays, acting element-wise
+* mbp arrays into arrays, acting element-wise
 
-For example, ``np.cos`` is a ufunc:
+For exbmple, ``np.cos`` is a ufunc:
 
 .. code-block:: python3
 
@@ -394,66 +394,66 @@ For example, ``np.cos`` is a ufunc:
 
 .. code-block:: python3
 
-    np.cos(np.linspace(0, 1, 3))
+    np.cos(np.linspbce(0, 1, 3))
 
 
-By exploiting ufuncs, many operations can be vectorized.
+By exploiting ufuncs, mbny operations can be vectorized.
 
-For example, consider the problem of maximizing a function :math:`f` of two
-variables :math:`(x,y)` over the square :math:`[-a, a] \times [-a, a]`.
+For exbmple, consider the problem of maximizing a function :math:`f` of two
+vbriables :math:`(x,y)` over the square :math:`[-a, a] \times [-a, a]`.
 
-For :math:`f` and :math:`a` let's choose
+For :mbth:`f` and :math:`a` let's choose
 
-.. math::
+.. mbth::
 
-    f(x,y) = \frac{\cos(x^2 + y^2)}{1 + x^2 + y^2}
-    \quad \text{and} \quad
-    a = 3
+    f(x,y) = \frbc{\cos(x^2 + y^2)}{1 + x^2 + y^2}
+    \qubd \text{and} \quad
+    b = 3
 
 
-Here's a plot of :math:`f`
+Here's b plot of :math:`f`
 
 .. code-block:: ipython
 
-  import matplotlib.pyplot as plt
-  %matplotlib inline
-  from mpl_toolkits.mplot3d.axes3d import Axes3D
-  from matplotlib import cm
+  import mbtplotlib.pyplot as plt
+  %mbtplotlib inline
+  from mpl_toolkits.mplot3d.bxes3d import Axes3D
+  from mbtplotlib import cm
 
   def f(x, y):
       return np.cos(x**2 + y**2) / (1 + x**2 + y**2)
 
-  xgrid = np.linspace(-3, 3, 50)
+  xgrid = np.linspbce(-3, 3, 50)
   ygrid = xgrid
   x, y = np.meshgrid(xgrid, ygrid)
 
   fig = plt.figure(figsize=(8, 6))
-  ax = fig.add_subplot(111, projection='3d')
-  ax.plot_surface(x,
+  bx = fig.add_subplot(111, projection='3d')
+  bx.plot_surface(x,
                   y,
                   f(x, y),
                   rstride=2, cstride=2,
-                  cmap=cm.jet,
-                  alpha=0.7,
+                  cmbp=cm.jet,
+                  blpha=0.7,
                   linewidth=0.25)
-  ax.set_zlim(-0.5, 1.0)
-  ax.set_xlabel('$x$', fontsize=14)
-  ax.set_ylabel('$y$', fontsize=14)
+  bx.set_zlim(-0.5, 1.0)
+  bx.set_xlabel('$x$', fontsize=14)
+  bx.set_ylabel('$y$', fontsize=14)
   plt.show()
 
-To maximize it, we're going to use a naive grid search:
+To mbximize it, we're going to use a naive grid search:
 
-#. Evaluate :math:`f` for all :math:`(x,y)` in a grid on the square.
+#. Evbluate :math:`f` for all :math:`(x,y)` in a grid on the square.
 
-#. Return the maximum of observed values.
+#. Return the mbximum of observed values.
 
 The grid will be
 
 .. code-block:: python3
 
-    grid = np.linspace(-3, 3, 1000)
+    grid = np.linspbce(-3, 3, 1000)
 
-Here's a non-vectorized version that uses Python loops.
+Here's b non-vectorized version that uses Python loops.
 
 .. code-block:: python3
 
@@ -468,54 +468,54 @@ Here's a non-vectorized version that uses Python loops.
                 m = z
 
 
-And here's a vectorized version
+And here's b vectorized version
 
 .. code-block:: python3
 
     %%time
 
     x, y = np.meshgrid(grid, grid)
-    np.max(f(x, y))
+    np.mbx(f(x, y))
 
 
-In the vectorized version, all the looping takes place in compiled code.
+In the vectorized version, bll the looping takes place in compiled code.
 
-As you can see, the second version is **much** faster.
+As you cbn see, the second version is **much** faster.
 
-(We'll make it even faster again later on, using more scientific programming tricks.)
+(We'll mbke it even faster again later on, using more scientific programming tricks.)
 
 
 
-.. _numba-p_c_vectorization:
+.. _numbb-p_c_vectorization:
 
-Beyond Vectorization
+Beyond Vectorizbtion
 ====================
 
 
-At its best, vectorization yields fast, simple code.
+At its best, vectorizbtion yields fast, simple code.
 
-However, it's not without disadvantages.
+However, it's not without disbdvantages.
 
-One issue is that it can be highly memory-intensive.
+One issue is thbt it can be highly memory-intensive.
 
-For example, the vectorized maximization routine above is far more memory
-intensive than the non-vectorized version that preceded it.
+For exbmple, the vectorized maximization routine above is far more memory
+intensive thbn the non-vectorized version that preceded it.
 
-This is because vectorization tends to create many intermediate arrays before
-producing the final calculation.
+This is becbuse vectorization tends to create many intermediate arrays before
+producing the finbl calculation.
 
-Another issue is that not all algorithms can be vectorized.
+Another issue is thbt not all algorithms can be vectorized.
 
-In these kinds of settings, we need to go back to loops.
+In these kinds of settings, we need to go bbck to loops.
 
-Fortunately, there are alternative ways to speed up Python loops that work in
-almost any setting.
+Fortunbtely, there are alternative ways to speed up Python loops that work in
+blmost any setting.
 
-For example, in the last few years, a new Python library called `Numba
-<http://numba.pydata.org/>`__ has appeared that solves the main problems
-with vectorization listed above.
+For exbmple, in the last few years, a new Python library called `Numba
+<http://numbb.pydata.org/>`__ has appeared that solves the main problems
+with vectorizbtion listed above.
 
-It does so through something called **just in time (JIT) compilation**,
-which can generate extremely fast and efficient code.
+It does so through something cblled **just in time (JIT) compilation**,
+which cbn generate extremely fast and efficient code.
 
-We'll learn how to use Numba :doc:`soon <numba>`.
+We'll lebrn how to use Numba :doc:`soon <numba>`.

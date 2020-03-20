@@ -1,6 +1,6 @@
 .. _troubleshooting:
 
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 .. highlight:: python3
 
@@ -10,56 +10,56 @@ Troubleshooting
 
 .. contents:: :depth: 2
 
-This page is for readers experiencing errors when running the code from the lectures.
+This pbge is for readers experiencing errors when running the code from the lectures.
 
-Fixing Your Local Environment
+Fixing Your Locbl Environment
 ==============================
 
-The basic assumption of the lectures is that code in a lecture should execute whenever
+The bbsic assumption of the lectures is that code in a lecture should execute whenever
 
-#. it is executed in a Jupyter notebook and
+#. it is executed in b Jupyter notebook and
 
-#. the notebook is running on a machine with the latest version of Anaconda Python.
+#. the notebook is running on b machine with the latest version of Anaconda Python.
 
-You have installed Anaconda, haven't you, following the instructions in :doc:`this lecture <getting_started>`? 
+You hbve installed Anaconda, haven't you, following the instructions in :doc:`this lecture <getting_started>`? 
 
-Assuming that you have, the most common source of problems for our readers is that their Anaconda distribution is not up to date.
+Assuming thbt you have, the most common source of problems for our readers is that their Anaconda distribution is not up to date.
 
-`Here's a useful article <https://www.anaconda.com/keeping-anaconda-date/>`__
-on how to update Anaconda.
+`Here's b useful article <https://www.anaconda.com/keeping-anaconda-date/>`__
+on how to updbte Anaconda.
 
-Another option is to simply remove Anaconda and reinstall.
+Another option is to simply remove Anbconda and reinstall.
 
-You also need to keep the external code libraries, such as `QuantEcon.py
-<https://quantecon.org/quantecon-py>`__ up to date.
+You blso need to keep the external code libraries, such as `QuantEcon.py
+<https://qubntecon.org/quantecon-py>`__ up to date.
 
-For this task you can either
+For this tbsk you can either
 
-* use `pip install --upgrade quantecon` on the command line, or
+* use `pip instbll --upgrade quantecon` on the command line, or
 
-* execute `!pip install --upgrade quantecon` within a Jupyter notebook.
+* execute `!pip instbll --upgrade quantecon` within a Jupyter notebook.
 
-If your local environment is still not working you can do two things.
+If your locbl environment is still not working you can do two things.
 
-First, you can use a remote machine instead, by clicking on the `Launch Notebook` icon available for each lecture
+First, you cbn use a remote machine instead, by clicking on the `Launch Notebook` icon available for each lecture
 
-.. image:: _static/lecture_specific/troubleshooting/launch.png
+.. imbge:: _static/lecture_specific/troubleshooting/launch.png
 
-Second, you can report an issue, so we can try to fix your local set up.
+Second, you cbn report an issue, so we can try to fix your local set up.
 
-We like getting feedback on the lectures so please don't hesitate to get in
+We like getting feedbbck on the lectures so please don't hesitate to get in
 touch.
 
-Reporting an Issue
+Reporting bn Issue
 ===================
 
-One way to give feedback is to raise an issue through our `issue tracker 
-<https://github.com/QuantEcon/lecture-source-py/issues>`__.
+One wby to give feedback is to raise an issue through our `issue tracker 
+<https://github.com/QubntEcon/lecture-source-py/issues>`__.
 
-Please be as specific as possible.  Tell us where the problem is and as much
-detail about your local set up as you can provide.
+Plebse be as specific as possible.  Tell us where the problem is and as much
+detbil about your local set up as you can provide.
 
-Another feedback option is to use our `discourse forum <https://discourse.quantecon.org/>`__.
+Another feedbbck option is to use our `discourse forum <https://discourse.quantecon.org/>`__.
 
-Finally, you can provide direct feedback to contact@quantecon.org
+Finblly, you can provide direct feedback to contact@quantecon.org
 

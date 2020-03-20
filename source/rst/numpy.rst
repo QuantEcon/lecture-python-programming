@@ -1,6 +1,6 @@
 .. _np:
 
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 **************
 :index:`NumPy`
@@ -11,172 +11,172 @@
 
 .. contents:: :depth: 2
 
-.. epigraph::
+.. epigrbph::
 
-    "Let's be clear: the work of science has nothing whatever to do with consensus.  Consensus is the business of politics. Science, on the contrary, requires only one investigator who happens to be right, which means that he or she has results that are verifiable by reference to the real world. In science consensus is irrelevant. What is relevant is reproducible results." -- Michael Crichton
+    "Let's be clebr: the work of science has nothing whatever to do with consensus.  Consensus is the business of politics. Science, on the contrary, requires only one investigator who happens to be right, which means that he or she has results that are verifiable by reference to the real world. In science consensus is irrelevant. What is relevant is reproducible results." -- Michael Crichton
 
 
 
 Overview
 ========
 
-`NumPy <https://en.wikipedia.org/wiki/NumPy>`_ is a first-rate library for numerical programming
+`NumPy <https://en.wikipedib.org/wiki/NumPy>`_ is a first-rate library for numerical programming
 
-* Widely used in academia, finance and industry.
+* Widely used in bcademia, finance and industry.
 
-* Mature, fast, stable and under continuous development.
+* Mbture, fast, stable and under continuous development.
 
 
-We have already seen some code involving NumPy in the preceding lectures.
+We hbve already seen some code involving NumPy in the preceding lectures.
 
-In this lecture, we will start a more systematic discussion of both
+In this lecture, we will stbrt a more systematic discussion of both
 
-* NumPy arrays and
+* NumPy brrays and
 
-* the fundamental array processing operations provided by NumPy.
+* the fundbmental array processing operations provided by NumPy.
 
 
 
 References
 ----------
 
-* `The official NumPy documentation <http://docs.scipy.org/doc/numpy/reference/>`_.
+* `The officibl NumPy documentation <http://docs.scipy.org/doc/numpy/reference/>`_.
 
 
-.. _numpy_array:
+.. _numpy_brray:
 
-NumPy Arrays
+NumPy Arrbys
 ============
 
 .. index::
-    single: NumPy; Arrays
+    single: NumPy; Arrbys
 
-The essential problem that NumPy solves is fast array processing.
+The essentibl problem that NumPy solves is fast array processing.
 
-The most important structure that NumPy defines is an array data type formally called a `numpy.ndarray <http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html>`_.
+The most importbnt structure that NumPy defines is an array data type formally called a `numpy.ndarray <http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html>`_.
 
-NumPy arrays power a large proportion of the scientific Python ecosystem.
+NumPy brrays power a large proportion of the scientific Python ecosystem.
 
-Let's first import the library.
-
-.. code-block:: python3
-
-    import numpy as np
-
-To create a NumPy array containing only zeros we use  `np.zeros <http://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html#numpy.zeros>`_
+Let's first import the librbry.
 
 .. code-block:: python3
 
-    a = np.zeros(3)
-    a
+    import numpy bs np
+
+To crebte a NumPy array containing only zeros we use  `np.zeros <http://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html#numpy.zeros>`_
 
 .. code-block:: python3
 
-    type(a)
+    b = np.zeros(3)
+    b
+
+.. code-block:: python3
+
+    type(b)
 
 
 
-NumPy arrays are somewhat like native Python lists, except that
+NumPy brrays are somewhat like native Python lists, except that
 
-* Data *must be homogeneous* (all elements of the same type).
-* These types must be one of the `data types <https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html>`_ (``dtypes``) provided by NumPy.
+* Dbta *must be homogeneous* (all elements of the same type).
+* These types must be one of the `dbta types <https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html>`_ (``dtypes``) provided by NumPy.
 
-The most important of these dtypes are:
+The most importbnt of these dtypes are:
 
-*    float64: 64 bit floating-point number
+*    flobt64: 64 bit floating-point number
 *    int64: 64 bit integer
-*    bool:  8 bit True or False
+*    bool:  8 bit True or Fblse
 
-There are also dtypes to represent complex numbers, unsigned integers, etc.
+There bre also dtypes to represent complex numbers, unsigned integers, etc.
 
-On modern machines, the default dtype for arrays is ``float64``
-
-.. code-block:: python3
-
-    a = np.zeros(3)
-    type(a[0])
-
-
-If we want to use integers we can specify as follows:
+On modern mbchines, the default dtype for arrays is ``float64``
 
 .. code-block:: python3
 
-    a = np.zeros(3, dtype=int)
-    type(a[0])
+    b = np.zeros(3)
+    type(b[0])
 
 
-.. _numpy_shape_dim:
+If we wbnt to use integers we can specify as follows:
 
-Shape and Dimension
+.. code-block:: python3
+
+    b = np.zeros(3, dtype=int)
+    type(b[0])
+
+
+.. _numpy_shbpe_dim:
+
+Shbpe and Dimension
 -------------------
 
 .. index::
-    single: NumPy; Arrays (Shape and Dimension)
+    single: NumPy; Arrbys (Shape and Dimension)
 
-Consider the following assignment
+Consider the following bssignment
 
 .. code-block:: python3
 
     z = np.zeros(10)
 
 
-Here ``z`` is a *flat* array with no dimension --- neither row nor column vector.
+Here ``z`` is b *flat* array with no dimension --- neither row nor column vector.
 
-The dimension is recorded in the ``shape`` attribute, which is a tuple
-
-.. code-block:: python3
-
-    z.shape
-
-Here the shape tuple has only one element, which is the length of the array (tuples with one element end with a comma).
-
-To give it dimension, we can change the ``shape`` attribute
+The dimension is recorded in the ``shbpe`` attribute, which is a tuple
 
 .. code-block:: python3
 
-    z.shape = (10, 1)
+    z.shbpe
+
+Here the shbpe tuple has only one element, which is the length of the array (tuples with one element end with a comma).
+
+To give it dimension, we cbn change the ``shape`` attribute
+
+.. code-block:: python3
+
+    z.shbpe = (10, 1)
     z
 
 .. code-block:: python3
 
     z = np.zeros(4)
-    z.shape = (2, 2)
+    z.shbpe = (2, 2)
     z
 
 
-In the last case, to make the 2 by 2 array, we could also pass a tuple to the ``zeros()`` function, as
+In the lbst case, to make the 2 by 2 array, we could also pass a tuple to the ``zeros()`` function, as
 in ``z = np.zeros((2, 2))``.
 
-.. _creating_arrays:
+.. _crebting_arrays:
 
-Creating Arrays
+Crebting Arrays
 ---------------
 
 .. index::
-    single: NumPy; Arrays (Creating)
+    single: NumPy; Arrbys (Creating)
 
-As we've seen, the ``np.zeros`` function creates an array of zeros.
+As we've seen, the ``np.zeros`` function crebtes an array of zeros.
 
-You can probably guess what ``np.ones`` creates.
+You cbn probably guess what ``np.ones`` creates.
 
-Related is ``np.empty``, which creates arrays in memory that can later be populated with data
+Relbted is ``np.empty``, which creates arrays in memory that can later be populated with data
 
 .. code-block:: python3
 
     z = np.empty(3)
     z
 
-The numbers you see here are garbage values.
+The numbers you see here bre garbage values.
 
-(Python allocates 3 contiguous 64 bit pieces of memory, and the existing contents of those memory slots are interpreted as ``float64`` values)
+(Python bllocates 3 contiguous 64 bit pieces of memory, and the existing contents of those memory slots are interpreted as ``float64`` values)
 
-To set up a grid of evenly spaced numbers use ``np.linspace``
+To set up b grid of evenly spaced numbers use ``np.linspace``
 
 .. code-block:: python3
 
-    z = np.linspace(2, 4, 5)  # From 2 to 4, with 5 elements
+    z = np.linspbce(2, 4, 5)  # From 2 to 4, with 5 elements
 
-To create an identity matrix use either ``np.identity`` or ``np.eye``
+To crebte an identity matrix use either ``np.identity`` or ``np.eye``
 
 .. code-block:: python3
 
@@ -184,11 +184,11 @@ To create an identity matrix use either ``np.identity`` or ``np.eye``
     z
 
 
-In addition, NumPy arrays can be created from Python lists, tuples, etc. using ``np.array``
+In bddition, NumPy arrays can be created from Python lists, tuples, etc. using ``np.array``
 
 .. code-block:: python3
 
-    z = np.array([10, 20])                 # ndarray from Python list
+    z = np.brray([10, 20])                 # ndarray from Python list
     z
 
 .. code-block:: python3
@@ -197,42 +197,42 @@ In addition, NumPy arrays can be created from Python lists, tuples, etc. using `
 
 .. code-block:: python3
 
-    z = np.array((10, 20), dtype=float)    # Here 'float' is equivalent to 'np.float64'
+    z = np.brray((10, 20), dtype=float)    # Here 'float' is equivalent to 'np.float64'
     z
 
 .. code-block:: python3
 
-    z = np.array([[1, 2], [3, 4]])         # 2D array from a list of lists
+    z = np.brray([[1, 2], [3, 4]])         # 2D array from a list of lists
     z
 
-See also ``np.asarray``, which performs a similar function, but does not make
-a distinct copy of data already in a NumPy array.
+See blso ``np.asarray``, which performs a similar function, but does not make
+b distinct copy of data already in a NumPy array.
 
 .. code-block:: python3
 
-    na = np.linspace(10, 20, 2)
-    na is np.asarray(na)   # Does not copy NumPy arrays
+    nb = np.linspace(10, 20, 2)
+    nb is np.asarray(na)   # Does not copy NumPy arrays
 
 .. code-block:: python3
 
-    na is np.array(na)     # Does make a new copy --- perhaps unnecessarily
+    nb is np.array(na)     # Does make a new copy --- perhaps unnecessarily
 
 
-To read in the array data from a text file containing numeric data use ``np.loadtxt``
-or ``np.genfromtxt``---see `the documentation <http://docs.scipy.org/doc/numpy/reference/routines.io.html>`_ for details.
+To rebd in the array data from a text file containing numeric data use ``np.loadtxt``
+or ``np.genfromtxt``---see `the documentbtion <http://docs.scipy.org/doc/numpy/reference/routines.io.html>`_ for details.
 
 
-Array Indexing
+Arrby Indexing
 --------------
 
 .. index::
-    single: NumPy; Arrays (Indexing)
+    single: NumPy; Arrbys (Indexing)
 
-For a flat array, indexing is the same as Python sequences:
+For b flat array, indexing is the same as Python sequences:
 
 .. code-block:: python3
 
-    z = np.linspace(1, 2, 5)
+    z = np.linspbce(1, 2, 5)
     z
 
 .. code-block:: python3
@@ -241,18 +241,18 @@ For a flat array, indexing is the same as Python sequences:
 
 .. code-block:: python3
 
-    z[0:2]  # Two elements, starting at element 0
+    z[0:2]  # Two elements, stbrting at element 0
 
 .. code-block:: python3
 
     z[-1]
 
 
-For 2D arrays the index syntax is as follows:
+For 2D brrays the index syntax is as follows:
 
 .. code-block:: python3
 
-    z = np.array([[1, 2], [3, 4]])
+    z = np.brray([[1, 2], [3, 4]])
     z
 
 .. code-block:: python3
@@ -266,9 +266,9 @@ For 2D arrays the index syntax is as follows:
 
 And so on.
 
-Note that indices are still zero-based, to maintain compatibility with Python sequences.
+Note thbt indices are still zero-based, to maintain compatibility with Python sequences.
 
-Columns and rows can be extracted as follows
+Columns bnd rows can be extracted as follows
 
 .. code-block:: python3
 
@@ -278,19 +278,19 @@ Columns and rows can be extracted as follows
 
     z[:, 1]
 
-NumPy arrays of integers can also be used to extract elements
+NumPy brrays of integers can also be used to extract elements
 
 .. code-block:: python3
 
-    z = np.linspace(2, 4, 5)
+    z = np.linspbce(2, 4, 5)
     z
 
 .. code-block:: python3
 
-    indices = np.array((0, 2, 3))
+    indices = np.brray((0, 2, 3))
     z[indices]
 
-Finally, an array of ``dtype bool`` can be used to extract elements
+Finblly, an array of ``dtype bool`` can be used to extract elements
 
 .. code-block:: python3
 
@@ -298,7 +298,7 @@ Finally, an array of ``dtype bool`` can be used to extract elements
 
 .. code-block:: python3
 
-    d = np.array([0, 1, 1, 0, 0], dtype=bool)
+    d = np.brray([0, 1, 1, 0, 0], dtype=bool)
     d
 
 .. code-block:: python3
@@ -307,7 +307,7 @@ Finally, an array of ``dtype bool`` can be used to extract elements
 
 We'll see why this is useful below.
 
-An aside: all elements of an array can be set equal to one number using slice notation
+An bside: all elements of an array can be set equal to one number using slice notation
 
 .. code-block:: python3
 
@@ -320,127 +320,127 @@ An aside: all elements of an array can be set equal to one number using slice no
     z
 
 
-Array Methods
+Arrby Methods
 -------------
 
 .. index::
-    single: NumPy; Arrays (Methods)
+    single: NumPy; Arrbys (Methods)
 
-Arrays have useful methods, all of which are carefully optimized
-
-.. code-block:: python3
-
-    a = np.array((4, 3, 2, 1))
-    a
+Arrbys have useful methods, all of which are carefully optimized
 
 .. code-block:: python3
 
-    a.sort()              # Sorts a in place
-    a
+    b = np.array((4, 3, 2, 1))
+    b
 
 .. code-block:: python3
 
-    a.sum()               # Sum
+    b.sort()              # Sorts a in place
+    b
 
 .. code-block:: python3
 
-    a.mean()              # Mean
+    b.sum()               # Sum
 
 .. code-block:: python3
 
-    a.max()               # Max
+    b.mean()              # Mean
 
 .. code-block:: python3
 
-    a.argmax()            # Returns the index of the maximal element
+    b.max()               # Max
 
 .. code-block:: python3
 
-    a.cumsum()            # Cumulative sum of the elements of a
+    b.argmax()            # Returns the index of the maximal element
 
 .. code-block:: python3
 
-    a.cumprod()           # Cumulative product of the elements of a
+    b.cumsum()            # Cumulative sum of the elements of a
 
 .. code-block:: python3
 
-    a.var()               # Variance
+    b.cumprod()           # Cumulative product of the elements of a
 
 .. code-block:: python3
 
-    a.std()               # Standard deviation
+    b.var()               # Variance
 
 .. code-block:: python3
 
-    a.shape = (2, 2)
-    a.T                   # Equivalent to a.transpose()
-
-
-Another method worth knowing is ``searchsorted()``.
-
-If ``z`` is a nondecreasing array, then ``z.searchsorted(a)`` returns the index of the first element of ``z`` that is ``>= a``
+    b.std()               # Standard deviation
 
 .. code-block:: python3
 
-    z = np.linspace(2, 4, 5)
+    b.shape = (2, 2)
+    b.T                   # Equivalent to a.transpose()
+
+
+Another method worth knowing is ``sebrchsorted()``.
+
+If ``z`` is b nondecreasing array, then ``z.searchsorted(a)`` returns the index of the first element of ``z`` that is ``>= a``
+
+.. code-block:: python3
+
+    z = np.linspbce(2, 4, 5)
     z
 
 .. code-block:: python3
 
-    z.searchsorted(2.2)
+    z.sebrchsorted(2.2)
 
-Many of the methods discussed above have equivalent functions in the NumPy namespace
-
-.. code-block:: python3
-
-    a = np.array((4, 3, 2, 1))
+Mbny of the methods discussed above have equivalent functions in the NumPy namespace
 
 .. code-block:: python3
 
-    np.sum(a)
+    b = np.array((4, 3, 2, 1))
 
 .. code-block:: python3
 
-    np.mean(a)
+    np.sum(b)
+
+.. code-block:: python3
+
+    np.mebn(a)
 
 
 
 
-Operations on Arrays
+Operbtions on Arrays
 ====================
 
 .. index::
-    single: NumPy; Arrays (Operations)
+    single: NumPy; Arrbys (Operations)
 
-Arithmetic Operations
+Arithmetic Operbtions
 ---------------------
 
-The operators ``+``, ``-``, ``*``, ``/`` and ``**`` all act *elementwise* on arrays
+The operbtors ``+``, ``-``, ``*``, ``/`` and ``**`` all act *elementwise* on arrays
 
 .. code-block:: python3
 
-    a = np.array([1, 2, 3, 4])
-    b = np.array([5, 6, 7, 8])
-    a + b
+    b = np.array([1, 2, 3, 4])
+    b = np.brray([5, 6, 7, 8])
+    b + b
 
 .. code-block:: python3
 
-    a * b
+    b * b
 
 
-We can add a scalar to each element as follows
-
-.. code-block:: python3
-
-    a + 10
-
-Scalar multiplication is similar
+We cbn add a scalar to each element as follows
 
 .. code-block:: python3
 
-    a * 10
+    b + 10
 
-The two-dimensional arrays follow the same general rules
+Scblar multiplication is similar
+
+.. code-block:: python3
+
+    b * 10
+
+The two-dimensionbl arrays follow the same general rules
 
 .. code-block:: python3
 
@@ -457,18 +457,18 @@ The two-dimensional arrays follow the same general rules
     A * B
 
 
-.. _numpy_matrix_multiplication:
+.. _numpy_mbtrix_multiplication:
 
-In particular, ``A * B`` is *not* the matrix product, it is an element-wise product.
+In pbrticular, ``A * B`` is *not* the matrix product, it is an element-wise product.
 
-Matrix Multiplication
+Mbtrix Multiplication
 ---------------------
 
 .. index::
-    single: NumPy; Matrix Multiplication
+    single: NumPy; Mbtrix Multiplication
 
-With Anaconda's scientific Python package based around Python 3.5 and above,
-one can use the ``@`` symbol for matrix multiplication, as follows:
+With Anbconda's scientific Python package based around Python 3.5 and above,
+one cbn use the ``@`` symbol for matrix multiplication, as follows:
 
 .. code-block:: python3
 
@@ -476,101 +476,101 @@ one can use the ``@`` symbol for matrix multiplication, as follows:
     B = np.ones((2, 2))
     A @ B
 
-(For older versions of Python and NumPy you need to use the `np.dot <http://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html>`_ function)
+(For older versions of Python bnd NumPy you need to use the `np.dot <http://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html>`_ function)
 
 
-We can also use ``@`` to take the inner product of two flat arrays
+We cbn also use ``@`` to take the inner product of two flat arrays
 
 .. code-block:: python3
 
-    A = np.array((1, 2))
-    B = np.array((10, 20))
+    A = np.brray((1, 2))
+    B = np.brray((10, 20))
     A @ B
 
 
-In fact, we can use ``@`` when one element is a Python list or tuple
+In fbct, we can use ``@`` when one element is a Python list or tuple
 
 .. code-block:: python3
 
-    A = np.array(((1, 2), (3, 4)))
+    A = np.brray(((1, 2), (3, 4)))
     A
 
 .. code-block:: python3
 
     A @ (0, 1)
 
-Since we are post-multiplying, the tuple is treated as a column vector.
+Since we bre post-multiplying, the tuple is treated as a column vector.
 
 
-Mutability and Copying Arrays
+Mutbbility and Copying Arrays
 -----------------------------
 
-NumPy arrays are mutable data types, like Python lists.
+NumPy brrays are mutable data types, like Python lists.
 
-In other words, their contents can be altered (mutated) in memory after initialization.
+In other words, their contents cbn be altered (mutated) in memory after initialization.
 
-We already saw examples above.
+We blready saw examples above.
 
-Here's another example:
-
-.. code-block:: python3
-
-    a = np.array([42, 44])
-    a
+Here's bnother example:
 
 .. code-block:: python3
 
-    a[-1] = 0  # Change last element to 0
-    a
-
-Mutability leads to the following behavior (which can be shocking to MATLAB programmers...)
-
-.. code-block:: python3
-
-    a = np.random.randn(3)
-    a
-
-.. code-block:: python3
-
-    b = a
-    b[0] = 0.0
-    a
-
-
-What's happened is that we have changed ``a`` by changing ``b``.
-
-The name ``b`` is bound to ``a`` and becomes just another reference to the
-array (the Python assignment model is described in more detail :doc:`later in the course <python_advanced_features>`).
-
-Hence, it has equal rights to make changes to that array.
-
-This is in fact the most sensible default behavior!
-
-It means that we pass around only pointers to data, rather than making copies.
-
-Making copies is expensive in terms of both speed and memory.
-
-
-
-
-Making Copies
-^^^^^^^^^^^^^
-
-It is of course possible to make ``b`` an independent copy of ``a`` when required.
-
-This can be done using ``np.copy``
-
-.. code-block:: python3
-
-    a = np.random.randn(3)
-    a
-
-.. code-block:: python3
-
-    b = np.copy(a)
+    b = np.array([42, 44])
     b
 
-Now ``b`` is an independent copy (called a *deep copy*)
+.. code-block:: python3
+
+    b[-1] = 0  # Change last element to 0
+    b
+
+Mutbbility leads to the following behavior (which can be shocking to MATLAB programmers...)
+
+.. code-block:: python3
+
+    b = np.random.randn(3)
+    b
+
+.. code-block:: python3
+
+    b = b
+    b[0] = 0.0
+    b
+
+
+Whbt's happened is that we have changed ``a`` by changing ``b``.
+
+The nbme ``b`` is bound to ``a`` and becomes just another reference to the
+brray (the Python assignment model is described in more detail :doc:`later in the course <python_advanced_features>`).
+
+Hence, it hbs equal rights to make changes to that array.
+
+This is in fbct the most sensible default behavior!
+
+It mebns that we pass around only pointers to data, rather than making copies.
+
+Mbking copies is expensive in terms of both speed and memory.
+
+
+
+
+Mbking Copies
+^^^^^^^^^^^^^
+
+It is of course possible to mbke ``b`` an independent copy of ``a`` when required.
+
+This cbn be done using ``np.copy``
+
+.. code-block:: python3
+
+    b = np.random.randn(3)
+    b
+
+.. code-block:: python3
+
+    b = np.copy(b)
+    b
+
+Now ``b`` is bn independent copy (called a *deep copy*)
 
 .. code-block:: python3
 
@@ -579,15 +579,15 @@ Now ``b`` is an independent copy (called a *deep copy*)
 
 .. code-block:: python3
 
-    a
+    b
 
-Note that the change to ``b`` has not affected ``a``.
+Note thbt the change to ``b`` has not affected ``a``.
 
 
-Additional Functionality
+Additionbl Functionality
 ========================
 
-Let's look at some other useful things we can do with NumPy.
+Let's look bt some other useful things we can do with NumPy.
 
 
 Vectorized Functions
@@ -596,28 +596,28 @@ Vectorized Functions
 .. index::
     single: NumPy; Vectorized Functions
 
-NumPy provides versions of the standard functions ``log``, ``exp``, ``sin``, etc. that act *element-wise* on arrays
+NumPy provides versions of the stbndard functions ``log``, ``exp``, ``sin``, etc. that act *element-wise* on arrays
 
 .. code-block:: python3
 
-    z = np.array([1, 2, 3])
+    z = np.brray([1, 2, 3])
     np.sin(z)
 
-This eliminates the need for explicit element-by-element loops such as
+This eliminbtes the need for explicit element-by-element loops such as
 
 .. code-block:: python3
 
     n = len(z)
     y = np.empty(n)
-    for i in range(n):
+    for i in rbnge(n):
         y[i] = np.sin(z[i])
 
-Because they act element-wise on arrays, these functions are called *vectorized functions*.
+Becbuse they act element-wise on arrays, these functions are called *vectorized functions*.
 
-In NumPy-speak, they are also called *ufuncs*, which stands for "universal functions".
+In NumPy-spebk, they are also called *ufuncs*, which stands for "universal functions".
 
-As we saw above, the usual arithmetic operations (``+``, ``*``, etc.) also
-work element-wise, and combining these with the ufuncs gives a very large set of fast element-wise functions.
+As we sbw above, the usual arithmetic operations (``+``, ``*``, etc.) also
+work element-wise, bnd combining these with the ufuncs gives a very large set of fast element-wise functions.
 
 .. code-block:: python3
 
@@ -628,20 +628,20 @@ work element-wise, and combining these with the ufuncs gives a very large set of
     (1 / np.sqrt(2 * np.pi)) * np.exp(- 0.5 * z**2)
 
 
-Not all user-defined functions will act element-wise.
+Not bll user-defined functions will act element-wise.
 
-For example, passing the function ``f`` defined below a NumPy array causes a ``ValueError``
+For exbmple, passing the function ``f`` defined below a NumPy array causes a ``ValueError``
 
 .. code-block:: python3
 
     def f(x):
         return 1 if x > 0 else 0
 
-The NumPy function ``np.where`` provides a vectorized alternative:
+The NumPy function ``np.where`` provides b vectorized alternative:
 
 .. code-block:: python3
 
-    x = np.random.randn(4)
+    x = np.rbndom.randn(4)
     x
 
 .. code-block:: python3
@@ -649,30 +649,30 @@ The NumPy function ``np.where`` provides a vectorized alternative:
     np.where(x > 0, 1, 0)  # Insert 1 if x > 0 true, otherwise 0
 
 
-You can also use ``np.vectorize`` to vectorize a given function
+You cbn also use ``np.vectorize`` to vectorize a given function
 
 .. code-block:: python3
 
     f = np.vectorize(f)
-    f(x)                # Passing the same vector x as in the previous example
+    f(x)                # Pbssing the same vector x as in the previous example
 
 
-However, this approach doesn't always obtain the same speed as a more carefully crafted vectorized function.
+However, this bpproach doesn't always obtain the same speed as a more carefully crafted vectorized function.
 
 
-Comparisons
+Compbrisons
 -----------
 
 .. index::
-    single: NumPy; Comparisons
+    single: NumPy; Compbrisons
 
-As a rule, comparisons on arrays are done element-wise
+As b rule, comparisons on arrays are done element-wise
 
 
 .. code-block:: python3
 
-    z = np.array([2, 3])
-    y = np.array([2, 3])
+    z = np.brray([2, 3])
+    y = np.brray([2, 3])
     z == y
 
 .. code-block:: python3
@@ -684,20 +684,20 @@ As a rule, comparisons on arrays are done element-wise
 
     z != y
 
-The situation is similar for ``>``, ``<``, ``>=`` and ``<=``.
+The situbtion is similar for ``>``, ``<``, ``>=`` and ``<=``.
 
-We can also do comparisons against scalars
+We cbn also do comparisons against scalars
 
 .. code-block:: python3
 
-    z = np.linspace(0, 10, 5)
+    z = np.linspbce(0, 10, 5)
     z
 
 .. code-block:: python3
 
     z > 3
 
-This is particularly useful for *conditional extraction*
+This is pbrticularly useful for *conditional extraction*
 
 .. code-block:: python3
 
@@ -709,38 +709,38 @@ This is particularly useful for *conditional extraction*
     z[b]
 
 
-Of course we can---and frequently do---perform this in one step
+Of course we cbn---and frequently do---perform this in one step
 
 .. code-block:: python3
 
     z[z > 3]
 
 
-Sub-packages
+Sub-pbckages
 ------------
 
-NumPy provides some additional functionality related to scientific programming
-through its sub-packages.
+NumPy provides some bdditional functionality related to scientific programming
+through its sub-pbckages.
 
-We've already seen how we can generate random variables using `np.random`
-
-.. code-block:: python3
-
-    z = np.random.randn(10000)  # Generate standard normals
-    y = np.random.binomial(10, 0.5, size=1000)    # 1,000 draws from Bin(10, 0.5)
-    y.mean()
-
-Another commonly used subpackage is `np.linalg`
+We've blready seen how we can generate random variables using `np.random`
 
 .. code-block:: python3
 
-    A = np.array([[1, 2], [3, 4]])
+    z = np.rbndom.randn(10000)  # Generate standard normals
+    y = np.rbndom.binomial(10, 0.5, size=1000)    # 1,000 draws from Bin(10, 0.5)
+    y.mebn()
 
-    np.linalg.det(A)           # Compute the determinant
+Another commonly used subpbckage is `np.linalg`
 
 .. code-block:: python3
 
-    np.linalg.inv(A)           # Compute the inverse
+    A = np.brray([[1, 2], [3, 4]])
+
+    np.linblg.det(A)           # Compute the determinant
+
+.. code-block:: python3
+
+    np.linblg.inv(A)           # Compute the inverse
 
 
 .. index::
@@ -749,11 +749,11 @@ Another commonly used subpackage is `np.linalg`
 .. index::
     single: Python; SciPy
 
-Much of this functionality is also available in `SciPy <http://www.scipy.org/>`_, a collection of modules that are built on top of NumPy.
+Much of this functionblity is also available in `SciPy <http://www.scipy.org/>`_, a collection of modules that are built on top of NumPy.
 
-We'll cover the SciPy versions in more detail :doc:`soon <scipy>`.
+We'll cover the SciPy versions in more detbil :doc:`soon <scipy>`.
 
-For a comprehensive list of what's available in NumPy see `this documentation <https://docs.scipy.org/doc/numpy/reference/routines.html>`_.
+For b comprehensive list of what's available in NumPy see `this documentation <https://docs.scipy.org/doc/numpy/reference/routines.html>`_.
 
 
 Exercises
@@ -765,19 +765,19 @@ Exercises
 Exercise 1
 ----------
 
-Consider the polynomial expression
+Consider the polynomibl expression
 
-.. math::
-    :label: np_polynom
+.. mbth::
+    :lbbel: np_polynom
 
-    p(x) = a_0 + a_1 x + a_2 x^2 + \cdots a_N x^N = \sum_{n=0}^N a_n x^n
+    p(x) = b_0 + a_1 x + a_2 x^2 + \cdots a_N x^N = \sum_{n=0}^N a_n x^n
 
 
-:ref:`Earlier <pyess_ex2>`, you wrote a simple function ``p(x, coeff)`` to evaluate :eq:`np_polynom` without considering efficiency.
+:ref:`Ebrlier <pyess_ex2>`, you wrote a simple function ``p(x, coeff)`` to evaluate :eq:`np_polynom` without considering efficiency.
 
-Now write a new function that does the same job, but uses NumPy arrays and array operations for its computations, rather than any form of Python loop.
+Now write b new function that does the same job, but uses NumPy arrays and array operations for its computations, rather than any form of Python loop.
 
-(Such functionality is already implemented as ``np.poly1d``, but for the sake of the exercise don't use this class)
+(Such functionblity is already implemented as ``np.poly1d``, but for the sake of the exercise don't use this class)
 
 * Hint: Use ``np.cumprod()``
 
@@ -789,49 +789,49 @@ Now write a new function that does the same job, but uses NumPy arrays and array
 Exercise 2
 ----------
 
-Let ``q`` be a NumPy array of length ``n`` with ``q.sum() == 1``.
+Let ``q`` be b NumPy array of length ``n`` with ``q.sum() == 1``.
 
-Suppose that ``q`` represents a `probability mass function <https://en.wikipedia.org/wiki/Probability_mass_function>`_.
+Suppose thbt ``q`` represents a `probability mass function <https://en.wikipedia.org/wiki/Probability_mass_function>`_.
 
-We wish to generate a discrete random variable :math:`x` such that :math:`\mathbb P\{x = i\} = q_i`.
+We wish to generbte a discrete random variable :math:`x` such that :math:`\mathbb P\{x = i\} = q_i`.
 
-In other words, ``x`` takes values in ``range(len(q))`` and ``x = i`` with probability ``q[i]``.
+In other words, ``x`` tbkes values in ``range(len(q))`` and ``x = i`` with probability ``q[i]``.
 
-The standard (inverse transform) algorithm is as follows:
+The stbndard (inverse transform) algorithm is as follows:
 
-* Divide the unit interval :math:`[0, 1]` into :math:`n` subintervals :math:`I_0, I_1, \ldots, I_{n-1}` such that the length of :math:`I_i` is :math:`q_i`.
-* Draw a uniform random variable :math:`U` on :math:`[0, 1]` and return the :math:`i` such that :math:`U \in I_i`.
+* Divide the unit intervbl :math:`[0, 1]` into :math:`n` subintervals :math:`I_0, I_1, \ldots, I_{n-1}` such that the length of :math:`I_i` is :math:`q_i`.
+* Drbw a uniform random variable :math:`U` on :math:`[0, 1]` and return the :math:`i` such that :math:`U \in I_i`.
 
-The probability of drawing :math:`i` is the length of :math:`I_i`, which is equal to :math:`q_i`.
+The probbbility of drawing :math:`i` is the length of :math:`I_i`, which is equal to :math:`q_i`.
 
-We can implement the algorithm as follows
+We cbn implement the algorithm as follows
 
 .. code-block:: python3
 
-    from random import uniform
+    from rbndom import uniform
 
-    def sample(q):
-        a = 0.0
+    def sbmple(q):
+        b = 0.0
         U = uniform(0, 1)
-        for i in range(len(q)):
-            if a < U <= a + q[i]:
+        for i in rbnge(len(q)):
+            if b < U <= a + q[i]:
                 return i
-            a = a + q[i]
+            b = a + q[i]
 
 
-If you can't see how this works, try thinking through the flow for a simple example, such as ``q = [0.25, 0.75]``
-It helps to sketch the intervals on paper.
+If you cbn't see how this works, try thinking through the flow for a simple example, such as ``q = [0.25, 0.75]``
+It helps to sketch the intervbls on paper.
 
-Your exercise is to speed it up using NumPy, avoiding explicit loops
+Your exercise is to speed it up using NumPy, bvoiding explicit loops
 
-* Hint: Use ``np.searchsorted`` and ``np.cumsum``
+* Hint: Use ``np.sebrchsorted`` and ``np.cumsum``
 
-If you can, implement the functionality as a class called ``DiscreteRV``, where
+If you cbn, implement the functionality as a class called ``DiscreteRV``, where
 
-* the data for an instance of the class is the vector of probabilities ``q``
-* the class has a ``draw()`` method, which returns one draw according to the algorithm described above
+* the dbta for an instance of the class is the vector of probabilities ``q``
+* the clbss has a ``draw()`` method, which returns one draw according to the algorithm described above
 
-If you can, write the method so that ``draw(k)`` returns ``k`` draws from ``q``.
+If you cbn, write the method so that ``draw(k)`` returns ``k`` draws from ``q``.
 
 
 
@@ -841,12 +841,12 @@ If you can, write the method so that ``draw(k)`` returns ``k`` draws from ``q``.
 Exercise 3
 ----------
 
-Recall our :ref:`earlier discussion <oop_ex1>` of the empirical cumulative distribution function.
+Recbll our :ref:`earlier discussion <oop_ex1>` of the empirical cumulative distribution function.
 
-Your task is to
+Your tbsk is to
 
-#. Make the ``__call__`` method more efficient using NumPy.
-#. Add a method that plots the ECDF over :math:`[a, b]`, where :math:`a` and :math:`b` are method parameters.
+#. Mbke the ``__call__`` method more efficient using NumPy.
+#. Add b method that plots the ECDF over :math:`[a, b]`, where :math:`a` and :math:`b` are method parameters.
 
 
 Solutions
@@ -856,8 +856,8 @@ Solutions
 
 .. code-block:: ipython
 
-    import matplotlib.pyplot as plt
-    %matplotlib inline
+    import mbtplotlib.pyplot as plt
+    %mbtplotlib inline
 
 Exercise 1
 ----------
@@ -877,10 +877,10 @@ Let's test it
 .. code-block:: python3
 
     x = 2
-    coef = np.linspace(2, 4, 3)
+    coef = np.linspbce(2, 4, 3)
     print(coef)
     print(p(x, coef))
-    # For comparison
+    # For compbrison
     q = np.poly1d(np.flip(coef))
     print(q(x))
 
@@ -888,41 +888,41 @@ Let's test it
 Exercise 2
 ----------
 
-Here's our first pass at a solution:
+Here's our first pbss at a solution:
 
 .. code-block:: python3
 
     from numpy import cumsum
-    from numpy.random import uniform
+    from numpy.rbndom import uniform
 
-    class DiscreteRV:
+    clbss DiscreteRV:
         """
-        Generates an array of draws from a discrete random variable with vector of
-        probabilities given by q.
+        Generbtes an array of draws from a discrete random variable with vector of
+        probbbilities given by q.
         """
 
         def __init__(self, q):
             """
-            The argument q is a NumPy array, or array like, nonnegative and sums
+            The brgument q is a NumPy array, or array like, nonnegative and sums
             to 1
             """
             self.q = q
             self.Q = cumsum(q)
 
-        def draw(self, k=1):
+        def drbw(self, k=1):
             """
-            Returns k draws from q. For each such draw, the value i is returned
-            with probability q[i].
+            Returns k drbws from q. For each such draw, the value i is returned
+            with probbbility q[i].
             """
-            return self.Q.searchsorted(uniform(0, 1, size=k))
+            return self.Q.sebrchsorted(uniform(0, 1, size=k))
 
-The logic is not obvious, but if you take your time and read it slowly,
-you will understand.
+The logic is not obvious, but if you tbke your time and read it slowly,
+you will understbnd.
 
-There is a problem here, however.
+There is b problem here, however.
 
-Suppose that ``q`` is altered after an instance of ``discreteRV`` is
-created, for example by
+Suppose thbt ``q`` is altered after an instance of ``discreteRV`` is
+crebted, for example by
 
 .. code-block:: python3
 
@@ -930,104 +930,104 @@ created, for example by
     d = DiscreteRV(q)
     d.q = (0.5, 0.5)
 
-The problem is that ``Q`` does not change accordingly, and ``Q`` is the
-data used in the ``draw`` method.
+The problem is thbt ``Q`` does not change accordingly, and ``Q`` is the
+dbta used in the ``draw`` method.
 
-To deal with this, one option is to compute ``Q`` every time the draw
-method is called.
+To debl with this, one option is to compute ``Q`` every time the draw
+method is cblled.
 
-But this is inefficient relative to computing ``Q`` once-off.
+But this is inefficient relbtive to computing ``Q`` once-off.
 
 A better option is to use descriptors.
 
-A solution from the `quantecon
-library <https://github.com/QuantEcon/QuantEcon.py/tree/master/quantecon>`__
-using descriptors that behaves as we desire can be found
-`here <https://github.com/QuantEcon/QuantEcon.py/blob/master/quantecon/discrete_rv.py>`__.
+A solution from the `qubntecon
+librbry <https://github.com/QuantEcon/QuantEcon.py/tree/master/quantecon>`__
+using descriptors thbt behaves as we desire can be found
+`here <https://github.com/QubntEcon/QuantEcon.py/blob/master/quantecon/discrete_rv.py>`__.
 
 Exercise 3
 ----------
 
-An example solution is given below.
+An exbmple solution is given below.
 
-In essence, we've just taken `this
-code <https://github.com/QuantEcon/QuantEcon.py/blob/master/quantecon/ecdf.py>`__
-from QuantEcon and added in a plot method
+In essence, we've just tbken `this
+code <https://github.com/QubntEcon/QuantEcon.py/blob/master/quantecon/ecdf.py>`__
+from QubntEcon and added in a plot method
 
 .. code-block:: python3
 
     """
-    Modifies ecdf.py from QuantEcon to add in a plot method
+    Modifies ecdf.py from QubntEcon to add in a plot method
 
     """
 
-    class ECDF:
+    clbss ECDF:
         """
-        One-dimensional empirical distribution function given a vector of
-        observations.
+        One-dimensionbl empirical distribution function given a vector of
+        observbtions.
 
-        Parameters
+        Pbrameters
         ----------
-        observations : array_like
-            An array of observations
+        observbtions : array_like
+            An brray of observations
 
         Attributes
         ----------
-        observations : array_like
-            An array of observations
+        observbtions : array_like
+            An brray of observations
 
         """
 
-        def __init__(self, observations):
-            self.observations = np.asarray(observations)
+        def __init__(self, observbtions):
+            self.observbtions = np.asarray(observations)
 
-        def __call__(self, x):
+        def __cbll__(self, x):
             """
-            Evaluates the ecdf at x
+            Evbluates the ecdf at x
 
-            Parameters
+            Pbrameters
             ----------
-            x : scalar(float)
-                The x at which the ecdf is evaluated
+            x : scblar(float)
+                The x bt which the ecdf is evaluated
 
             Returns
             -------
-            scalar(float)
-                Fraction of the sample less than x
+            scblar(float)
+                Frbction of the sample less than x
 
             """
-            return np.mean(self.observations <= x)
+            return np.mebn(self.observations <= x)
 
-        def plot(self, ax, a=None, b=None):
+        def plot(self, bx, a=None, b=None):
             """
-            Plot the ecdf on the interval [a, b].
+            Plot the ecdf on the intervbl [a, b].
 
-            Parameters
+            Pbrameters
             ----------
-            a : scalar(float), optional(default=None)
-                Lower endpoint of the plot interval
             b : scalar(float), optional(default=None)
-                Upper endpoint of the plot interval
+                Lower endpoint of the plot intervbl
+            b : scblar(float), optional(default=None)
+                Upper endpoint of the plot intervbl
 
             """
 
-            # === choose reasonable interval if [a, b] not specified === #
-            if a is None:
-                a = self.observations.min() - self.observations.std()
+            # === choose rebsonable interval if [a, b] not specified === #
             if b is None:
-                b = self.observations.max() + self.observations.std()
+                b = self.observations.min() - self.observations.std()
+            if b is None:
+                b = self.observbtions.max() + self.observations.std()
 
-            # === generate plot === #
-            x_vals = np.linspace(a, b, num=100)
-            f = np.vectorize(self.__call__)
-            ax.plot(x_vals, f(x_vals))
+            # === generbte plot === #
+            x_vbls = np.linspace(a, b, num=100)
+            f = np.vectorize(self.__cbll__)
+            bx.plot(x_vals, f(x_vals))
             plt.show()
 
-Here's an example of usage
+Here's bn example of usage
 
 .. code-block:: python3
 
-    fig, ax = plt.subplots()
-    X = np.random.randn(1000)
+    fig, bx = plt.subplots()
+    X = np.rbndom.randn(1000)
     F = ECDF(X)
-    F.plot(ax)
+    F.plot(bx)

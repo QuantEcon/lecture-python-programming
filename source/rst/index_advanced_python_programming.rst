@@ -1,10 +1,10 @@
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 ************************************
-Advanced Python Programming
+Advbnced Python Programming
 ************************************
 
-This part provides a look at more advanced concepts in Python programming
+This pbrt provides a look at more advanced concepts in Python programming
 
 .. only:: html
 
@@ -13,8 +13,8 @@ This part provides a look at more advanced concepts in Python programming
 
 
 .. toctree::
-    :maxdepth: 2
+    :mbxdepth: 2
 
     writing_good_code
-    python_advanced_features
+    python_bdvanced_features
     debugging

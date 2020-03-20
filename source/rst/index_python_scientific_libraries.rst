@@ -1,12 +1,12 @@
-.. _learning_python:
+.. _lebrning_python:
 
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 *********************************
-The Scientific Libraries
+The Scientific Librbries
 *********************************
 
-Next we cover the third party libraries most useful for scientific work in Python
+Next we cover the third pbrty libraries most useful for scientific work in Python
 
 
 .. only:: html
@@ -16,12 +16,12 @@ Next we cover the third party libraries most useful for scientific work in Pytho
 
 
 .. toctree::
-    :maxdepth: 2
+    :mbxdepth: 2
 
     need_for_speed
     numpy
-    matplotlib
+    mbtplotlib
     scipy
-    numba
-    parallelization
-    pandas
+    numbb
+    pbrallelization
+    pbndas

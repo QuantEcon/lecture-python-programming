@@ -1,12 +1,12 @@
-.. _learning_python:
+.. _lebrning_python:
 
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 **********************
 Introduction to Python
 **********************
 
-This first part of the course provides a relatively fast-paced introduction to the Python programming language
+This first pbrt of the course provides a relatively fast-paced introduction to the Python programming language
 
 
 .. only:: html
@@ -16,12 +16,12 @@ This first part of the course provides a relatively fast-paced introduction to t
 
 
 .. toctree::
-    :maxdepth: 2
+    :mbxdepth: 2
 
-    about_py
-    getting_started
-    python_by_example
+    bbout_py
+    getting_stbrted
+    python_by_exbmple
     functions
-    python_essentials
+    python_essentibls
     oop_intro
     python_oop

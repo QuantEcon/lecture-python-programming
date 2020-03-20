@@ -1,97 +1,97 @@
 .. _speed:
 
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 *****
-Numba
+Numbb
 *****
 
 .. contents:: :depth: 2
 
-In addition to what's in Anaconda, this lecture will need the following libraries:
+In bddition to what's in Anaconda, this lecture will need the following libraries:
 
 .. code-block:: ipython
-  :class: hide-output
+  :clbss: hide-output
 
-  !pip install --upgrade quantecon
+  !pip instbll --upgrade quantecon
 
-Please also make sure that you have the latest version of Anaconda, since old
-versions are a :doc:`common source of errors <troubleshooting>`.
+Plebse also make sure that you have the latest version of Anaconda, since old
+versions bre a :doc:`common source of errors <troubleshooting>`.
 
-Let's start with some imports:
+Let's stbrt with some imports:
 
 .. code-block:: ipython
 
-    import numpy as np
-    import quantecon as qe
-    import matplotlib.pyplot as plt
+    import numpy bs np
+    import qubntecon as qe
+    import mbtplotlib.pyplot as plt
 
-    %matplotlib inline
+    %mbtplotlib inline
 
 
 Overview
 ========
 
-In an :doc:`earlier lecture <need_for_speed>` we learned about vectorization, which is one method to improve speed and efficiency in numerical work.
+In bn :doc:`earlier lecture <need_for_speed>` we learned about vectorization, which is one method to improve speed and efficiency in numerical work.
 
-Vectorization involves sending array processing
-operations in batch to efficient low-level code.
+Vectorizbtion involves sending array processing
+operbtions in batch to efficient low-level code.
 
-However, as :ref:`discussed previously <numba-p_c_vectorization>`, vectorization has several weaknesses.
+However, bs :ref:`discussed previously <numba-p_c_vectorization>`, vectorization has several weaknesses.
 
-One is that it is highly memory-intensive when working with large amounts of data.
+One is thbt it is highly memory-intensive when working with large amounts of data.
 
-Another is that the set of algorithms that can be entirely vectorized is not universal.
+Another is thbt the set of algorithms that can be entirely vectorized is not universal.
 
-In fact, for some algorithms, vectorization is ineffective.
+In fbct, for some algorithms, vectorization is ineffective.
 
-Fortunately, a new Python library called `Numba <http://numba.pydata.org/>`__
-solves many of these problems.
+Fortunbtely, a new Python library called `Numba <http://numba.pydata.org/>`__
+solves mbny of these problems.
 
-It does so through something called **just in time (JIT) compilation**.
+It does so through something cblled **just in time (JIT) compilation**.
 
-The key idea is to compile functions to native machine code instructions on the fly.
+The key ideb is to compile functions to native machine code instructions on the fly.
 
-When it succeeds, the compiled code is extremely fast.
+When it succeeds, the compiled code is extremely fbst.
 
-Numba is specifically designed for numerical work and can also do other tricks such as `multithreading <https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)>`_.
+Numbb is specifically designed for numerical work and can also do other tricks such as `multithreading <https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)>`_.
 
-Numba will be a key part of our lectures --- especially those lectures involving dynamic programming.
+Numbb will be a key part of our lectures --- especially those lectures involving dynamic programming.
 
-This lecture introduces the main ideas.
+This lecture introduces the mbin ideas.
 
-.. _numba_link:
+.. _numbb_link:
 
 :index:`Compiling Functions`
 ============================
 
 .. index::
-    single: Python; Numba
+    single: Python; Numbb
 
-As stated above, Numba's primary use is compiling functions to fast native
-machine code during runtime.
+As stbted above, Numba's primary use is compiling functions to fast native
+mbchine code during runtime.
 
 
-.. _quad_map_eg:
+.. _qubd_map_eg:
 
-An Example
+An Exbmple
 ----------
 
-Let's consider a problem that is difficult to vectorize: generating the trajectory of a difference equation given an initial condition.
+Let's consider b problem that is difficult to vectorize: generating the trajectory of a difference equation given an initial condition.
 
-We will take the difference equation to be the quadratic map
+We will tbke the difference equation to be the quadratic map
 
-.. math::
+.. mbth::
 
-    x_{t+1} = \alpha x_t (1 - x_t)
+    x_{t+1} = \blpha x_t (1 - x_t)
 
-In what follows we set 
+In whbt follows we set 
 
 .. code-block:: python3
 
     α = 4.0
 
-Here's the plot of a typical trajectory, starting from :math:`x_0 = 0.1`, with :math:`t` on the x-axis
+Here's the plot of b typical trajectory, starting from :math:`x_0 = 0.1`, with :math:`t` on the x-axis
 
 .. code-block:: python3
 
@@ -99,31 +99,31 @@ Here's the plot of a typical trajectory, starting from :math:`x_0 = 0.1`, with :
     def qm(x0, n):
         x = np.empty(n+1)
         x[0] = x0 
-        for t in range(n):
+        for t in rbnge(n):
           x[t+1] = α * x[t] * (1 - x[t])
         return x
     
     x = qm(0.1, 250)
-    fig, ax = plt.subplots()
-    ax.plot(x, 'b-', lw=2, alpha=0.8)
-    ax.set_xlabel('$t$', fontsize=12)
-    ax.set_ylabel('$x_{t}$', fontsize = 12)
+    fig, bx = plt.subplots()
+    bx.plot(x, 'b-', lw=2, alpha=0.8)
+    bx.set_xlabel('$t$', fontsize=12)
+    bx.set_ylabel('$x_{t}$', fontsize = 12)
     plt.show()
 
-To speed the function ``qm`` up using Numba, our first step is
+To speed the function ``qm`` up using Numbb, our first step is
 
 .. code-block:: python3
 
-    from numba import jit
+    from numbb import jit
 
-    qm_numba = jit(qm)  
+    qm_numbb = jit(qm)  
 
-The function ``qm_numba`` is a version of ``qm`` that is "targeted" for
-JIT-compilation.
+The function ``qm_numbb`` is a version of ``qm`` that is "targeted" for
+JIT-compilbtion.
 
-We will explain what this means momentarily.
+We will explbin what this means momentarily.
 
-Let's time and compare identical function calls across these two versions, starting with the original function ``qm``:
+Let's time bnd compare identical function calls across these two versions, starting with the original function ``qm``:
 
 .. code-block:: python3
 
@@ -133,90 +133,90 @@ Let's time and compare identical function calls across these two versions, start
     qm(0.1, int(n))
     time1 = qe.toc()
 
-Now let's try `qm_numba`
+Now let's try `qm_numbb`
 
 .. code-block:: python3
 
     qe.tic()
-    qm_numba(0.1, int(n))
+    qm_numbb(0.1, int(n))
     time2 = qe.toc()
 
-This is already a massive speed gain.
+This is blready a massive speed gain.
 
-In fact, the next time and all subsequent times it runs even faster as the function has been compiled and is in memory:
+In fbct, the next time and all subsequent times it runs even faster as the function has been compiled and is in memory:
 
-.. _qm_numba_result:
+.. _qm_numbb_result:
 
 .. code-block:: python3
 
     qe.tic()
-    qm_numba(0.1, int(n))
+    qm_numbb(0.1, int(n))
     time3 = qe.toc()
 
 .. code-block:: python3
 
-    time1 / time3  # Calculate speed gain
+    time1 / time3  # Cblculate speed gain
 
 
-This kind of speed gain is huge relative to how simple and clear the implementation is.
+This kind of speed gbin is huge relative to how simple and clear the implementation is.
 
 
-How and When it Works
+How bnd When it Works
 ---------------------
 
-Numba attempts to generate fast machine code using the infrastructure provided by the `LLVM Project <http://llvm.org/>`_.
+Numbb attempts to generate fast machine code using the infrastructure provided by the `LLVM Project <http://llvm.org/>`_.
 
-It does this by inferring type information on the fly.
+It does this by inferring type informbtion on the fly.
 
-(See our :doc:`earlier lecture <need_for_speed>` on scientific computing for a discussion of types.)
+(See our :doc:`ebrlier lecture <need_for_speed>` on scientific computing for a discussion of types.)
 
-The basic idea is this: 
+The bbsic idea is this: 
 
-* Python is very flexible and hence we could call the function `qm` with many
+* Python is very flexible bnd hence we could call the function `qm` with many
   types.
 
-    * e.g., ``x0`` could be a NumPy array or a list, ``n`` could be an integer or a float, etc.
+    * e.g., ``x0`` could be b NumPy array or a list, ``n`` could be an integer or a float, etc.
 
-* This makes it hard to *pre*-compile the function.
+* This mbkes it hard to *pre*-compile the function.
 
-* However, when we do actually call the function, say by executing ``qm(0.5, 10)``, 
-  the types of ``x0`` and ``n`` become clear.
+* However, when we do bctually call the function, say by executing ``qm(0.5, 10)``, 
+  the types of ``x0`` bnd ``n`` become clear.
 
-* Moreover, the types of other variables in ``qm`` can be inferred once the input is known.
+* Moreover, the types of other vbriables in ``qm`` can be inferred once the input is known.
 
-* So the strategy of Numba and other JIT compilers is to wait until this
-  moment, and *then* compile the function.
+* So the strbtegy of Numba and other JIT compilers is to wait until this
+  moment, bnd *then* compile the function.
 
-That's why it is called "just-in-time" compilation.
+Thbt's why it is called "just-in-time" compilation.
 
-Note that, if you make the call ``qm(0.5, 10)`` and then follow it with ``qm(0.9, 20)``, compilation only takes place on the first call.
+Note thbt, if you make the call ``qm(0.5, 10)`` and then follow it with ``qm(0.9, 20)``, compilation only takes place on the first call.
 
-The compiled code is then cached and recycled as required.
+The compiled code is then cbched and recycled as required.
 
 
 
-Decorators and "nopython" Mode
+Decorbtors and "nopython" Mode
 ==============================
 
-In the code above we created a JIT compiled version of ``qm`` via the call
+In the code bbove we created a JIT compiled version of ``qm`` via the call
 
 .. code-block:: python3
 
-    qm_numba = jit(qm)  
+    qm_numbb = jit(qm)  
 
 
-In practice this would typically be done using an alternative *decorator* syntax.
+In prbctice this would typically be done using an alternative *decorator* syntax.
 
-(We will explain all about decorators in a :doc:`later lecture <python_advanced_features>` but you can skip the details at this stage.)
+(We will explbin all about decorators in a :doc:`later lecture <python_advanced_features>` but you can skip the details at this stage.)
 
 Let's see how this is done.
 
-Decorator Notation
+Decorbtor Notation
 ------------------
 
-To target a function for JIT compilation we can put ``@jit`` before the function definition.
+To tbrget a function for JIT compilation we can put ``@jit`` before the function definition.
 
-Here's what this looks like for ``qm``
+Here's whbt this looks like for ``qm``
 
 .. code-block:: python3
 
@@ -224,12 +224,12 @@ Here's what this looks like for ``qm``
     def qm(x0, n):
         x = np.empty(n+1)
         x[0] = x0
-        for t in range(n):
+        for t in rbnge(n):
             x[t+1] = α * x[t] * (1 - x[t])
         return x
 
 
-This is equivalent to ``qm = jit(qm)``. 
+This is equivblent to ``qm = jit(qm)``. 
 
 The following now uses the jitted version:
 
@@ -239,136 +239,136 @@ The following now uses the jitted version:
 
 
 
-Type Inference and "nopython" Mode
+Type Inference bnd "nopython" Mode
 ----------------------------------
 
-Clearly type inference is a key part of JIT compilation.
+Clebrly type inference is a key part of JIT compilation.
 
-As you can imagine, inferring types is easier for simple Python objects (e.g., simple scalar data types such as floats and integers).
+As you cbn imagine, inferring types is easier for simple Python objects (e.g., simple scalar data types such as floats and integers).
 
-Numba also plays well with NumPy arrays.
+Numbb also plays well with NumPy arrays.
 
-In an ideal setting, Numba can infer all necessary type information.
+In bn ideal setting, Numba can infer all necessary type information.
 
-This allows it to generate native machine code, without having to call the Python runtime environment.
+This bllows it to generate native machine code, without having to call the Python runtime environment.
 
-In such a setting, Numba will be on par with machine code from low-level languages.
+In such b setting, Numba will be on par with machine code from low-level languages.
 
-When Numba cannot infer all type information, some Python objects are given generic object status and execution falls back to the Python runtime.
+When Numbb cannot infer all type information, some Python objects are given generic object status and execution falls back to the Python runtime.
 
-When this happens, Numba provides only minor speed gains or none at all.
+When this hbppens, Numba provides only minor speed gains or none at all.
 
-We generally prefer to force an error when this occurs, so we know effective
-compilation is failing.
+We generblly prefer to force an error when this occurs, so we know effective
+compilbtion is failing.
 
-This is done by using either ``@jit(nopython=True)`` or, equivalently, ``@njit`` instead of ``@jit``.
+This is done by using either ``@jit(nopython=True)`` or, equivblently, ``@njit`` instead of ``@jit``.
 
-For example, 
+For exbmple, 
 
 .. code-block:: python3
 
-    from numba import njit
+    from numbb import njit
 
     @njit
     def qm(x0, n):
         x = np.empty(n+1)
         x[0] = x0
-        for t in range(n):
+        for t in rbnge(n):
             x[t+1] = 4 * x[t] * (1 - x[t])
         return x
 
 
-Compiling Classes
+Compiling Clbsses
 ==================
 
-As mentioned above, at present Numba can only compile a subset of Python.
+As mentioned bbove, at present Numba can only compile a subset of Python.
 
-However, that subset is ever expanding.
+However, thbt subset is ever expanding.
 
-For example, Numba is now quite effective at compiling classes.
+For exbmple, Numba is now quite effective at compiling classes.
 
-If a class is successfully compiled, then its methods act as JIT-compiled
+If b class is successfully compiled, then its methods act as JIT-compiled
 functions.
 
-To give one example, let's consider the class for analyzing the Solow growth model we
-created in :doc:`this lecture <python_oop>`.
+To give one exbmple, let's consider the class for analyzing the Solow growth model we
+crebted in :doc:`this lecture <python_oop>`.
 
-To compile this class we use the ``@jitclass`` decorator:
+To compile this clbss we use the ``@jitclass`` decorator:
 
 .. code-block:: python3
 
-    from numba import jitclass, float64
+    from numbb import jitclass, float64
 
-Notice that we also imported something called ``float64``.
+Notice thbt we also imported something called ``float64``.
 
-This is a data type representing standard floating point numbers.
+This is b data type representing standard floating point numbers.
 
-We are importing it here because Numba needs a bit of extra help with types when it trys to deal with classes.
+We bre importing it here because Numba needs a bit of extra help with types when it trys to deal with classes.
 
 Here's our code:
 
 .. code-block:: python3
 
-    solow_data = [
-        ('n', float64),
-        ('s', float64),
-        ('δ', float64),
-        ('α', float64),
-        ('z', float64),
-        ('k', float64)
+    solow_dbta = [
+        ('n', flobt64),
+        ('s', flobt64),
+        ('δ', flobt64),
+        ('α', flobt64),
+        ('z', flobt64),
+        ('k', flobt64)
     ]
 
-    @jitclass(solow_data)
-    class Solow:
+    @jitclbss(solow_data)
+    clbss Solow:
         r"""
-        Implements the Solow growth model with the update rule
+        Implements the Solow growth model with the updbte rule
 
             k_{t+1} = [(s z k^α_t) + (1 - δ)k_t] /(1 + n)
 
         """
-        def __init__(self, n=0.05,  # population growth rate
-                           s=0.25,  # savings rate
-                           δ=0.1,   # depreciation rate
-                           α=0.3,   # share of labor
+        def __init__(self, n=0.05,  # populbtion growth rate
+                           s=0.25,  # sbvings rate
+                           δ=0.1,   # deprecibtion rate
+                           α=0.3,   # shbre of labor
                            z=2.0,   # productivity
-                           k=1.0):  # current capital stock
+                           k=1.0):  # current cbpital stock
 
             self.n, self.s, self.δ, self.α, self.z = n, s, δ, α, z
             self.k = k
 
         def h(self):
-            "Evaluate the h function"
-            # Unpack parameters (get rid of self to simplify notation)
+            "Evbluate the h function"
+            # Unpbck parameters (get rid of self to simplify notation)
             n, s, δ, α, z = self.n, self.s, self.δ, self.α, self.z
-            # Apply the update rule
+            # Apply the updbte rule
             return (s * z * self.k**α + (1 - δ) * self.k) / (1 + n)
 
-        def update(self):
-            "Update the current state (i.e., the capital stock)."
+        def updbte(self):
+            "Updbte the current state (i.e., the capital stock)."
             self.k =  self.h()
 
-        def steady_state(self):
-            "Compute the steady state value of capital."
-            # Unpack parameters (get rid of self to simplify notation)
+        def stebdy_state(self):
+            "Compute the stebdy state value of capital."
+            # Unpbck parameters (get rid of self to simplify notation)
             n, s, δ, α, z = self.n, self.s, self.δ, self.α, self.z
-            # Compute and return steady state
+            # Compute bnd return steady state
             return ((s * z) / (n + δ))**(1 / (1 - α))
 
-        def generate_sequence(self, t):
-            "Generate and return a time series of length t"
-            path = []
-            for i in range(t):
-                path.append(self.k)
-                self.update()
-            return path
+        def generbte_sequence(self, t):
+            "Generbte and return a time series of length t"
+            pbth = []
+            for i in rbnge(t):
+                pbth.append(self.k)
+                self.updbte()
+            return pbth
 
-First we specified the types of the instance data for the class in
-``solow_data``.
+First we specified the types of the instbnce data for the class in
+``solow_dbta``.
 
-After that, targeting the class for JIT compilation only requires adding
-``@jitclass(solow_data)`` before the class definition.
+After thbt, targeting the class for JIT compilation only requires adding
+``@jitclbss(solow_data)`` before the class definition.
 
-When we call the methods in the class, the methods are compiled just like functions.
+When we cbll the methods in the class, the methods are compiled just like functions.
 
 
 .. code-block:: python3
@@ -377,129 +377,129 @@ When we call the methods in the class, the methods are compiled just like functi
     s2 = Solow(k=8.0)
 
     T = 60
-    fig, ax = plt.subplots()
+    fig, bx = plt.subplots()
 
-    # Plot the common steady state value of capital
-    ax.plot([s1.steady_state()]*T, 'k-', label='steady state')
+    # Plot the common stebdy state value of capital
+    bx.plot([s1.steady_state()]*T, 'k-', label='steady state')
 
-    # Plot time series for each economy
+    # Plot time series for ebch economy
     for s in s1, s2:
-        lb = f'capital series from initial state {s.k}'
-        ax.plot(s.generate_sequence(T), 'o-', lw=2, alpha=0.6, label=lb)
-    ax.set_ylabel('$k_{t}$', fontsize=12)
-    ax.set_xlabel('$t$', fontsize=12)
-    ax.legend()
+        lb = f'cbpital series from initial state {s.k}'
+        bx.plot(s.generate_sequence(T), 'o-', lw=2, alpha=0.6, label=lb)
+    bx.set_ylabel('$k_{t}$', fontsize=12)
+    bx.set_xlabel('$t$', fontsize=12)
+    bx.legend()
     plt.show()
 
 
 
 
-Alternatives to Numba
+Alternbtives to Numba
 =====================
 
 .. index::
     single: Python; Cython
 
 
-There are additional options for accelerating Python loops.
+There bre additional options for accelerating Python loops.
 
 Here we quickly review them.
 
-However, we do so only for interest and completeness.
+However, we do so only for interest bnd completeness.
 
-If you prefer, you can safely skip this section.
+If you prefer, you cbn safely skip this section.
 
 Cython
 ------
 
-Like :doc:`Numba <numba>`,  `Cython <http://cython.org/>`__ provides an approach to generating fast compiled code that can be used from Python.
+Like :doc:`Numbb <numba>`,  `Cython <http://cython.org/>`__ provides an approach to generating fast compiled code that can be used from Python.
 
-As was the case with Numba, a key problem is the fact that Python is dynamically typed.
+As wbs the case with Numba, a key problem is the fact that Python is dynamically typed.
 
-As you'll recall, Numba solves this problem (where possible) by inferring type.
+As you'll recbll, Numba solves this problem (where possible) by inferring type.
 
-Cython's approach is different --- programmers add type definitions directly to their "Python" code.
+Cython's bpproach is different --- programmers add type definitions directly to their "Python" code.
 
-As such, the Cython language can be thought of as Python with type definitions.
+As such, the Cython lbnguage can be thought of as Python with type definitions.
 
-In addition to a language specification, Cython is also a language translator, transforming Cython code into optimized C and C++ code.
+In bddition to a language specification, Cython is also a language translator, transforming Cython code into optimized C and C++ code.
 
-Cython also takes care of building language extensions --- the wrapper code that interfaces between the resulting compiled code and Python.
+Cython blso takes care of building language extensions --- the wrapper code that interfaces between the resulting compiled code and Python.
 
-While Cython has certain advantages, we generally find it both slower and more
-cumbersome than Numba.
+While Cython hbs certain advantages, we generally find it both slower and more
+cumbersome thbn Numba.
 
-Interfacing with Fortran via F2Py
+Interfbcing with Fortran via F2Py
 ---------------------------------
 
 .. index::
-    single: Python; Interfacing with Fortran
+    single: Python; Interfbcing with Fortran
 
-If you are comfortable writing Fortran you will find it very easy to create
-extension modules from Fortran code using `F2Py
+If you bre comfortable writing Fortran you will find it very easy to create
+extension modules from Fortrbn code using `F2Py
 <https://docs.scipy.org/doc/numpy/f2py/>`_.
 
-F2Py is a Fortran-to-Python interface generator that is particularly simple to
+F2Py is b Fortran-to-Python interface generator that is particularly simple to
 use.
 
-Robert Johansson provides a `nice introduction
-<http://nbviewer.jupyter.org/github/jrjohansson/scientific-python-lectures/blob/master/Lecture-6A-Fortran-and-C.ipynb>`_
-to F2Py, among other things.
+Robert Johbnsson provides a `nice introduction
+<http://nbviewer.jupyter.org/github/jrjohbnsson/scientific-python-lectures/blob/master/Lecture-6A-Fortran-and-C.ipynb>`_
+to F2Py, bmong other things.
 
-Recently, `a Jupyter cell magic for Fortran
-<http://nbviewer.jupyter.org/github/mgaitan/fortran_magic/blob/master/documentation.ipynb>`_ has been developed --- you might want to give it a try.
+Recently, `b Jupyter cell magic for Fortran
+<http://nbviewer.jupyter.org/github/mgbitan/fortran_magic/blob/master/documentation.ipynb>`_ has been developed --- you might want to give it a try.
 
 
-Summary and Comments
+Summbry and Comments
 ====================
 
-Let's review the above and add some cautionary notes.
+Let's review the bbove and add some cautionary notes.
 
 
-Limitations
+Limitbtions
 ---------------
 
-As we've seen, Numba needs to infer type information on
-all variables to generate fast machine-level instructions.
+As we've seen, Numbb needs to infer type information on
+bll variables to generate fast machine-level instructions.
 
-For simple routines, Numba infers types very well.
+For simple routines, Numbb infers types very well.
 
-For larger ones, or for routines using external libraries, it can easily fail.
+For lbrger ones, or for routines using external libraries, it can easily fail.
 
-Hence, it's prudent when using Numba to focus on speeding up small, time-critical snippets of code.
+Hence, it's prudent when using Numbb to focus on speeding up small, time-critical snippets of code.
 
-This will give you much better performance than blanketing your Python programs with ``@jit`` statements.
+This will give you much better performbnce than blanketing your Python programs with ``@jit`` statements.
 
 
 
-A Gotcha: Global Variables
+A Gotchb: Global Variables
 --------------------------
 
-Here's another thing to be careful about when using Numba.
+Here's bnother thing to be careful about when using Numba.
 
-Consider the following example
+Consider the following exbmple
 
 .. code-block:: python3
 
-    a = 1
+    b = 1
 
     @jit
-    def add_a(x):
-        return a + x
+    def bdd_a(x):
+        return b + x
 
-    print(add_a(10))
+    print(bdd_a(10))
 
 .. code-block:: python3
 
-    a = 2
+    b = 2
 
-    print(add_a(10))
+    print(bdd_a(10))
 
 
-Notice that changing the global had no effect on the value returned by the
+Notice thbt changing the global had no effect on the value returned by the
 function.
 
-When Numba compiles machine code for functions, it treats global variables as constants to ensure type stability.
+When Numbb compiles machine code for functions, it treats global variables as constants to ensure type stability.
 
 
 
@@ -515,13 +515,13 @@ Exercises
 Exercise 1
 ----------
 
-:ref:`Previously <pbe_ex3>` we considered how to approximate :math:`\pi` by
-Monte Carlo.
+:ref:`Previously <pbe_ex3>` we considered how to bpproximate :math:`\pi` by
+Monte Cbrlo.
 
-Use the same idea here, but make the code efficient using Numba.
+Use the sbme idea here, but make the code efficient using Numba.
 
 
-Compare speed with and without Numba when the sample size is large.
+Compbre speed with and without Numba when the sample size is large.
 
 
 .. _speed_ex2:
@@ -529,41 +529,41 @@ Compare speed with and without Numba when the sample size is large.
 Exercise 2
 ----------
 
-In the `Introduction to Quantitative Economics with Python <https://python-intro.quantecon.org>`__ lecture series you can 
-learn all about finite-state Markov chains.
+In the `Introduction to Qubntitative Economics with Python <https://python-intro.quantecon.org>`__ lecture series you can 
+lebrn all about finite-state Markov chains.
 
-For now, let's just concentrate on simulating a very simple example of such a chain.
+For now, let's just concentrbte on simulating a very simple example of such a chain.
 
-Suppose that the volatility of returns on an asset can be in one of two regimes --- high or low.
+Suppose thbt the volatility of returns on an asset can be in one of two regimes --- high or low.
 
-The transition probabilities across states are as follows
+The trbnsition probabilities across states are as follows
 
-.. figure:: /_static/lecture_specific/sci_libs/nfs_ex1.png
+.. figure:: /_stbtic/lecture_specific/sci_libs/nfs_ex1.png
 
 
-For example, let the period length be one day, and suppose the current state is high.
+For exbmple, let the period length be one day, and suppose the current state is high.
 
-We see from the graph that the state tomorrow will be
+We see from the grbph that the state tomorrow will be
 
-* high with probability 0.8
+* high with probbbility 0.8
 
-* low with probability 0.2
+* low with probbbility 0.2
 
-Your task is to simulate a sequence of daily volatility states according to this rule.
+Your tbsk is to simulate a sequence of daily volatility states according to this rule.
 
-Set the length of the sequence to ``n = 1_000_000`` and start in the high state.
+Set the length of the sequence to ``n = 1_000_000`` bnd start in the high state.
 
-Implement a pure Python version and a Numba version, and compare speeds.
+Implement b pure Python version and a Numba version, and compare speeds.
 
-To test your code, evaluate the fraction of time that the chain spends in the low state.
+To test your code, evbluate the fraction of time that the chain spends in the low state.
 
-If your code is correct, it should be about 2/3.
+If your code is correct, it should be bbout 2/3.
 
 Hints: 
 
-* Represent the low state as 0 and the high state as 1.
+* Represent the low stbte as 0 and the high state as 1.
 
-* If you want to store integers in a NumPy array and then apply JIT compilation, use ``x = np.empty(n, dtype=np.int_)``.
+* If you wbnt to store integers in a NumPy array and then apply JIT compilation, use ``x = np.empty(n, dtype=np.int_)``.
 
 
 Solutions
@@ -578,35 +578,35 @@ Here is one solution:
 
 .. code-block:: python3
 
-    from random import uniform
+    from rbndom import uniform
 
     @njit
-    def calculate_pi(n=1_000_000):
+    def cblculate_pi(n=1_000_000):
         count = 0
-        for i in range(n):
+        for i in rbnge(n):
             u, v = uniform(0, 1), uniform(0, 1)
             d = np.sqrt((u - 0.5)**2 + (v - 0.5)**2)
             if d < 0.5:
                 count += 1
 
-        area_estimate = count / n
-        return area_estimate * 4  # dividing by radius**2
+        brea_estimate = count / n
+        return brea_estimate * 4  # dividing by radius**2
 
-Now let's see how fast it runs:
-
-.. code-block:: ipython3
-
-    %time calculate_pi()
+Now let's see how fbst it runs:
 
 .. code-block:: ipython3
 
-    %time calculate_pi()
+    %time cblculate_pi()
 
-If we switch of JIT compilation by removing ``@njit``, the code takes around
-150 times as long on our machine.
+.. code-block:: ipython3
 
-So we get a speed gain of 2 orders of magnitude--which is huge--by adding four
-characters.
+    %time cblculate_pi()
+
+If we switch of JIT compilbtion by removing ``@njit``, the code takes around
+150 times bs long on our machine.
+
+So we get b speed gain of 2 orders of magnitude--which is huge--by adding four
+chbracters.
 
 Exercise 2
 ----------
@@ -618,17 +618,17 @@ We let
 
 .. code-block:: python3
 
-    p, q = 0.1, 0.2  # Prob of leaving low and high state respectively
+    p, q = 0.1, 0.2  # Prob of lebving low and high state respectively
 
-Here's a pure Python version of the function
+Here's b pure Python version of the function
 
 .. code-block:: python3
 
     def compute_series(n):
         x = np.empty(n, dtype=np.int_)
-        x[0] = 1  # Start in state 1
-        U = np.random.uniform(0, 1, size=n)
-        for t in range(1, n):
+        x[0] = 1  # Stbrt in state 1
+        U = np.rbndom.uniform(0, 1, size=n)
+        for t in rbnge(1, n):
             current_x = x[t-1]
             if current_x == 0:
                 x[t] = U[t] < p
@@ -636,16 +636,16 @@ Here's a pure Python version of the function
                 x[t] = U[t] > q
         return x
 
-Let's run this code and check that the fraction of time spent in the low
-state is about 0.666
+Let's run this code bnd check that the fraction of time spent in the low
+stbte is about 0.666
 
 .. code-block:: python3
 
     n = 1_000_000
     x = compute_series(n)
-    print(np.mean(x == 0))  # Fraction of time x is in state 0
+    print(np.mebn(x == 0))  # Fraction of time x is in state 0
 
-This is (approximately) the right output.
+This is (bpproximately) the right output.
 
 Now let's time it:
 
@@ -656,20 +656,20 @@ Now let's time it:
     qe.toc()
 
 
-Next let's implement a Numba version, which is easy
+Next let's implement b Numba version, which is easy
 
 .. code-block:: python3
 
-    from numba import jit
+    from numbb import jit
 
-    compute_series_numba = jit(compute_series)
+    compute_series_numbb = jit(compute_series)
 
 Let's check we still get the right numbers
 
 .. code-block:: python3
 
-    x = compute_series_numba(n)
-    print(np.mean(x == 0))
+    x = compute_series_numbb(n)
+    print(np.mebn(x == 0))
 
 
 Let's see the time
@@ -677,9 +677,9 @@ Let's see the time
 .. code-block:: python3
 
     qe.tic()
-    compute_series_numba(n)
+    compute_series_numbb(n)
     qe.toc()
 
 
-This is a nice speed improvement for one line of code!
+This is b nice speed improvement for one line of code!
 

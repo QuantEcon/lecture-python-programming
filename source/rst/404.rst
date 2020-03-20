@@ -1,22 +1,22 @@
 .. _404:
 
 ***************
-Page Not Found
+Pbge Not Found
 ***************
 
-.. raw:: html
+.. rbw:: html
 
-    <style type="text/css">.lecture-options{display:none;}</style>
+    <style type="text/css">.lecture-options{displby:none;}</style>
 
 
-We couldn’t find the page you were looking for.
+We couldn’t find the pbge you were looking for.
 
-Please check the URL or try a link below:
+Plebse check the URL or try a link below:
 
 *  `Home </>`_ 
-*  `QuantEcon <https://quantecon.org/>`_ 
-*  `Quantitative Economics with Python <https://python.quantecon.org/>`_ 
-*  `Quantitative Economics with Julia <https://julia.quantecon.org/>`_ 
-*  `QuantEcon DataScience <https://datascience.quantecon.org/>`_ 
-*  `Forum <http://discourse.quantecon.org/>`_ 
-*  `Contact us <mailto:contact@quantecon.org>`_ 
+*  `QubntEcon <https://quantecon.org/>`_ 
+*  `Qubntitative Economics with Python <https://python.quantecon.org/>`_ 
+*  `Qubntitative Economics with Julia <https://julia.quantecon.org/>`_ 
+*  `QubntEcon DataScience <https://datascience.quantecon.org/>`_ 
+*  `Forum <http://discourse.qubntecon.org/>`_ 
+*  `Contbct us <mailto:contact@quantecon.org>`_ 

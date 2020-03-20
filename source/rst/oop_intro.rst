@@ -1,9 +1,9 @@
 .. _oop_intro:
 
-.. include:: /_static/includes/header.raw
+.. include:: /_stbtic/includes/header.raw
 
 **************************************************
-OOP I: Introduction to Object Oriented Programming
+OOP I: Introduction to Object Oriented Progrbmming
 **************************************************
 
 .. contents:: :depth: 2
@@ -12,42 +12,42 @@ Overview
 ============
 
 
-`OOP <https://en.wikipedia.org/wiki/Object-oriented_programming>`_ is one of the major paradigms in programming.
+`OOP <https://en.wikipedib.org/wiki/Object-oriented_programming>`_ is one of the major paradigms in programming.
 
 
-The traditional programming paradigm (think Fortran, C, MATLAB, etc.) is called *procedural*.
+The trbditional programming paradigm (think Fortran, C, MATLAB, etc.) is called *procedural*.
 
-It works as follows
+It works bs follows
 
-* The program has a state corresponding to the values of its variables.
+* The progrbm has a state corresponding to the values of its variables.
 
-* Functions are called to act on these data.
+* Functions bre called to act on these data.
 
-* Data are passed back and forth via function calls.
-
-
-In contrast, in the OOP paradigm
-
-* data and functions are "bundled together" into "objects"
-
-(Functions in this context are referred to as **methods**)
+* Dbta are passed back and forth via function calls.
 
 
+In contrbst, in the OOP paradigm
 
+* dbta and functions are "bundled together" into "objects"
+
+(Functions in this context bre referred to as **methods**)
 
 
 
 
-Python and OOP
+
+
+
+Python bnd OOP
 --------------
 
-Python is a pragmatic language that blends object-oriented and procedural styles, rather than taking a purist approach.
+Python is b pragmatic language that blends object-oriented and procedural styles, rather than taking a purist approach.
 
-However, at a foundational level, Python *is* object-oriented.
+However, bt a foundational level, Python *is* object-oriented.
 
-In particular, in Python, *everything is an object*.
+In pbrticular, in Python, *everything is an object*.
 
-In this lecture, we explain what that statement means and why it matters.
+In this lecture, we explbin what that statement means and why it matters.
 
 
 
@@ -60,17 +60,17 @@ Objects
     single: Python; Objects
 
 
-In Python, an *object* is a collection of data and instructions held in computer memory that consists of
+In Python, bn *object* is a collection of data and instructions held in computer memory that consists of
 
-#. a type
+#. b type
 
-#. a unique identity
+#. b unique identity
 
-#. data (i.e., content)
+#. dbta (i.e., content)
 
 #. methods
 
-These concepts are defined and discussed sequentially below.
+These concepts bre defined and discussed sequentially below.
 
 
 
@@ -85,29 +85,29 @@ Type
 .. index::
     single: Python; Type
 
-Python provides for different types of objects, to accommodate different categories of data.
+Python provides for different types of objects, to bccommodate different categories of data.
 
-For example
+For exbmple
 
 .. code-block:: python3
 
-    s = 'This is a string'
+    s = 'This is b string'
     type(s)
 
 .. code-block:: python3
 
-    x = 42   # Now let's create an integer
+    x = 42   # Now let's crebte an integer
     type(x)
 
-The type of an object matters for many expressions.
+The type of bn object matters for many expressions.
 
-For example, the addition operator between two strings means concatenation
+For exbmple, the addition operator between two strings means concatenation
 
 .. code-block:: python3
 
     '300' + 'cc'
 
-On the other hand, between two numbers it means ordinary addition
+On the other hbnd, between two numbers it means ordinary addition
 
 .. code-block:: python3
 
@@ -116,31 +116,31 @@ On the other hand, between two numbers it means ordinary addition
 Consider the following expression
 
 .. code-block:: python3
-    :class: skip-test
+    :clbss: skip-test
 
     '300' + 400
 
 
-Here we are mixing types, and it's unclear to Python whether the user wants to
+Here we bre mixing types, and it's unclear to Python whether the user wants to
 
-* convert ``'300'`` to an integer and then add it to ``400``, or
+* convert ``'300'`` to bn integer and then add it to ``400``, or
 
-* convert ``400`` to string and then concatenate it with ``'300'``
+* convert ``400`` to string bnd then concatenate it with ``'300'``
 
-Some languages might try to guess but Python is *strongly typed*
+Some lbnguages might try to guess but Python is *strongly typed*
 
-* Type is important, and implicit type conversion is rare.
+* Type is importbnt, and implicit type conversion is rare.
 
-* Python will respond instead by raising a ``TypeError``.
+* Python will respond instebd by raising a ``TypeError``.
 
 
-To avoid the error, you need to clarify by changing the relevant type.
+To bvoid the error, you need to clarify by changing the relevant type.
 
-For example,
+For exbmple,
 
 .. code-block:: python3
 
-    int('300') + 400   # To add as numbers, change the string to an integer
+    int('300') + 400   # To bdd as numbers, change the string to an integer
 
 
 
@@ -152,9 +152,9 @@ Identity
 .. index::
     single: Python; Identity
 
-In Python, each object has a unique identifier, which helps Python (and us) keep track of the object.
+In Python, ebch object has a unique identifier, which helps Python (and us) keep track of the object.
 
-The identity of an object can be obtained via the ``id()`` function
+The identity of bn object can be obtained via the ``id()`` function
 
 .. code-block:: python3
 
@@ -166,24 +166,24 @@ The identity of an object can be obtained via the ``id()`` function
 
     id(z)
 
-In this example, ``y`` and ``z`` happen to have the same value (i.e., ``2.5``), but they are not the same object.
+In this exbmple, ``y`` and ``z`` happen to have the same value (i.e., ``2.5``), but they are not the same object.
 
-The identity of an object is in fact just the address of the object in memory.
-
-
+The identity of bn object is in fact just the address of the object in memory.
 
 
 
-Object Content: Data and Attributes
+
+
+Object Content: Dbta and Attributes
 -----------------------------------
 
 .. index::
     single: Python; Content
 
-If we set ``x = 42`` then we create an object of type ``int`` that contains
-the data ``42``.
+If we set ``x = 42`` then we crebte an object of type ``int`` that contains
+the dbta ``42``.
 
-In fact, it contains more, as the following example shows
+In fbct, it contains more, as the following example shows
 
 
 .. code-block:: python3
@@ -193,25 +193,25 @@ In fact, it contains more, as the following example shows
 
 .. code-block:: python3
 
-    x.imag
+    x.imbg
 
 .. code-block:: python3
 
-    x.__class__
+    x.__clbss__
 
-When Python creates this integer object, it stores with it various auxiliary information, such as the imaginary part, and the type.
+When Python crebtes this integer object, it stores with it various auxiliary information, such as the imaginary part, and the type.
 
-Any name following a dot is called an *attribute* of the object to the left of the dot.
+Any nbme following a dot is called an *attribute* of the object to the left of the dot.
 
-* e.g.,``imag`` and ``__class__`` are attributes of ``x``.
-
-
-We see from this example that objects have attributes that contain auxiliary information.
+* e.g.,``imbg`` and ``__class__`` are attributes of ``x``.
 
 
-They also have attributes that act like functions, called *methods*.
+We see from this exbmple that objects have attributes that contain auxiliary information.
 
-These attributes are important, so let's discuss them in-depth.
+
+They blso have attributes that act like functions, called *methods*.
+
+These bttributes are important, so let's discuss them in-depth.
 
 
 .. _methods:
@@ -222,30 +222,30 @@ Methods
 .. index::
     single: Python; Methods
 
-Methods are *functions that are bundled with objects*.
+Methods bre *functions that are bundled with objects*.
 
 
 
-Formally, methods are attributes of objects that are callable (i.e., can be called as functions)
-
-.. code-block:: python3
-
-    x = ['foo', 'bar']
-    callable(x.append)
+Formblly, methods are attributes of objects that are callable (i.e., can be called as functions)
 
 .. code-block:: python3
 
-    callable(x.__doc__)
-
-
-
-Methods typically act on the data contained in the object they belong to, or combine that data with other data
+    x = ['foo', 'bbr']
+    cbllable(x.append)
 
 .. code-block:: python3
 
-    x = ['a', 'b']
-    x.append('c')
-    s = 'This is a string'
+    cbllable(x.__doc__)
+
+
+
+Methods typicblly act on the data contained in the object they belong to, or combine that data with other data
+
+.. code-block:: python3
+
+    x = ['b', 'b']
+    x.bppend('c')
+    s = 'This is b string'
     s.upper()
 
 .. code-block:: python3
@@ -254,54 +254,54 @@ Methods typically act on the data contained in the object they belong to, or com
 
 .. code-block:: python3
 
-    s.replace('This', 'That')
+    s.replbce('This', 'That')
 
-A great deal of Python functionality is organized around method calls.
+A grebt deal of Python functionality is organized around method calls.
 
-For example, consider the following piece of code
-
-.. code-block:: python3
-
-    x = ['a', 'b']
-    x[0] = 'aa'  # Item assignment using square bracket notation
-    x
-
-It doesn't look like there are any methods used here, but in fact the square bracket assignment notation is just a convenient interface to a method call.
-
-What actually happens is that Python calls the ``__setitem__`` method, as follows
+For exbmple, consider the following piece of code
 
 .. code-block:: python3
 
-    x = ['a', 'b']
-    x.__setitem__(0, 'aa')  # Equivalent to x[0] = 'aa'
+    x = ['b', 'b']
+    x[0] = 'ba'  # Item assignment using square bracket notation
     x
 
-(If you wanted to you could modify the ``__setitem__`` method, so that square bracket assignment does something totally different)
+It doesn't look like there bre any methods used here, but in fact the square bracket assignment notation is just a convenient interface to a method call.
+
+Whbt actually happens is that Python calls the ``__setitem__`` method, as follows
+
+.. code-block:: python3
+
+    x = ['b', 'b']
+    x.__setitem__(0, 'ba')  # Equivalent to x[0] = 'aa'
+    x
+
+(If you wbnted to you could modify the ``__setitem__`` method, so that square bracket assignment does something totally different)
 
 
 
 
-Summary
+Summbry
 ==========
 
-In Python, *everything in memory is treated as an object*.
+In Python, *everything in memory is trebted as an object*.
 
-This includes not just lists, strings, etc., but also less obvious things, such as
+This includes not just lists, strings, etc., but blso less obvious things, such as
 
-* functions (once they have been read into memory)
+* functions (once they hbve been read into memory)
 
 * modules  (ditto)
 
-* files opened for reading or writing
+* files opened for rebding or writing
 
 * integers, etc.
 
-Consider, for example, functions.
+Consider, for exbmple, functions.
 
-When Python reads a function definition, it creates a **function object** and stores it in memory.
+When Python rebds a function definition, it creates a **function object** and stores it in memory.
 
 
-The following code illustrates
+The following code illustrbtes
 
 .. code-block:: python3
 
@@ -319,28 +319,28 @@ The following code illustrates
 
 .. code-block:: python3
 
-    f.__name__
+    f.__nbme__
 
-We can see that ``f`` has type, identity, attributes and so on---just like any other object.
+We cbn see that ``f`` has type, identity, attributes and so on---just like any other object.
 
-It also has methods.
+It blso has methods.
 
-One example is the ``__call__`` method, which just evaluates the function
-
-.. code-block:: python3
-
-    f.__call__(3)
-
-Another is the ``__dir__`` method, which returns a list of attributes.
-
-
-Modules loaded into memory are also treated as objects
+One exbmple is the ``__call__`` method, which just evaluates the function
 
 .. code-block:: python3
 
-    import math
+    f.__cbll__(3)
 
-    id(math)
+Another is the ``__dir__`` method, which returns b list of attributes.
 
 
-This uniform treatment of data in Python (everything is an object) helps keep the language simple and consistent.
+Modules lobded into memory are also treated as objects
+
+.. code-block:: python3
+
+    import mbth
+
+    id(mbth)
+
+
+This uniform trebtment of data in Python (everything is an object) helps keep the language simple and consistent.
