@@ -57,6 +57,9 @@
 \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
 \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
 \usepackage{fancyvrb} % verbatim replacement that allows latex
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{escapeinside={<@}{@>}}
 \usepackage{grffile} % extends the file name processing of package graphics
                      % to support a larger range
 % The hyperref package gives us a pdf with properly built
@@ -76,7 +79,6 @@
 \usepackage[greek,english]{babel}
 \usepackage{xunicode}   
 \usepackage{letltxmacro}
-\setmonofont{LiberationMono}
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
 \DeclareMathOperator{\col}{col}
@@ -91,10 +93,20 @@
 
 \DeclareTextFontCommand{\texttt}{\ttfamily}
 
+% Enable Unicode characters in `Out` code-blocks within verbatim
+\usepackage{pmboxdraw}
+
 % renew commands %
 % Set max figure width to be 80% of text width, for now hardcoded.
 \renewcommand{\includegraphics}[1]{\begin{center}\Oldincludegraphics[width=.8\maxwidth]{#1}\end{center}}
 \renewcommand \caption [2][]{} % removes captions from all figures
+\setlist[itemize]{nosep}
+
+% using CMU Serif for greek and latin letters in code blocks and Liberation Mono for rest%
+\setmonofont{Liberation Mono}
+\usepackage[Latin,Greek]{ucharclasses}
+\newfontfamily\substitutefont{CMU Serif}
+\setTransitionsForGreek{\begingroup\substitutefont}{\endgroup}
 ((* endblock packages *))
 
 % Colors for the hyperref package
@@ -240,8 +252,7 @@
         ((*- elif type in ['text/latex']*))
             ((( custom_add_prompt(output.data['text/latex'] | wrap_text(88) | ansi2latex, cell, 'Out', 'outcolor', 'latex') )))
         ((* else -*))
-            ((( " " )))
-            ((( draw_prompt(cell, 'Out', 'outcolor','') )))((( super() )))
+            ((( custom_add_prompt( '' | wrap_text(88)| escape_latex  | ansi2latex, cell, 'Out', 'outcolor', 'plain') )))
         ((*- endif -*))
     ((*- endfor -*))
 ((* endblock execute_result *))
@@ -264,9 +275,15 @@
     ((*- set execution_count = "" -*))
     ((*- endif -*))
     ((*- set indention =  " " * (execution_count | length + 7) -*))
-\begin{Verbatim}[mathescape, commandchars=\\\{\}, fontsize=\small, xleftmargin=-3.9em]
-((( text.replace('$$','').replace('$','') | add_prompts(first='{\color{' ~ prompt_color ~ '}' ~ prompt ~ '[{\\color{' ~ prompt_color ~ '}' ~ execution_count ~ '}]:} ', cont=indention) )))
+((*- if type == 'plain' -*))
+\begin{Verbatim}[commandchars=\\\{\}, fontsize=\small, xleftmargin=-3.9em]
+((( text.replace('$$','').replace('$\\',"\\(\\").replace('$','\)') | add_prompts(first='{\color{' ~ prompt_color ~ '}' ~ prompt ~ '[{\\color{' ~ prompt_color ~ '}' ~ execution_count ~ '}]:} ', cont=indention) )))
 \end{Verbatim}
+((*- else -*))
+\begin{lstlisting}[mathescape, basicstyle=\small\ttfamily\color{black}, keywordstyle={\color{red}}, xleftmargin=-4.8em]
+((( text | add_prompts(first='<@\\textcolor{red}{' ~ prompt ~ '[' ~ execution_count ~ ']: }@>', cont=indention) )))
+\end{lstlisting}
+((*- endif -*))
 ((*- endmacro *))
 
 %==============================================================================
