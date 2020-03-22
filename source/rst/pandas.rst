@@ -486,6 +486,25 @@ Complete the program to plot the result as a bar graph like this one:
 .. figure:: /_static/lecture_specific/pandas/pandas_share_prices.png
    :scale: 80%
 
+.. _pd_ex2:
+
+Exercise 2
+----------
+
+Using the method ``read_data`` introduced in :ref:`Exercise 1 <pd_ex1>`, write a program to obtain year-on-year percentage change for the following indices:
+
+.. code-block:: python3
+
+    indices_list = {'^GSPC': 'S&P 500',
+                   '^IXIC': 'NASDAQ',
+                   '^DJI': 'Dow Jones',
+                   '^N225': 'Nikkei'}
+
+Complete the program to show summary statistics and plot the result as a time series graph like this one:
+
+.. figure:: /_static/lecture_specific/pandas/pandas_indices_pctchange.png
+   :scale: 80%
+
 Solutions
 =========
 
@@ -524,6 +543,53 @@ Then to plot the chart
     ax.set_ylabel('percentage change in price', fontsize=12)
     price_change.plot(kind='bar', ax=ax)
     plt.show()
+
+Exercise 2
+----------
+
+Following the work you did in :ref:`Exercise 1 <pd_ex1>`, you can query the data using ``read_data`` by updating the start and end dates accordingly.
+
+.. code-block:: python3
+
+    indices_data = read_data(
+            indices_list,
+            start=dt.datetime(1928, 1, 2),
+            end=dt.datetime(2020, 12, 31)
+    )
+
+Then, extract the first and last set of prices per year as DataFrames and calculate the yearly returns such as:
+
+.. code-block:: python3
+
+    yearly_returns = pd.DataFrame()
+
+    for index, name in indices_list.items():
+        p1 = indices_data.groupby(indices_data.index.year)[index].first()  # Get the first set of returns as a DataFrame
+        p2 = indices_data.groupby(indices_data.index.year)[index].last()   # Get the last set of returns as a DataFrame
+        returns = (p2 - p1) / p1
+        yearly_returns[name] = returns
+
+    yearly_returns
+
+Next, you can obtain summary statistics by using the method ``describe``.
+
+.. code-block:: python3
+
+    yearly_returns.describe()
+
+Then, to plot the chart
+
+.. code-block:: python3
+
+    fig, axes = plt.subplots(2, 2, figsize=(10, 6))
+
+    for iter_, ax in enumerate(axes.flatten()):            # Flatten 2-D array to 1-D array
+        index_name = yearly_returns.columns[iter_]         # Get index name per iteration
+        ax.plot(yearly_returns[index_name])                # Plot pct change of yearly returns per index
+        ax.set_ylabel("percent change", fontsize = 12)
+        ax.set_title(index_name)
+    
+    plt.tight_layout() 
 
 .. rubric:: Footnotes
 
