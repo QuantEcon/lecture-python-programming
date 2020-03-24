@@ -76,40 +76,6 @@
 	}
 }
 
-/* Tabs for alternate index tocs */
-.index-tabs {
-	margin:3rem 0;
-	list-style: none;
-	padding:0;
-	display: flex;
-	border:1px solid #DEDEE2;
-	border-width: 0 0 1px 1px;
-	border-radius: 5px 5px 0 0;
-}
-.index-tabs li {
-	position: relative;
-	bottom:-1px;
-	margin:0;
-}
-.index-tabs li a {
-	border-width:1px 1px 1px 0;
-	border-radius: 5px 5px 0 0;
-	padding:1rem 2rem;
-	color: #444;
-	font-weight: 700;
-	display: block;
-	border:1px solid #DEDEE2;
-	background-color: #F2F2F6;
-}
-.index-tabs li a:hover {
-	background-color: #fbfbfb;
-	text-decoration: none;
-}
-.index-tabs li.active a {
-	border-bottom:1px solid #fff;
-	background-color: #fff;
-	font-weight: 700;
-}
 
 /* Other */
 #qe-notebook-header {
