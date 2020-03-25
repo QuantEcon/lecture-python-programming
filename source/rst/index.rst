@@ -1,8 +1,8 @@
 .. _index:
 
-**************************************
+**********************************************
 Python Programming for Quantitative Economics
-**************************************
+**********************************************
 
 .. toctree::
     :hidden:
@@ -17,7 +17,7 @@ Python Programming for Quantitative Economics
     <div class="home-intro">
         <div class="home-detail">
             <div class="home-blurb">
-                <p>This website presents a set of lectures on Python Programming for Quantitative Economics, designed and written by <a href="http://www.tomsargent.com" target="_blank">Thomas J. Sargent</a> and <a href="http://johnstachurski.net" target="_blank">John Stachurski</a>.</p>
+                <p>This website presents a set of lectures on python programming for quantitative economics, designed and written by <a href="http://www.tomsargent.com" target="_blank">Thomas J. Sargent</a> and <a href="http://johnstachurski.net" target="_blank">John Stachurski</a>.</p>
                 <p>Last compiled: <span id="compiled_date"></span><br><a href="https://github.com/QuantEcon/lecture-python-programming/commits/">View commits</a> | <a href="https://github.com/QuantEcon/lecture-python-programming/graphs/contributors">See all contributors</a></p>
             </div>
             <div class="web-version">
