@@ -471,7 +471,7 @@ jupyter_pdf_book = False
 jupyter_pdf_book_title = "Python Programming for Quantitative Economics"
 
 # pdf book name
-jupyter_pdf_book_name = "Python Programming for Quantitative Economics"
+jupyter_pdf_book_name = "python_programming_for_quantitative_economics"
 
 # pdf toc file
 jupyter_pdf_book_index = "index_toc"
