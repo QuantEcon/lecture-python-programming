@@ -468,10 +468,10 @@ jupyter_pdf_urlpath = "https://python-programming.quantecon.org/"
 jupyter_pdf_book = False
 
 # book title
-jupyter_pdf_book_title = "Python for Quantitative Economics"
+jupyter_pdf_book_title = "Python Programming for Quantitative Economics"
 
 # pdf book name
-jupyter_pdf_book_name = "python_for_quantitative_economics"
+jupyter_pdf_book_name = "Python Programming for Quantitative Economics"
 
 # pdf toc file
 jupyter_pdf_book_index = "index_toc"
