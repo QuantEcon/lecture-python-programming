@@ -102,7 +102,7 @@ Python's popularity begin to spike in the first figure.
 
 Overall, it's clear that
 
-* Python is `one of the most popular programming languages worldwide <http://spectrum.ieee.org/computing/software/the-2017-top-programming-languages>`__.
+* Python is `one of the most popular programming languages worldwide <https://spectrum.ieee.org/computing/software/the-top-programming-languages-2019>`__.
 
 * Python is a major tool for scientific computing, accounting for a rapidly rising share of scientific work around the globe.
 
