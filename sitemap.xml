@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://python-programming.quantecon.org/</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/index_toc.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/python_programming_for_quantitative_economics.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/about_lectures.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/index_learning_python.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/about_py.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/getting_started.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/python_by_example.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/functions.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/python_essentials.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/oop_intro.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/python_oop.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/index_python_scientific_libraries.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/need_for_speed.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/numpy.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/matplotlib.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/scipy.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/numba.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/parallelization.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/pandas.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/index_advanced_python_programming.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/writing_good_code.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/python_advanced_features.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/debugging.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/about_lectures.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/troubleshooting.html</loc>
+  <lastmod>2020-03-27T00:01:43+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/about_py.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/getting_started.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/python_by_example.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/functions.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/python_essentials.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/oop_intro.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/python_oop.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/need_for_speed.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/numpy.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/matplotlib.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/scipy.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/numba.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/parallelization.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/pandas.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/writing_good_code.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/python_advanced_features.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/debugging.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://python-programming.quantecon.org/_downloads/pdf/troubleshooting.pdf</loc>
+  <lastmod>2020-03-26T23:54:05+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+
+
+</urlset>
