@@ -40,6 +40,7 @@ extensions = [
 	'IPython.sphinxext.ipython_console_highlighting',
     # Custom Sphinx Extensions
     'sphinxcontrib.jupyter', 
+    'sphinx_sitemap',
 ]
 
 # Retired Extensions but may be useful in Future
@@ -131,7 +132,7 @@ rst_prolog = """
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'qe-lectures'
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -475,3 +476,7 @@ jupyter_pdf_book_name = "python_programming_for_quantitative_economics"
 
 # pdf toc file
 jupyter_pdf_book_index = "index_toc"
+
+#-SiteMap-#
+
+html_baseurl = 'https://python-programming.quantecon.org/'
