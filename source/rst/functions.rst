@@ -471,7 +471,7 @@ Here's a function for the first random device.
             U = uniform()
             count = count + 1 if U < 0.5 else 0
             print(count)    # print counts for clarity
-            if count == k:
+            if count >= k:
                 payoff = 1
 
         return payoff
@@ -491,7 +491,7 @@ Here's another function for the second random device.
             U = uniform()
             count = count + ( 1 if U < 0.5 else 0 )
             print(count)    
-            if count == k:
+            if count >= k:
                 payoff = 1
 
         return payoff
