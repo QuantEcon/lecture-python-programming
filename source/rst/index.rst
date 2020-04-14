@@ -50,16 +50,11 @@ Python Programming for Quantitative Economics
                     <p>Get the full set of Jupyter notebooks</p>
                 </a>
             </li>
-        </ul>
-    </div>
-    <div class="home-alternatives">
-        <h2>Open source lectures</h2>
-        <ul>
             <li>
                 <a href="https://github.com/QuantEcon/lecture-python-programming">
                     <i class="fab fa-github"></i>
                     <h3>GitHub Repository</h3>
-                    <p>The source files for these lectures are openly available and stored on GitHub.  We welcome feedback and improvements.  Readers can view the source files, report issues and submit pull requests (suggested changes).</p>
+                    <p>The source files for these lectures are openly available and stored on GitHub.  We welcome feedback and improvements.</p>
                 </a>
             </li>
         </ul>

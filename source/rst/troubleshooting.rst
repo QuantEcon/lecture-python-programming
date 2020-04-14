@@ -54,7 +54,7 @@ Reporting an Issue
 ===================
 
 One way to give feedback is to raise an issue through our `issue tracker 
-<https://github.com/QuantEcon/lecture-source-py/issues>`__.
+<https://github.com/QuantEcon/lecture-python-programming/issues>`__.
 
 Please be as specific as possible.  Tell us where the problem is and as much
 detail about your local set up as you can provide.
