@@ -24,6 +24,12 @@ jobs:
         run: bash scripts/execution-test.sh
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
+      - name: Copy for Netlify Deploy
+        run: |
+          pwd
+          echo $HOME
+          mkdir -p /home/runner/work/_temp/_github_home/build
+          cp -r /home/runner/work/_build/html/ /home/runner/work/_temp/_github_home/build/
       - name: Deploy Netlify
         uses: danakim/gh-action-deploy-netlify@master
         with:
