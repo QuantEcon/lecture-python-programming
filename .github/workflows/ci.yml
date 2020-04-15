@@ -1,0 +1,28 @@
+name: Tests
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest']
+        python-version: [3.7, 3.8]
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Setup Anaconda ${{ matrix.python-version}}
+          uses: actions/setup-miniconda@v1
+          with:
+            auto-update-conda: true
+            auto-activate-base: true
+            miniconda-version: 'latest'
+            python-version: ${{ matrix.python-version }}
+            environment-file: environment.yml
+            activate-environment: qe-lectures
+        - name: Install Pip Dependencies
+          run: |
+            pip install quantecon joblib sphinxcontrib-jupyter
+        - name: Run Execution Tests
+          run: bash scripts/execution-test.sh
+        - name: Run Linkchecker
+          run: bash scripts/linkchecker-test.sh
