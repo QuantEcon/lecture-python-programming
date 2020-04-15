@@ -1,3 +1,4 @@
+more ${HOME}/files_modified.json
 echo "PR: $TRAVIS_PULL_REQUEST"
 echo "COMMIT RANGE: $TRAVIS_COMMIT_RANGE"
 CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep '\.rst' | tr '\n' ' ')
