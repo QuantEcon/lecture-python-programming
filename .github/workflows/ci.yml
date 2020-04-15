@@ -2,7 +2,7 @@ name: Tests
 on: [push]
 
 jobs:
-  build:
+  setup:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'macos-latest']
@@ -24,3 +24,14 @@ jobs:
         run: bash scripts/execution-test.sh
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '11.x'
+      - name: Install the Netlify CLI
+        run: npm install netlify-cli -g
+      - name: Netlify Deploy
+        shell: bash
+        env:
+          NETLIFY_AUTH_TOKEN : ${{ secrets.NETLIFY_DEPLOY }}
+        run: netlify deploy --dir ./_build/html/ --timeout=600
