@@ -27,7 +27,8 @@ jobs:
       - name: Copy for Netlify Deploy
         run: |
           mkdir -p $HOME/work/_temp/_github_home/build
-          cp -r $HOME/work/lecture-python-programming/lecture-python-programming/_build/html/ $Home/work/_temp/_github_home/build/
+          pwd
+          cp -r $HOME/work/lecture-python-programming/_build/html/ $Home/work/_temp/_github_home/build/
       - name: Deploy Netlify
         uses: danakim/gh-action-deploy-netlify@master
         with:
