@@ -3,6 +3,7 @@ CHANGED_FILES=""
 for F in $MODIFIED_FILES
 do
     if [[ $F == *.rst ]]
+    then
         CHANGED_FILES="$CHANGED_FILES $F"
     fi
 done
