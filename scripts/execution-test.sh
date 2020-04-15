@@ -2,6 +2,7 @@ MODIFIED_FILES=$(<${HOME}/files_modified.json)
 CHANGED_FILES=""
 for F in $MODIFIED_FILES
 do
+    echo "$F"
     if [[ $F == *.rst ]]
     then
         CHANGED_FILES="$CHANGED_FILES $F"
