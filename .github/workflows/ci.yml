@@ -34,4 +34,4 @@ jobs:
         shell: bash
         env:
           NETLIFY_AUTH_TOKEN : ${{ secrets.NETLIFY_DEPLOY }}
-        run: netlify deploy --dir ./_build/html/ --timeout=600
+        run: netlify deploy --dir ./_build/html/ --timeout=600 --site happy-raman-6cd1b1
