@@ -20,12 +20,17 @@ jobs:
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
           activate-environment: qe-lectures
-      - name: Get Changed Files
-        uses: lots0logs/gh-action-get-changed-files@2.0.6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Changed RST Files
+        run: |
+          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+          CHANGED_FILES=$(curl -s -X GET -G $URL | jq -r '.[rst] | .filename')
+          echo $CHANGED_FILES
+        env:
+          CHANGED_FILES: $CHANGED_FILES
       - name: Run Execution Tests
-        run: bash scripts/execution-test.sh
+        run: | 
+          echo $CHANGED_FILES
+          bash scripts/execution-test.sh
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
       - name: Copy for Netlify Deploy
