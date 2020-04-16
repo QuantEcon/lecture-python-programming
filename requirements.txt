@@ -1,3 +1,6 @@
 sphinxcontrib-bibtex
 sphinxcontrib-jupyter
 quantecon
+jupyter
+matplotlib
+networkx
