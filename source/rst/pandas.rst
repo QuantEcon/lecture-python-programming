@@ -29,6 +29,7 @@ of fields such as data science and machine learning.
 Here's a popularity comparison over time against STATA, SAS, and `dplyr <https://dplyr.tidyverse.org/>`_ courtesy of Stack Overflow Trends
 
 .. figure:: /_static/lecture_specific/pandas/pandas_vs_rest.png
+  :scale: 55%
 
 
 Just as `NumPy <http://www.numpy.org/>`_ provides the basic array data type plus core array operations, pandas
@@ -437,7 +438,7 @@ With these imports:
 
 .. code-block:: python3
 
-    import datetime as dt 
+    import datetime as dt
     from pandas_datareader import data
 
 Write a program to calculate the percentage price change over 2019 for the following shares:
@@ -465,18 +466,18 @@ Here's the first part of the program
 
     def read_data(ticker_list,
               start=dt.datetime(2019, 1, 2),
-              end=dt.datetime(2019, 12, 31)): 
+              end=dt.datetime(2019, 12, 31)):
         """
-        This function reads in closing price data from Yahoo 
+        This function reads in closing price data from Yahoo
         for each tick in the ticker_list.
         """
         ticker = pd.DataFrame()
-    
+
         for tick in ticker_list:
             prices = data.DataReader(tick, 'yahoo', start, end)
             closing_prices = prices['Close']
             ticker[tick] = closing_prices
-        
+
         return ticker
 
     ticker = read_data(ticker_list)
@@ -484,7 +485,7 @@ Here's the first part of the program
 Complete the program to plot the result as a bar graph like this one:
 
 .. figure:: /_static/lecture_specific/pandas/pandas_share_prices.png
-   :scale: 80%
+   :scale: 50%
 
 .. _pd_ex2:
 
@@ -503,7 +504,7 @@ Using the method ``read_data`` introduced in :ref:`Exercise 1 <pd_ex1>`, write a
 Complete the program to show summary statistics and plot the result as a time series graph like this one:
 
 .. figure:: /_static/lecture_specific/pandas/pandas_indices_pctchange.png
-   :scale: 80%
+   :scale: 53%
 
 Solutions
 =========
@@ -512,7 +513,7 @@ Exercise 1
 ----------
 
 There are a few ways to approach this problem using Pandas to calculate
-the percentage change. 
+the percentage change.
 
 First, you can extract the data and perform the calculation such as:
 
@@ -523,7 +524,7 @@ First, you can extract the data and perform the calculation such as:
     price_change = (p2 - p1) / p1 * 100
     price_change
 
-Alternatively you can use an inbuilt method ``pct_change`` and configure it to 
+Alternatively you can use an inbuilt method ``pct_change`` and configure it to
 perform the correct calculation using ``periods`` argument.
 
 .. code-block:: python3
@@ -588,8 +589,8 @@ Then, to plot the chart
         ax.plot(yearly_returns[index_name])                # Plot pct change of yearly returns per index
         ax.set_ylabel("percent change", fontsize = 12)
         ax.set_title(index_name)
-    
-    plt.tight_layout() 
+
+    plt.tight_layout()
 
 .. rubric:: Footnotes
 

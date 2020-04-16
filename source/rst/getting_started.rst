@@ -16,7 +16,7 @@ Overview
 
 In this lecture, you will learn how to
 
-#. get a Python environment up and running 
+#. get a Python environment up and running
 
 #. execute simple Python commands
 
@@ -135,6 +135,7 @@ Because of these features, Jupyter is now a major player in the scientific compu
 Here's an image showing execution of some code (borrowed from `here <http://matplotlib.org/examples/pylab_examples/hexbin_demo.html>`__) in a Jupyter notebook
 
 .. figure:: /_static/lecture_specific/getting_started/jp_demo.png
+  :scale: 45%
 
 
 While Jupyter isn't the only way to code in Python, it's great for when you wish to
@@ -168,6 +169,7 @@ Either
 If you use the second option, you will see something like this
 
 .. figure:: /_static/lecture_specific/getting_started/starting_nb.png
+  :scale: 45%
 
 The output tells us the notebook is running at ``http://localhost:8888/``
 
@@ -180,6 +182,7 @@ Thus, the Jupyter kernel is listening for Python commands on port 8888 of our lo
 Hopefully, your default browser has also opened up with a web page that looks something like this
 
 .. figure:: /_static/lecture_specific/getting_started/nb.png
+  :scale: 45%
 
 What you see here is called the Jupyter *dashboard*.
 
@@ -190,6 +193,7 @@ Assuming all this has worked OK, you can now click on ``New`` at the top right a
 Here's what shows up on our machine:
 
 .. figure:: /_static/lecture_specific/getting_started/nb2.png
+  :scale: 45%
 
 The notebook displays an *active cell*, into which you can type Python commands.
 
@@ -217,6 +221,7 @@ In this mode, whatever you type will appear in the cell with the flashing cursor
 When you're ready to execute the code in a cell, hit ``Shift-Enter`` instead of the usual ``Enter``.
 
 .. figure:: /_static/lecture_specific/getting_started/nb3.png
+  :scale: 45%
 
 (Note: There are also menu and button options for running code in a cell that you can find by exploring)
 
@@ -238,7 +243,7 @@ The two modes are
 
 #. Command mode
 
-    * The green border is replaced by a grey (or grey and blue) border 
+    * The green border is replaced by a grey (or grey and blue) border
 
     * Keystrokes are interpreted as commands --- for example, typing `b` adds a new cell below  the current one
 
@@ -322,6 +327,7 @@ We can explore these attributes of ``np`` using the ``Tab`` key.
 For example, here we type ``np.ran`` and hit Tab
 
 .. figure:: /_static/lecture_specific/getting_started/nb6.png
+  :scale: 45%
 
 Jupyter offers up the two possible completions, ``random`` and ``rank``.
 
@@ -343,6 +349,7 @@ To get help on ``np.rank``, say, we can execute ``np.rank?``.
 Documentation appears in a split window of the browser, like so
 
 .. figure:: /_static/lecture_specific/getting_started/nb6a.png
+  :scale: 45%
 
 Clicking on the top right of the lower split closes the on-line help.
 
@@ -356,6 +363,7 @@ In addition to executing code, the Jupyter notebook allows you to embed text, eq
 For example, here we enter a mixture of plain text and LaTeX instead of code
 
 .. figure:: /_static/lecture_specific/getting_started/nb7.png
+  :scale: 45%
 
 Next we ``Esc`` to enter command mode and then type ``m`` to indicate that we
 are writing `Markdown <http://daringfireball.net/projects/markdown/>`_, a mark-up language similar to (but simpler than) LaTeX.
@@ -365,6 +373,7 @@ are writing `Markdown <http://daringfireball.net/projects/markdown/>`_, a mark-u
 Now we ``Shift+Enter`` to produce this
 
 .. figure:: /_static/lecture_specific/getting_started/nb8.png
+  :scale: 45%
 
 
 
