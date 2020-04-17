@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MODIFIED_FILES=$1
+MODIFIED_FILES="$1"
 
 RST_FILES=""
 for F in $MODIFIED_FILES
