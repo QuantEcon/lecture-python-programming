@@ -20,14 +20,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
           activate-environment: qe-lectures
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ github.event.pull_request.commits_url }}
-        run: echo "$GITHUB_CONTEXT"
-      - run: curl -o out.json ${{ github.event.pull_request.commits_url }}
+      - name: Get Commit Range
+        run: |
+          echo ${{ github.head_ref }}
+          echo ${{ github.sha }}
+          echo ${{ github.base_ref }}
       - name: Run Execution Tests
         run: |
-          more out.json
           bash scripts/execution-test.sh ${{ steps.files.outputs.all }}
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
