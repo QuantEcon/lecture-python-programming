@@ -25,19 +25,7 @@ jobs:
         uses: jitterbit/get-changed-files@v1
       - name: Run Execution Tests
         shell: bash -l {0}
-        run: |
-          conda info
-          bash scripts/execution-test.sh "${{ steps.files.outputs.all }}"
+        run: bash scripts/execution-test.sh "${{ steps.files.outputs.all }}"
       - name: Run Linkchecker
+        shell: bash -l {0}
         run: bash scripts/linkchecker-test.sh
-      - name: Copy for Netlify Deploy
-        run: |
-          mkdir -p $HOME/work/_temp/_github_home/build
-          pwd
-          cp -r $(pwd)/_build/html/ $HOME/work/_temp/_github_home/build/
-      - name: Deploy Netlify
-        uses: danakim/gh-action-deploy-netlify@master
-        with:
-          AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          DEPLOY_PROD: true

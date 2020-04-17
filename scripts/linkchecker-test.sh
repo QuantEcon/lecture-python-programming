@@ -1,18 +1,19 @@
-echo "PR: $TRAVIS_PULL_REQUEST"
-echo "COMMIT RANGE: $TRAVIS_COMMIT_RANGE"
-CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep '\.rst' | tr '\n' ' ')
-#Check for Full Deletions
-SPHINX_FILES=""
-for f in $CHANGED_FILES
+#!/bin/bash
+
+MODIFIED_FILES="$1"
+
+RST_FILES=""
+for F in $MODIFIED_FILES
 do
-    if [ -f $f ]
+    if [[ $F == *.rst ]]
     then
-        SPHINX_FILES="$SPHINX_FILES $f"
+        RST_FILES="$RST_FILES $F"
     fi
 done
-echo "List of Changed Files: $SPHINX_FILES"
-if [ -z "$SPHINX_FILES" ]; then
+echo "List of Changed RST Files: $RST_FILES"
+if [ -z "$RST_FILES" ]; then
     echo "No RST Files have changed -- nothing to do in this PR"
 else
-    make linkcheck FILES="$SPHINX_FILES"
+    RST_FILES="$RST_FILES source/rst/index_toc.rst"
+    make linkcheck FILES="$RST_FILES"
 fi
