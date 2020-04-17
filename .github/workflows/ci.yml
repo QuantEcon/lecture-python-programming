@@ -20,19 +20,15 @@ jobs:
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
           activate-environment: qe-lectures
-      - name: Get file changes
-        id: get_file_changes
-        uses: dorner/file-changes-action@v1.2.0
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          plaintext: true
-          prNumber: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+      - name: Get Changed Files
+        id: files
+        uses: jitterbit/get-changed-files@v1
       - name: Echo file changes
         run: |
-          echo Changed files: ${{ steps.get_file_changes.outputs.files }}
+          echo Changed files: ${{ steps.files.outputs.all }}
       - name: Run Execution Tests
         run: |
-          bash scripts/execution-test.sh ${{ steps.get_file_changes.outputs.files }}
+          bash scripts/execution-test.sh ${{ steps.files.outputs.all }}
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
       - name: Copy for Netlify Deploy
