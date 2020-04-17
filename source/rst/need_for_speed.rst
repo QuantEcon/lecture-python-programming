@@ -8,13 +8,10 @@ Python for Scientific Computing
 
 .. contents:: :depth: 2
 
-In addition to what's in Anaconda, this lecture will need the following libraries:
+.. epigraph::
 
-.. code-block:: ipython
-  :class: hide-output
-
-  !pip install --upgrade quantecon
-
+    "We should forget about small efficiencies, say about 97% of the time:
+    premature optimization is the root of all evil." -- Donald Knuth
 
 
 
@@ -43,6 +40,15 @@ addressing the following questions:
 * What are the main elements of the scientific Python ecosystem?
 
 * How is the situation changing over time?
+
+
+In addition to what's in Anaconda, this lecture will need
+
+.. code-block:: ipython
+  :class: hide-output
+
+  !pip install --upgrade quantecon
+
 
 
 
