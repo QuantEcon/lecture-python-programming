@@ -1,16 +1,20 @@
-MODIFIED_FILES=$(<${HOME}/files_modified.json)
-CHANGED_FILES=""
+#!/bin/bash
+
+MODIFIED_FILES=$1
+
+RST_FILES=""
 for F in $MODIFIED_FILES
 do
     echo "$F"
     if [[ $F == *.rst ]]
     then
-        CHANGED_FILES="$CHANGED_FILES $F"
+        RST_FILES="$RST_FILES $F"
     fi
 done
-echo "List of Changed Files: $CHANGED_FILES"
-if [ -z "$CHANGED_FILES" ]; then
+echo "List of Changed RST Files: $RST_FILES"
+if [ -z "$RST_FILES" ]; then
     echo "No RST Files have changed -- nothing to do in this PR"
 else
-    make coverage FILES="$CHANGED_FILES"
+    RST_FILES="$RST_FILES index_toc.rst"
+    make coverage FILES="$RST_FILES"
 fi

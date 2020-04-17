@@ -20,18 +20,18 @@ jobs:
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
           activate-environment: qe-lectures
-      - name: Changed Files Exporter
-        uses: futuratrepadeira/changed-files@v3.1.0
+      - name: Get file changes
+        id: get_file_changes
+        uses: dorner/file-changes-action@v1.2.0
         with:
-          repo-token: ${{ github.token }}
-          pattern: '^.*\.(rst)$'
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          plaintext: true
+      - name: Echo file changes
+        run: |
+          echo Changed files: ${{ steps.get_file_changes.outputs.files }}
       - name: Run Execution Tests
         run: |
-          ls
-          more files_created.json
-          more files_updated.json
-          more files_deleted.json
-          bash scripts/execution-test.sh
+          bash scripts/execution-test.sh ${{ steps.get_file_changes.outputs.files }}
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
       - name: Copy for Netlify Deploy
