@@ -23,12 +23,9 @@ jobs:
       - name: Get Changed Files
         id: files
         uses: jitterbit/get-changed-files@v1
-      - run: |
-          for changed_file in ${{ steps.files.outputs.all }}; do
-            echo "Do something with this ${changed_file}."
-          done
       - name: Run Execution Tests
         run: |
+          echo "${{ steps.files.outputs.all }}"
           bash scripts/execution-test.sh ${{ steps.files.outputs.all }}
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
