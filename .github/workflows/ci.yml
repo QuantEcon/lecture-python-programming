@@ -21,8 +21,8 @@ jobs:
           environment-file: environment.yml
           activate-environment: qe-lectures
       - name: Setup PIP Dependencies
-      - run: | 
-        pip install sphinxcontrib-jupyter sphinxcontrib-bibtex quantecon joblib
+        run: | 
+          pip install sphinxcontrib-jupyter sphinxcontrib-bibtex quantecon joblib
       - name: Get Changed Files
         id: files
         uses: jitterbit/get-changed-files@v1
