@@ -20,16 +20,17 @@ jobs:
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
           activate-environment: qe-lectures
-      - name: Get Changed RST Files
-        run: |
-          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
-          CHANGED_FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          echo $CHANGED_FILES
-        env:
-          CHANGED_FILES: $CHANGED_FILES
+      - name: Changed Files Exporter
+        uses: futuratrepadeira/changed-files@v3.1.0
+        with:
+          repo-token: ${{ github.token }}
+          pattern: '^.*\.(rst)$'
       - name: Run Execution Tests
-        run: | 
-          echo $CHANGED_FILES
+        run: |
+          ls
+          more files_created.json
+          more files_updated.json
+          more files_deleted.json
           bash scripts/execution-test.sh
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
