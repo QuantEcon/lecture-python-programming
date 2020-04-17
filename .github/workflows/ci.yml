@@ -22,9 +22,11 @@ jobs:
           activate-environment: qe-lectures
       - name: Get Commit Range
         run: |
-          echo ${{ github.head_ref }}
+          start=$(jq --raw-output .commits[0].id "$GITHUB_EVENT_PATH")
+          end=$(jq --raw-output .commits[-1].id "$GITHUB_EVENT_PATH")
+          echo $start
+          echo $end
           echo ${{ github.sha }}
-          echo ${{ github.base_ref }}
       - name: Run Execution Tests
         run: |
           bash scripts/execution-test.sh ${{ steps.files.outputs.all }}
