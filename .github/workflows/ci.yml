@@ -25,8 +25,7 @@ jobs:
         uses: jitterbit/get-changed-files@v1
       - name: Run Execution Tests
         run: |
-          echo "${{ steps.files.outputs.all }}"
-          bash scripts/execution-test.sh ${{ steps.files.outputs.all }}
+          bash scripts/execution-test.sh "${{ steps.files.outputs.all }}"
       - name: Run Linkchecker
         run: bash scripts/linkchecker-test.sh
       - name: Copy for Netlify Deploy
