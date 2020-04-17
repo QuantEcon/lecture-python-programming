@@ -28,4 +28,4 @@ jobs:
         run: bash scripts/execution-test.sh "${{ steps.files.outputs.all }}"
       - name: Run Linkchecker
         shell: bash -l {0}
-        run: bash scripts/linkchecker-test.sh
+        run: bash scripts/linkchecker-test.sh "${{ steps.files.outputs.all }}"
