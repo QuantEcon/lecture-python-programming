@@ -26,6 +26,7 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           plaintext: true
+          prNumber: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
       - name: Echo file changes
         run: |
           echo Changed files: ${{ steps.get_file_changes.outputs.files }}
