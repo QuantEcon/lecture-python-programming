@@ -1,29 +1,20 @@
-name: qe-lectures
+name: lectures
 channels:
   - default
   - conda-forge
 dependencies:
+  - pip
   - python
   - jupyter
   - jupyterlab
   - nbconvert
-  - pytest
-  - pytest-xdist
-  - pytest-cov
-  - codecov
-  - pre-commit
-  - pylint
-  - flake8
-  - black
-  - autopep8
-  - pip
-  - setuptools
   - pandoc
   - pandas
   - numba
   - numpy
+  - matplotlib
+  - networkx
   - sphinx
-  - pip
   - pip:
     - sphinxcontrib-jupyter
     - sphinxcontrib-bibtex
