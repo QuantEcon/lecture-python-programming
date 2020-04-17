@@ -1,4 +1,4 @@
-name: lectures
+name: qe-lectures
 channels:
   - default
   - conda-forge
@@ -15,8 +15,4 @@ dependencies:
   - matplotlib
   - networkx
   - sphinx
-  - pip:
-    - sphinxcontrib-jupyter
-    - sphinxcontrib-bibtex
-    - quantecon
-    - joblib
+
