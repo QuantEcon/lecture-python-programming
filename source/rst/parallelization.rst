@@ -41,7 +41,7 @@ This is particularly important in scientific programming, which requires handlin
 
 In this lecture we discuss parallelization for scientific computing, with a focus on
 
-#. the best tools for parallelization in Python and 
+#. the best tools for parallelization in Python and
 
 #. how these tools can be applied to quantitative economic problems.
 
@@ -101,7 +101,7 @@ Advantages and Disadvantages
 ----------------------------
 
 Multithreading is more lightweight because most system and memory resources
-are shared by the threads. 
+are shared by the threads.
 
 In addition, the fact that multiple threads all access a shared pool of memory
 is extremely convenient for numerical programming.
@@ -147,6 +147,7 @@ Now, let's look at the output of the `htop` system monitor on our machine while
 this code is running:
 
 .. figure:: /_static/lecture_specific/parallelization/htop_parallel_npmat.png
+  :scale: 45%
 
 We can see that 4 of the 8 CPUs are running at full speed.
 
@@ -284,10 +285,10 @@ The code simulates updating the wealth :math:`w_t` of a household via the rule
 
     w_{t+1} = R_{t+1} s w_t + y_{t+1}
 
-Here 
+Here
 
-* :math:`R` is the gross rate of return on assets 
-* :math:`s` is the savings rate of the household and 
+* :math:`R` is the gross rate of return on assets
+* :math:`s` is the savings rate of the household and
 * :math:`y` is labor income.
 
 We model both :math:`R` and :math:`y` as independent draws from a lognormal

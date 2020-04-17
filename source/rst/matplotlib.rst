@@ -342,7 +342,7 @@ Here's one solution
 
     def f(x, θ):
         return np.cos(np.pi * θ * x ) * np.exp(- x)
-    
+
     θ_vals = np.linspace(0, 2, 10)
     x = np.linspace(0, 5, 200)
     fig, ax = plt.subplots()

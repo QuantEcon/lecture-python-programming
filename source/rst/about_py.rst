@@ -85,6 +85,7 @@ Relative Popularity
 The following chart, produced using Stack Overflow Trends, shows one measure of the relative popularity of Python
 
 .. figure:: /_static/lecture_specific/about_py/python_vs_matlab.png
+  :scale: 55%
 
 The figure indicates not only that Python is widely used but also that adoption of Python has accelerated significantly since 2012.
 
@@ -96,6 +97,7 @@ For example, the popularity of `pandas <http://pandas.pydata.org/>`_, a library 
 (The corresponding time path for MATLAB is shown for comparison)
 
 .. figure:: /_static/lecture_specific/about_py/pandas_vs_matlab.png
+  :scale: 55%
 
 Note that pandas takes off in 2012, which is the same year that we see
 Python's popularity begin to spike in the first figure.
@@ -118,7 +120,7 @@ It has a relatively small core language supported by many libraries.
 
 Other features of Python:
 
-* multiple programming styles are supported (procedural, object-oriented, functional, etc.) 
+* multiple programming styles are supported (procedural, object-oriented, functional, etc.)
 
 * it is interpreted rather than compiled.
 
@@ -257,14 +259,17 @@ The most popular and comprehensive Python library for creating figures and graph
 Example 2D plot with embedded LaTeX annotations
 
 .. figure:: /_static/lecture_specific/about_py/qs.png
+  :scale: 55%
 
 Example contour plot
 
 .. figure:: /_static/lecture_specific/about_py/bn_density1.png
+  :scale: 40%
 
 Example 3D plot
 
 .. figure:: /_static/lecture_specific/about_py/career_vf.png
+  :scale: 50%
 
 More examples can be found in the `Matplotlib thumbnail gallery <http://matplotlib.org/gallery.html>`_.
 
@@ -330,10 +335,10 @@ and calculate limits, derivatives and integrals
     diff(sin(x), x)
 
 
-The beauty of importing this functionality into Python is that we are working within 
-a fully fledged programming language. 
+The beauty of importing this functionality into Python is that we are working within
+a fully fledged programming language.
 
-We can easily create tables of derivatives, generate LaTeX output, add that output 
+We can easily create tables of derivatives, generate LaTeX output, add that output
 to figures and so on.
 
 
@@ -352,7 +357,7 @@ One of the most popular libraries for working with data is `pandas <http://panda
 
 Pandas is fast, efficient, flexible and well designed.
 
-Here's a simple example, using some dummy data generated with Numpy's excellent 
+Here's a simple example, using some dummy data generated with Numpy's excellent
 ``random`` functionality.
 
 .. code-block:: python3
@@ -405,7 +410,7 @@ Python has many libraries for studying graphs.
 .. index::
     single: NetworkX
 
-One well-known example is `NetworkX <http://networkx.github.io/>`_. 
+One well-known example is `NetworkX <http://networkx.github.io/>`_.
 Its features include, among many other things:
 
 * standard graph algorithms for analyzing networks
