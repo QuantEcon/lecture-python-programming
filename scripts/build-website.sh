@@ -15,7 +15,9 @@ if [ -z "$RST_FILES" ]; then
     echo "No RST Files have changed -- nothing to do in this PR"
 else
     pwd
+    ls theme/lectures-python-programming.theme/*
     RST_FILES="$RST_FILES source/rst/index_toc.rst"
-    make website THEMEPATH=theme/lectures-python-programming.theme FILES="$RST_FILES"
+    FILES="$RST_FILES"
+    make website THEMEPATH=theme/lectures-python-programming.theme
     ls _build/website/jupyter_html/*
 fi
