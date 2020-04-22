@@ -13,7 +13,7 @@ jobs:
         with:
           repository: QuantEcon/lecture-python-programming.theme
           token: ${{ secrets.ACTIONS_PAT }}
-          path: theme/
+          path: theme/lecture-python-programming.theme
       - name: Setup Anaconda
         uses: goanpeca/setup-miniconda@v1
         with:
