@@ -15,5 +15,5 @@ if [ -z "$RST_FILES" ]; then
     echo "No RST Files have changed -- nothing to do in this PR"
 else
     RST_FILES="$RST_FILES source/rst/index_toc.rst"
-    make website FILES="$RST_FILES"
+    make website FILES="$RST_FILES" THEMEPATH="theme/lectures-python-programming.theme"
 fi
