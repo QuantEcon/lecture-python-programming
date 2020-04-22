@@ -14,7 +14,8 @@ echo "List of Changed RST Files: $RST_FILES"
 if [ -z "$RST_FILES" ]; then
     echo "No RST Files have changed -- nothing to do in this PR"
 else
-    pwd
+    #https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=909728
+    rm -rf /usr/local/share/fonts
     ls theme/lectures-python-programming.theme/*
     RST_FILES="$RST_FILES source/rst/index_toc.rst"
     FILES="$RST_FILES"
