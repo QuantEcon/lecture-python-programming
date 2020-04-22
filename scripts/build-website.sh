@@ -16,6 +16,6 @@ if [ -z "$RST_FILES" ]; then
 else
     pwd
     RST_FILES="$RST_FILES source/rst/index_toc.rst"
-    make website FILES="$RST_FILES" THEMEPATH="theme/lectures-python-programming.theme"
+    make website FILES="$RST_FILES"
     ls _build/website/jupyter_html/*
 fi
