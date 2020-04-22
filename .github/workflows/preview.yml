@@ -8,6 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Checkout private QuantEcon theme
+        uses: actions/checkout@v2
+        with:
+          repository: QuantEcon/lecture-python-programming.theme
+          path: theme/
       - name: Setup Anaconda
         uses: goanpeca/setup-miniconda@v1
         with:
