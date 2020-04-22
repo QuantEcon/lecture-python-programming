@@ -7,7 +7,12 @@ jobs:
     name: 'Deploy'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Show Path
+        run: pwd
       - name: Checkout private QuantEcon theme
         uses: actions/checkout@v2
         with:
