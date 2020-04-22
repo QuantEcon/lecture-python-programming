@@ -1,23 +1,18 @@
-name: Tests
+name: Execution and Link Checks
 on: [pull_request]
-
 jobs:
-  setup:
-    strategy:
-      matrix:
-        os: ['ubuntu-latest', 'macos-latest']
-        python-version: [3.7]
-    runs-on: ${{ matrix.os }}
+  tests:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Anaconda ${{ matrix.python-version}}
+      - name: Setup Anaconda
         uses: goanpeca/setup-miniconda@v1
         with:
           auto-update-conda: true
           auto-activate-base: true
           miniconda-version: 'latest'
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.7
           environment-file: environment.yml
           activate-environment: qe-lectures
       - name: Get Changed Files
