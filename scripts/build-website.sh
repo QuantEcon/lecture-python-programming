@@ -17,7 +17,6 @@ else
     echo "Working Directory: $pwd"
     ls theme/lecture-python-programming.theme/*
     RST_FILES="$RST_FILES source/rst/index_toc.rst"
-    FILES="$RST_FILES"
-    make website THEMEPATH=theme/lecture-python-programming.theme
+    make website THEMEPATH=theme/lecture-python-programming.theme FILES="$RST_FILES"
     ls _build/website/jupyter_html/*
 fi
