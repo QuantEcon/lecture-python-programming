@@ -1,0 +1,26 @@
+name: Execution and Link Checks
+on: [pull_request]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Anaconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          auto-update-conda: true
+          auto-activate-base: true
+          miniconda-version: 'latest'
+          python-version: 3.7
+          environment-file: environment.yml
+          activate-environment: qe-lectures
+      - name: Get Changed Files
+        id: files
+        uses: jitterbit/get-changed-files@v1
+      - name: Run Execution Tests
+        shell: bash -l {0}
+        run: bash scripts/execution-test.sh "${{ steps.files.outputs.all }}"
+      - name: Run Linkchecker
+        shell: bash -l {0}
+        run: bash scripts/linkchecker-test.sh "${{ steps.files.outputs.all }}"

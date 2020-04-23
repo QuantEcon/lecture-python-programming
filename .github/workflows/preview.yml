@@ -1,0 +1,42 @@
+name: 'Netlify Preview Deploy'
+on:
+  pull_request:
+    types: ['opened', 'edited', 'synchronize']
+jobs:
+  deploy-preview:
+    name: 'Deploy'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Anaconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          auto-update-conda: true
+          auto-activate-base: true
+          miniconda-version: 'latest'
+          python-version: 3.7
+          environment-file: environment.yml
+          activate-environment: qe-lectures
+      - name: Get Changed Files
+        id: files
+        uses: jitterbit/get-changed-files@v1
+      - name: Checkout QuantEcon theme
+        uses: actions/checkout@v2
+        with:
+          repository: QuantEcon/lecture-python-programming.theme
+          token: ${{ secrets.ACTIONS_PAT }}
+          path: theme/lecture-python-programming.theme
+      - name: Build website files
+        shell: bash -l {0}
+        run: bash scripts/build-website.sh "${{ steps.files.outputs.all }}"
+      - name: Preview Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.0
+        with:
+          publish-dir: './_build/website/jupyter_html'
+          production-branch: master
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Preview Deploy from GitHub Actions"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
