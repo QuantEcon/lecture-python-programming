@@ -12,10 +12,10 @@ do
 done
 echo "List of Changed RST Files: $RST_FILES"
 if [ -z "$RST_FILES" ]; then
-    export BUILD_NETLIFY=false
+    echo "::set-env name=BUILD_NETLIFY::false"
     echo "No RST Files have changed -- nothing to do in this PR"
 else
-    export BUILD_NETLIFY=true
+    echo "::set-env name=BUILD_NETLIFY::true"
     RST_FILES="$RST_FILES source/rst/index_toc.rst"
     make website THEMEPATH=theme/lecture-python-programming.theme FILES="$RST_FILES"
     ls _build/website/jupyter_html/*  #Ensure build files are created
