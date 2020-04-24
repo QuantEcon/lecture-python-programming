@@ -29,9 +29,12 @@ jobs:
           path: theme/lecture-python-programming.theme
       - name: Build website files
         shell: bash -l {0}
-        run: bash scripts/build-website.sh "${{ steps.files.outputs.added_modified }}"
+        run: | 
+          bash scripts/build-website.sh "${{ steps.files.outputs.added_modified }}"
+          echo "::set-env name=BUILD_NETLIFY::$BUILD_NETLIFY"
       - name: Preview Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.0
+        if: env.BUILD_NETLIFY == 'true'
         with:
           publish-dir: './_build/website/jupyter_html'
           production-branch: master
