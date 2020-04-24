@@ -31,7 +31,6 @@ jobs:
         shell: bash -l {0}
         run: | 
           bash scripts/build-website.sh "${{ steps.files.outputs.added_modified }}"
-          echo "::set-env name=BUILD_NETLIFY::$BUILD_NETLIFY"
       - name: Preview Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.0
         if: env.BUILD_NETLIFY == 'true'
