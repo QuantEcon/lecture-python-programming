@@ -20,7 +20,7 @@ jobs:
         uses: jitterbit/get-changed-files@v1
       - name: Run Execution Tests
         shell: bash -l {0}
-        run: bash scripts/execution-test.sh "${{ steps.files.outputs.all }}"
+        run: bash scripts/execution-test.sh "${{ steps.files.outputs.added_modified }}"
       - name: Run Linkchecker
         shell: bash -l {0}
-        run: bash scripts/linkchecker-test.sh "${{ steps.files.outputs.all }}"
+        run: bash scripts/linkchecker-test.sh "${{ steps.files.outputs.added_modified }}"
