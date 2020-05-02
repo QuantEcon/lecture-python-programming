@@ -37,7 +37,7 @@ Python Programming for Economics and Finance
         <h2>Other ways to access the lectures</h2>
         <ul>
 			<li>
-				<a href="/_downloads/pdf/python_programming_for_quantitative_economics.pdf">
+				<a href="/_downloads/pdf/python_programming_for_economics_finance.pdf">
 					<i class="fas fa-file-pdf"></i>
 					<h3>PDF Version</h3>
 					<p>A print-ready version for viewing offline</p>
