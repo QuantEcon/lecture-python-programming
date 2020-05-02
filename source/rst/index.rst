@@ -1,7 +1,7 @@
 .. _index:
 
 **********************************************
-Python Programming for Quantitative Economics
+Python Programming for Economics and Finance
 **********************************************
 
 .. toctree::
@@ -13,11 +13,11 @@ Python Programming for Quantitative Economics
 .. raw:: html
 
     <div><style type="text/css">h1,.breadcrumbs{display:none;}</style></div>
-    <h1 class="sr-only" style="display:block;">Python Programming for Quantitative Economics</h1>
+    <h1 class="sr-only" style="display:block;">Python Programming for Economics and Finance</h1>
     <div class="home-intro">
         <div class="home-detail">
             <div class="home-blurb">
-                <p>This website presents a set of lectures on Python programming for quantitative economics, designed and written by <a href="http://www.tomsargent.com" target="_blank">Thomas J. Sargent</a> and <a href="http://johnstachurski.net" target="_blank">John Stachurski</a>.</p>
+                <p>This website presents a set of lectures on Python programming for economics and finance, designed and written by <a href="http://www.tomsargent.com" target="_blank">Thomas J. Sargent</a> and <a href="http://johnstachurski.net" target="_blank">John Stachurski</a>.</p>
                 <p>Last compiled: <span id="compiled_date"></span><br><a href="https://github.com/QuantEcon/lecture-python-programming/commits/">View commits</a> | <a href="https://github.com/QuantEcon/lecture-python-programming/graphs/contributors">See all contributors</a></p>
             </div>
             <div class="web-version">
@@ -37,7 +37,7 @@ Python Programming for Quantitative Economics
         <h2>Other ways to access the lectures</h2>
         <ul>
 			<li>
-				<a href="/_downloads/pdf/python_programming_for_quantitative_economics.pdf">
+				<a href="/_downloads/pdf/python_programming_for_economics_finance.pdf">
 					<i class="fas fa-file-pdf"></i>
 					<h3>PDF Version</h3>
 					<p>A print-ready version for viewing offline</p>
