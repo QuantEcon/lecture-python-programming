@@ -18,7 +18,9 @@ Python Programming for Economics and Finance
         <div class="home-detail">
             <div class="home-blurb">
                 <p>This website presents a set of lectures on Python programming for economics and finance, designed and written by <a href="http://www.tomsargent.com" target="_blank">Thomas J. Sargent</a> and <a href="http://johnstachurski.net" target="_blank">John Stachurski</a>.</p>
-                <p>Last compiled: <span id="compiled_date"></span><br><a href="https://github.com/QuantEcon/lecture-python-programming/commits/">View commits</a> | <a href="https://github.com/QuantEcon/lecture-python-programming/graphs/contributors">See all contributors</a></p>
+                <p>Last compiled: <span id="compiled_date"></span><br>
+                    <a href="https://github.com/QuantEcon/lecture-python-programming">View source</a> |
+                    <a href="https://github.com/QuantEcon/lecture-python-programming/commits/">View commits</a> | <a href="https://github.com/QuantEcon/lecture-python-programming/graphs/contributors">See all contributors</a></p>
             </div>
             <div class="web-version">
                 <a href="/index_toc.html">
@@ -48,13 +50,6 @@ Python Programming for Economics and Finance
                     <i class="fas fa-file-download"></i>
                     <h3>Notebooks</h3>
                     <p>Get the full set of Jupyter notebooks</p>
-                </a>
-            </li>
-            <li>
-                <a href="https://github.com/QuantEcon/lecture-python-programming">
-                    <i class="fab fa-github"></i>
-                    <h3>GitHub Repository</h3>
-                    <p>The source files for these lectures are openly available and stored on GitHub.  We welcome feedback and improvements.</p>
                 </a>
             </li>
         </ul>
