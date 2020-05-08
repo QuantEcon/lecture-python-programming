@@ -1,0 +1,41 @@
+name: Execution and Link Testing (Nightly)
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  coverage:
+    name: Run Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Anaconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          auto-update-conda: true
+          auto-activate-base: true
+          miniconda-version: 'latest'
+          python-version: 3.7
+          environment-file: environment.yml
+          activate-environment: qe-lectures
+      - name: Run Execution Tests
+        shell: bash -l {0}
+        run: make coverage
+  linkchecker:
+    name: Run linkchecker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Anaconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          auto-update-conda: true
+          auto-activate-base: true
+          miniconda-version: 'latest'
+          python-version: 3.7
+          environment-file: environment.yml
+          activate-environment: qe-lectures
+      - name: Run Linkchecker
+        shell: bash -l {0}
+        run: make linkcheck
