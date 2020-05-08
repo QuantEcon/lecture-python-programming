@@ -27,6 +27,12 @@ jobs:
           repository: QuantEcon/lecture-python-programming.theme
           token: ${{ secrets.ACTIONS_PAT }}
           path: theme/lecture-python-programming.theme
+      - name: Check Sphinx Cache
+        id: cache
+        uses: actions/cache@v1
+        with:
+          path: _build
+          key: cache-sphinx
       - name: Build website files
         shell: bash -l {0}
         run: | 
