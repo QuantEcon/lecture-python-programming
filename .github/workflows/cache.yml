@@ -1,4 +1,4 @@
-name: Build Website Cache
+name: Build Website Cache (Nightly)
 on:
   schedule:
     - cron: '1 0 * * *'
