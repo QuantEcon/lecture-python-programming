@@ -1,8 +1,7 @@
 name: Build Website Cache
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: '1 0 * * *'
 jobs:
   build-cache:
     name: Build Website

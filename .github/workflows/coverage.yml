@@ -1,7 +1,7 @@
 name: Execution and Link Testing (Nightly)
 on:
   schedule:
-    - cron: '0 21 * * *'
+    - cron: '0 17 * * *'
 jobs:
   coverage:
     name: Run Coverage
