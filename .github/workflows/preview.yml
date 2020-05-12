@@ -27,15 +27,16 @@ jobs:
           repository: QuantEcon/lecture-python-programming.theme
           token: ${{ secrets.ACTIONS_PAT }}
           path: theme/lecture-python-programming.theme
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      # - name: Get current date
+      #   id: date
+      #   run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Check Sphinx Cache
         id: cache
         uses: actions/cache@v1
         with:
           path: _build
-          key: cache-sphinx-${{ steps.date.outputs.date }}
+          key: cache-sphinx
+          # key: cache-sphinx-${{ steps.date.outputs.date }}
       - name: Build website files
         shell: bash -l {0}
         run: |
