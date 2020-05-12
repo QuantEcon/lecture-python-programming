@@ -1,7 +1,53 @@
-name: Build Website Cache (Nightly)
+# !!!
+# Once https://github.com/actions/cache/issues/63 is merged
+# this can be enabled for daily cache for full HTML previews
+# !!!
+# name: Build Website Cache (Nightly)
+# on:
+#   schedule:
+#     - cron: '1 0 * * *'
+# jobs:
+#   build-cache:
+#     name: Build Website
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - name: Setup Anaconda
+#         uses: goanpeca/setup-miniconda@v1
+#         with:
+#           auto-update-conda: true
+#           auto-activate-base: true
+#           miniconda-version: 'latest'
+#           python-version: 3.7
+#           environment-file: environment.yml
+#           activate-environment: qe-lectures
+#       - name: Checkout QuantEcon theme
+#         uses: actions/checkout@v2
+#         with:
+#           repository: QuantEcon/lecture-python-programming.theme
+#           token: ${{ secrets.ACTIONS_PAT }}
+#           path: theme/lecture-python-programming.theme
+#       - name: Get current date
+#         id: date
+#         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+#       - name: Cache Website Build Folder
+#         id: cache
+#         uses: actions/cache@v1
+#         with:
+#           path: _build
+#           key: cache-sphinx-${{ steps.date.outputs.date }}
+#       - name: Build Website files
+#         shell: bash -l {0}
+#         run: |
+#           make website THEMEPATH=theme/lecture-python-programming.theme
+#           ls _build/website/jupyter_html/*
+
+name: Build Website Cache
 on:
-  schedule:
-    - cron: '1 0 * * *'
+  push:
+    branches:
+      - master
 jobs:
   build-cache:
     name: Build Website
@@ -24,15 +70,12 @@ jobs:
           repository: QuantEcon/lecture-python-programming.theme
           token: ${{ secrets.ACTIONS_PAT }}
           path: theme/lecture-python-programming.theme
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Cache Website Build Folder
         id: cache
         uses: actions/cache@v1
         with:
           path: _build
-          key: cache-sphinx-${{ steps.date.outputs.date }}
+          key: cache-sphinx
       - name: Build Website files
         shell: bash -l {0}
         run: |
