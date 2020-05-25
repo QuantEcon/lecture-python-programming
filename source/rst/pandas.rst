@@ -148,6 +148,8 @@ In essence, a ``DataFrame`` in pandas is analogous to a (highly optimized) Excel
 
 Thus, it is a powerful tool for representing and analyzing data that are naturally organized  into rows and columns, often with  descriptive indexes for individual rows and individual columns.
 
+You can read more on how Pandas can read and write data files like Excel spreadsheets `here <https://realpython.com/pandas-read-write-files/>`_. 
+
 .. only:: html
 
     Let's look at an example that reads data from the CSV file ``pandas/data/test_pwt.csv`` that can be downloaded
