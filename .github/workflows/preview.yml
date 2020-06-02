@@ -22,6 +22,7 @@ jobs:
         id: files
         uses: jitterbit/get-changed-files@v1
       - name: Checkout QuantEcon theme
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/checkout@v2
         with:
           repository: QuantEcon/lecture-python-programming.theme
@@ -40,7 +41,7 @@ jobs:
       - name: Build website files
         shell: bash -l {0}
         run: |
-          bash scripts/build-website.sh "${{ steps.files.outputs.added_modified }}"
+          bash scripts/build-website.sh "${{ steps.files.outputs.added_modified }}" "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
       - name: Preview Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.0
         if: env.BUILD_NETLIFY == 'true'
