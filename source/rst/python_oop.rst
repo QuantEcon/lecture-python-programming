@@ -148,11 +148,11 @@ OOP is useful for the same reason that abstraction is useful: for recognizing an
 
 For example,
 
-* *a Markov chain* consists of a set of states and a collection of transition probabilities for moving across states
+* *a Markov chain* consists of a set of states, an initial probability distribution over states,  and a collection of transition probabilities for moving across states
 
 * *a general equilibrium theory* consists of a commodity space, preferences, technologies, and an equilibrium definition
 
-* *a game* consists of a list of players, lists of actions available to each player, player payoffs as functions of all players' actions, and a timing protocol
+* *a game* consists of a list of players, lists of actions available to each player, each player's payoffs as functions of all other players' actions, and a timing protocol
 
 These are all abstractions that collect together "objects" of the same "type".
 
@@ -179,10 +179,57 @@ Let's build some simple classes to start off.
 .. _oop_consumer_class:
 
 
+Before we do so, in order to indicate some of the power of Classes, we'll define two functions that we'll call ``earn`` and ``spend``.
+
+.. code-block:: python3
+
+    def earn(w,y):
+        "Consumer with inital wealth w earns y"
+        return w+y
+
+    def spend(w,x):
+        "consumer with initial wealth w spends x"
+        new_wealth = w -x
+        if new_wealth < 0:
+            print("Insufficient funds")
+        else:
+            return new_wealth    
+
+The ``earn`` function takes a consumer's initial wealth :math:`w` and  adds to it her current earnings :math:`y`.
+
+The ``spend`` function takes a consumer's initial wealth :math:`w` and deducts from it  her current spending :math:`x`.
+
+We can use these two functions to keep track of a consumer's wealth as she earns and spends.
+
+For example
+
+.. code-block:: python3
+
+    w0=100
+    w1=earn(w0,10)
+    w2=spend(w1,20)
+    w3=earn(w2,10)
+    w4=spend(w3,20)
+    print("w0,w1,w2,w3,w4 = ", w0,w1,w2,w3,w4)
+
+
+A Class bundles a set of data tied to a particular *instance* together with a collection of functions that operate on the data.
+
+In our example, an *instance* will be the name of  particular *person* whose *instance data* consist solely of its wealth.
+
+(In other examples *instance data* will consist of a vector of data.)
+
+In our example, two functions ``earn`` and ``spend`` can be applied to the current instance data.
+
+Taken together,  the instance data and functions  are called *methods*.
+
+These can be readily accessed in ways that we shall describe now.
+
+
 Example: A Consumer Class
 -------------------------
 
-First, we'll build a ``Consumer`` class with
+We'll build a ``Consumer`` class with
 
 * a ``wealth`` attribute that stores the consumer's wealth (data)
 
@@ -190,9 +237,9 @@ First, we'll build a ``Consumer`` class with
 
 * a ``spend`` method, where ``spend(x)`` either decreases wealth by ``x`` or returns an error if insufficient funds exist
 
-Admittedly a little contrived, this example of a class helps us internalize some new syntax.
+Admittedly a little contrived, this example of a class helps us internalize some peculiar syntax.
 
-Here's one implementation
+Here how we set up our Consumer class.
 
 
 .. code-block:: python3
@@ -220,28 +267,28 @@ There's some special syntax here so let's step through carefully
 
 * The ``class`` keyword indicates that we are building a class.
 
-This class defines instance data ``wealth`` and three methods: ``__init__``, ``earn`` and ``spend``
+The ``Consumer`` class defines instance data ``wealth`` and three methods: ``__init__``, ``earn`` and ``spend``
 
-*  ``wealth`` is *instance data* because each consumer we create (each instance of the ``Consumer`` class) will have its own separate wealth data.
+*  ``wealth`` is *instance data* because each consumer we create (each instance of the ``Consumer`` class) will have its own wealth data.
 
-The ideas behind the ``earn`` and ``spend`` methods were discussed above.
+The ``earn`` and ``spend`` methods deploy the functions we described earlier and that can potentially be applied to the ``wealth`` instance data. 
 
-Both of these act on the instance data ``wealth``.
 
 The ``__init__`` method is a *constructor method*.
 
-Whenever we create an instance of the class, this method will be called automatically.
+Whenever we create an instance of the class, the ``__init_`` method will be called automatically.
 
 Calling ``__init__`` sets up a "namespace" to hold the instance data --- more on this soon.
 
-We'll also discuss the role of ``self`` just below.
+We'll also discuss the role of the peculiar  ``self`` bookkeeping device in detail below.
+
+Usage 
+^^^^^^
 
 
-Usage
-^^^^^
+Here's an example in which we use the class ``Consumer`` to crdate an instance of a consumer whom we affectionately name :math:`c1`.
 
-
-Here's an example of usage
+After we create consumer :math:`c1` and endow it with initial wealth :math:`10`, we'll apply the ``spend`` method.
 
 .. code-block:: python3
 
@@ -283,12 +330,13 @@ When we access or set attributes we're actually just modifying the dictionary
 maintained by the instance.
 
 Self
-^^^^
+^^^^^
+
 
 If you look at the ``Consumer`` class definition again you'll see the word
 `self` throughout the code.
 
-The rules with ``self`` are that
+The rules for using ``self`` in creating a Class are that
 
 * Any instance data should be prepended with ``self``
 
