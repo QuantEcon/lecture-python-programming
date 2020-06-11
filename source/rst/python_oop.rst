@@ -148,7 +148,7 @@ OOP is useful for the same reason that abstraction is useful: for recognizing an
 
 For example,
 
-* *a Markov chain* consists of a set of states, an initial probability distribution over states,  and a collection of transition probabilities for moving across states
+* *a Markov chain* consists of a set of states, an initial probability distribution over states,  and a collection of probabilities of moving across states
 
 * *a general equilibrium theory* consists of a commodity space, preferences, technologies, and an equilibrium definition
 
@@ -213,7 +213,7 @@ For example
     print("w0,w1,w2,w3,w4 = ", w0,w1,w2,w3,w4)
 
 
-A Class bundles a set of data tied to a particular *instance* together with a collection of functions that operate on the data.
+A *Class* bundles a set of data tied to a particular *instance* together with a collection of functions that operate on the data.
 
 In our example, an *instance* will be the name of  particular *person* whose *instance data* consist solely of its wealth.
 
@@ -302,7 +302,7 @@ After we create consumer :math:`c1` and endow it with initial wealth :math:`10`,
     c1.spend(100)
 
 
-We can of course create multiple instances each with its own data
+We can of course create multiple instances, i.e., multiple consumers,  each with its own name and  data
 
 .. code-block:: python3
 
@@ -316,7 +316,7 @@ We can of course create multiple instances each with its own data
     c1.wealth
 
 
-In fact, each instance stores its data in a separate namespace dictionary
+Each instance, i.e., each consumer,  stores its data in a separate namespace dictionary
 
 .. code-block:: python3
 
@@ -340,9 +340,9 @@ The rules for using ``self`` in creating a Class are that
 
 * Any instance data should be prepended with ``self``
 
-    * e.g., the ``earn`` method references ``self.wealth`` rather than just ``wealth``
+    * e.g., the ``earn`` method uses ``self.wealth`` rather than just ``wealth``
 
-* Any method defined within the class should have ``self`` as its first argument
+* A method defined within the code that defines the  class should have ``self`` as its first argument
 
     * e.g., ``def earn(self, y)`` rather than just ``def earn(y)``
 
@@ -355,7 +355,7 @@ Details
 
 In this section, we look at some more formal details related to classes and ``self``
 
-*  You might wish to skip to :ref:`the next section <oop_solow_growth>` on first pass of this lecture.
+*  You might wish to skip to :ref:`the next section <oop_solow_growth>` the first time you read this lecture.
 
 *  You can return to these details after you've familiarized yourself with more examples.
 
@@ -412,8 +412,8 @@ Example: The Solow Growth Model
 
 For our next example, let's write a simple class to implement the Solow growth model.
 
-The Solow growth model is a neoclassical growth model where the amount of
-capital stock per capita :math:`k_t` evolves according to the rule
+The Solow growth model is a neoclassical growth model in which the per capita 
+capital stock :math:`k_t` evolves according to the rule
 
 .. math::
     :label: solow_lom
@@ -423,13 +423,13 @@ capital stock per capita :math:`k_t` evolves according to the rule
 
 Here
 
-* :math:`s` is an exogenously given savings rate
+* :math:`s` is an exogenously given saving rate
 * :math:`z` is a productivity parameter
 * :math:`\alpha` is capital's share of income
 * :math:`n` is the population growth rate
 * :math:`\delta` is the depreciation rate
 
-The **steady state** of the model is the :math:`k` that solves :eq:`solow_lom` when :math:`k_{t+1} = k_t = k`.
+A **steady state** of the model is a :math:`k` that solves :eq:`solow_lom` when :math:`k_{t+1} = k_t = k`.
 
 Here's a class that implements this model.
 
@@ -512,7 +512,7 @@ The common steady state is also plotted for comparison
         lb = f'capital series from initial state {s.k}'
         ax.plot(s.generate_sequence(T), 'o-', lw=2, alpha=0.6, label=lb)
 
-    ax.set_xlabel('$k_{t+1}$', fontsize=14)
+    ax.set_xlabel('$t$', fontsize=14)
     ax.set_ylabel('$k_t$', fontsize=14)
     ax.legend()
     plt.show()
@@ -522,7 +522,7 @@ The common steady state is also plotted for comparison
 Example: A Market
 -----------------
 
-Next, let's write a class for a simple one good market where agents are price takers.
+Next, let's write a class for competitive market in which buyers and sellers are both price takers.
 
 The market consists of the following objects:
 
@@ -532,7 +532,7 @@ The market consists of the following objects:
 
 Here
 
-* :math:`p` is price paid by the consumer,  :math:`Q` is quantity and :math:`t` is a per-unit tax.
+* :math:`p` is price paid by the buyer,  :math:`Q` is quantity and :math:`t` is a per-unit tax.
 
 * Other symbols are demand and supply parameters.
 
@@ -559,7 +559,7 @@ Here's our implementation.
                 raise ValueError('Insufficient demand.')
 
         def price(self):
-            "Return equilibrium price"
+            "Compute equilibrium price"
             return  (self.ad - self.az + self.bz * self.tax) / (self.bd + self.bz)
 
         def quantity(self):
@@ -667,7 +667,7 @@ Example: Chaos
 
 Let's look at one more example, related to chaotic dynamics in nonlinear systems.
 
-One simple transition rule that can generate complex dynamics is the logistic map
+A simple transition rule that can generate erratic time paths is the logistic map
 
 .. math::
     :label: quadmap2
@@ -685,7 +685,7 @@ Here's one implementation
 
     class Chaos:
       """
-      Models the dynamical system with :math:`x_{t+1} = r x_t (1 - x_t)`
+      Models the dynamical system :math:`x_{t+1} = r x_t (1 - x_t)`
       """
       def __init__(self, x0, r):
           """
@@ -775,7 +775,7 @@ Special Methods
 .. index::
     single: Object-Oriented Programming; Special Methods
 
-Python provides special methods with which some neat tricks can be performed.
+Python provides special methods that come in handy. 
 
 For example, recall that lists and tuples have a notion of length and that this length can be queried via the ``len`` function
 
