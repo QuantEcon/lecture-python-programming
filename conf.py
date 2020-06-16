@@ -451,6 +451,8 @@ jupyter_allow_html_only=True
 # jupyter_theme_path = 'theme/minimal'    #Specified in Makefile
 # jupyter_template_path = 'theme/minimal/templates'   #Specified in Makefile
 
+jupyter_nextprev_ignore = ['404', "search", "status", "troubleshooting"]
+
 ### pdf options
 jupyter_pdf_logo = "_static/img/qe-menubar-logo.png"
 
