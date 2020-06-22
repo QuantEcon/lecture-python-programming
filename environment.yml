@@ -16,7 +16,8 @@ dependencies:
   - networkx
   - sphinx=2.4.4
   - pip:
-    - sphinxcontrib-jupyter 
-    - sphinxcontrib-bibtex 
-    - quantecon 
+    - sphinxcontrib-jupyter
+    - sphinxcontrib-bibtex
+    - git+https://github.com/mmcky/sphinxcontrib-myst.git
+    - quantecon
     - joblib
