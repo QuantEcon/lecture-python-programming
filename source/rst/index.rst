@@ -20,7 +20,7 @@ Python Programming for Economics and Finance
                 <p>This website presents a set of lectures on Python programming for economics and finance, designed and written by <a href="http://www.tomsargent.com" target="_blank">Thomas J. Sargent</a> and <a href="http://johnstachurski.net" target="_blank">John Stachurski</a>.</p>
                 <p>Last compiled: <span id="compiled_date"></span><br>
                     <a href="https://github.com/QuantEcon/lecture-python-programming">View source</a> |
-                    <a href="https://github.com/QuantEcon/lecture-python-programming/commits/">View commits</a> | <a href="https://github.com/QuantEcon/lecture-python-programming/graphs/contributors">See all contributors</a></p>
+                    <a href="https://github.com/QuantEcon/lecture-python-programming/commits/">View commits</a> | <a href="https://quantecon.org/about-python-lectures/#credits">See all contributors</a></p>
             </div>
             <div class="web-version">
                 <a href="/index_toc.html">
