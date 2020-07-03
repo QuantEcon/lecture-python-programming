@@ -18,5 +18,4 @@ dependencies:
   - pip:
     - sphinxcontrib-jupyter 
     - sphinxcontrib-bibtex 
-    - quantecon 
     - joblib
