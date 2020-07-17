@@ -13,7 +13,7 @@ In addition to what's in Anaconda, this lecture will need the following librarie
 .. code-block:: ipython
   :class: hide-output
 
-  !conda install -c conda-forge quantecon
+  !conda install quantecon
 
 Please also make sure that you have the latest version of Anaconda, since old
 versions are a :doc:`common source of errors <troubleshooting>`.
