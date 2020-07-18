@@ -420,7 +420,7 @@ Installing Libraries
 
 Most of the libraries we need come in Anaconda.
 
-Other libraries can be installed with ``pip``.
+Other libraries can be installed with ``pip`` or ``conda``.
 
 One library we'll be using is `QuantEcon.py <http://quantecon.org/quantecon-py>`__.
 
@@ -429,26 +429,25 @@ One library we'll be using is `QuantEcon.py <http://quantecon.org/quantecon-py>`
 You can install `QuantEcon.py <http://quantecon.org/quantecon-py>`__ by
 starting Jupyter and typing
 
-
-    ``!pip install --upgrade quantecon``
+    ``!conda install quantecon``
 
 into a cell.
 
 Alternatively, you can type the following into a terminal
 
-    ``pip install quantecon``
+    ``conda install quantecon``
 
 More instructions can be found on the `library page <http://quantecon.org/quantecon-py>`__.
 
 To upgrade to the latest version, which you should do regularly, use
 
-    ``pip install --upgrade quantecon``
+    ``conda upgrade quantecon``
 
 Another library we will be using is `interpolation.py <https://github.com/EconForge/interpolation.py>`__.
 
 This can be installed by typing in Jupyter
 
-    ``!pip install interpolation``
+    ``!conda install -c conda-forge interpolation``
 
 
 

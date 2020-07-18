@@ -47,7 +47,7 @@ In addition to what's in Anaconda, this lecture will need
 .. code-block:: ipython
   :class: hide-output
 
-  !pip install --upgrade quantecon
+  !conda install quantecon
 
 
 

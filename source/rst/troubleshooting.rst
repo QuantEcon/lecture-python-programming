@@ -35,9 +35,9 @@ You also need to keep the external code libraries, such as `QuantEcon.py
 
 For this task you can either
 
-* use `pip install --upgrade quantecon` on the command line, or
+* use `conda upgrade quantecon` on the command line, or
 
-* execute `!pip install --upgrade quantecon` within a Jupyter notebook.
+* execute `!conda upgrade quantecon` within a Jupyter notebook.
 
 If your local environment is still not working you can do two things.
 

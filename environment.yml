@@ -15,8 +15,9 @@ dependencies:
   - matplotlib
   - networkx
   - sphinx=2.4.4
+  - sympy
+  - scipy
   - pip:
     - sphinxcontrib-jupyter 
     - sphinxcontrib-bibtex 
-    - quantecon 
     - joblib
