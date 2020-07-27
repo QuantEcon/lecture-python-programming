@@ -18,6 +18,7 @@ dependencies:
   - sympy
   - scipy
   - pip:
-    - sphinxcontrib-jupyter 
-    - sphinxcontrib-bibtex 
+    - sphinxcontrib-jupyter
+    - sphinxcontrib-bibtex
     - joblib
+    - git+https://github.com/mmcky/sphinxcontrib-rst2myst.git
