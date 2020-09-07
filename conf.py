@@ -40,7 +40,7 @@ extensions = [
 	'IPython.sphinxext.ipython_console_highlighting',
     # Custom Sphinx Extensions
     'sphinxcontrib.jupyter', 
-    'sphinxcontrib.rst2myst',
+    'sphinxcontrib.tomyst',
 ]
 
 # Retired Extensions but may be useful in Future
