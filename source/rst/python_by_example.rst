@@ -416,10 +416,10 @@ On the other hand, it takes a bit of care to get right, so please remember:
 
 * The line before the start of a code block always ends in a colon
 
-   * ``for i in range(10):``
-   * ``if x > y:``
-   * ``while x < 100:``
-   * etc., etc.
+  * ``for i in range(10):``
+  * ``if x > y:``
+  * ``while x < 100:``
+  * etc., etc.
 
 * All lines in a code block **must have the same amount of indentation**.
 

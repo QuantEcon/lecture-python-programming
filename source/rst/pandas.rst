@@ -38,9 +38,9 @@ Just as `NumPy <http://www.numpy.org/>`_ provides the basic array data type plus
 
 #. endows them with methods that facilitate operations such as
 
-   * reading in data
+  * reading in data
 
-   * adjusting indices
+  * adjusting indices
 
    * working with dates and time series
 

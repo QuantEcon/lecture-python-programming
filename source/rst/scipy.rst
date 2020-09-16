@@ -231,9 +231,9 @@ To understand the idea, recall the well-known game where
 
 * Player B asks if it's less than 50
 
-   * If yes, B asks if it's less than 25
+  * If yes, B asks if it's less than 25
 
-   * If no, B asks if it's less than 75
+  * If no, B asks if it's less than 75
 
 And so on.
 

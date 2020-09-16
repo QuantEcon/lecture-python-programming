@@ -164,7 +164,7 @@ Either
 
 * open up a terminal and type ``jupyter notebook``
 
-   * Windows users should substitute "Anaconda command prompt" for "terminal" in the previous line.
+  * Windows users should substitute "Anaconda command prompt" for "terminal" in the previous line.
 
 If you use the second option, you will see something like this
 
@@ -519,9 +519,9 @@ Nothing beats the power and efficiency of a good text editor for working with pr
 
 A good text editor will provide
 
-   * efficient text editing commands (e.g., copy, paste, search and replace)
+  * efficient text editing commands (e.g., copy, paste, search and replace)
 
-   * syntax highlighting, etc.
+  * syntax highlighting, etc.
 
 Right now, an extremely popular text editor for coding is `VS Code <https://code.visualstudio.com/>`__.
 
