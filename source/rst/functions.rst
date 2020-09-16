@@ -234,9 +234,9 @@ We will break this program into two parts:
 
 #. The main part of the program that
 
-    #. calls this function to get data
+   #. calls this function to get data
 
-    #. plots the data
+   #. plots the data
 
 This is accomplished in the next program
 
@@ -302,9 +302,9 @@ Notes
 
 * Notice that equality is tested with the ``==`` syntax, not ``=``.
 
-    * For example, the statement ``a = 10`` assigns the name ``a`` to the value ``10``.
+   * For example, the statement ``a = 10`` assigns the name ``a`` to the value ``10``.
 
-    * The expression ``a == 10`` evaluates to either ``True`` or ``False``, depending on the value of ``a``.
+   * The expression ``a == 10`` evaluates to either ``True`` or ``False``, depending on the value of ``a``.
 
 Now, there are several ways that we can simplify the code above.
 
