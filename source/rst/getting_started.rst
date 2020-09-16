@@ -164,7 +164,7 @@ Either
 
 * open up a terminal and type ``jupyter notebook``
 
-    * Windows users should substitute "Anaconda command prompt" for "terminal" in the previous line.
+  * Windows users should substitute "Anaconda command prompt" for "terminal" in the previous line.
 
 If you use the second option, you will see something like this
 
@@ -237,15 +237,15 @@ The two modes are
 
 #. Edit mode
 
-    * Indicated by a green border around one cell, plus a blinking cursor
+   * Indicated by a green border around one cell, plus a blinking cursor
 
-    * Whatever you type appears as is in that cell
+   * Whatever you type appears as is in that cell
 
 #. Command mode
 
-    * The green border is replaced by a grey (or grey and blue) border
+   * The green border is replaced by a grey (or grey and blue) border
 
-    * Keystrokes are interpreted as commands --- for example, typing `b` adds a new cell below  the current one
+   * Keystrokes are interpreted as commands --- for example, typing `b` adds a new cell below  the current one
 
 
 To switch to
@@ -519,9 +519,9 @@ Nothing beats the power and efficiency of a good text editor for working with pr
 
 A good text editor will provide
 
-    * efficient text editing commands (e.g., copy, paste, search and replace)
+* efficient text editing commands (e.g., copy, paste, search and replace)
 
-    * syntax highlighting, etc.
+* syntax highlighting, etc.
 
 Right now, an extremely popular text editor for coding is `VS Code <https://code.visualstudio.com/>`__.
 
@@ -595,7 +595,7 @@ There are two main flavors of Git
 
 #. the various point-and-click GUI versions
 
-    * See, for example, the `GitHub version <https://desktop.github.com/>`_
+   * See, for example, the `GitHub version <https://desktop.github.com/>`_
 
 As the 1st task, try
 

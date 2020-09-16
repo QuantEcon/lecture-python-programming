@@ -38,15 +38,15 @@ Just as `NumPy <http://www.numpy.org/>`_ provides the basic array data type plus
 
 #. endows them with methods that facilitate operations such as
 
-    * reading in data
+   * reading in data
 
-    * adjusting indices
+   * adjusting indices
 
-    * working with dates and time series
+   * working with dates and time series
 
-    * sorting, grouping, re-ordering and general data munging [#mung]_
+   * sorting, grouping, re-ordering and general data munging [#mung]_
 
-    * dealing with missing values, etc., etc.
+   * dealing with missing values, etc., etc.
 
 More sophisticated statistical functionality is left to other packages, such
 as `statsmodels <http://www.statsmodels.org/>`__ and `scikit-learn <http://scikit-learn.org/>`__, which are built on top of pandas.
