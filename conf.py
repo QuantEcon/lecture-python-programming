@@ -368,6 +368,8 @@ linkcheck_ignore = [r'https:\/\/github\.com\/.*?#.*'] #Anchors on Github seem to
 
 linkcheck_timeout = 30 
 
+# {{ tomyst-remove-start }}
+
 # --------------------------------------------
 # jupyter Sphinx Extension conversion settings
 # --------------------------------------------
@@ -484,4 +486,6 @@ jupyter_pdf_book_index = "index_toc"
 # Set Destination path
 tomyst_static_file_path = ['source/rst/_static']
 tomyst_parser = "myst_nb"
-tomyst_comment_conf = ["^jupyter_"]
+tomyst_conf_removeblocks = True
+
+# {{ tomyst-remove-finish }}
