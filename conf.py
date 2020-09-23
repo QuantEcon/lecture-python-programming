@@ -487,5 +487,6 @@ jupyter_pdf_book_index = "index_toc"
 tomyst_static_file_path = ['source/rst/_static']
 tomyst_parser = "myst_nb"
 tomyst_conf_removeblocks = True
+tomyst_conf_dropcontaining = ["sphinxcontrib.jupyter"]
 
 # {{ tomyst-remove-finish }}
