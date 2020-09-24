@@ -617,9 +617,9 @@ As the 1st task, try
 
 For example, if you've installed the command line version, open up a terminal and enter.
 
+.. code-block:: bash
 
-
-	``git clone https://github.com/QuantEcon/QuantEcon.py``.
+    git clone https://github.com/QuantEcon/QuantEcon.py
 
 (This is just ``git clone`` in front of the URL for the repository)
 
