@@ -40,6 +40,7 @@ extensions = [
 	'IPython.sphinxext.ipython_console_highlighting',
     # Custom Sphinx Extensions
     'sphinxcontrib.jupyter', 
+    'sphinx_tomyst',
 ]
 
 # Retired Extensions but may be useful in Future
@@ -131,7 +132,7 @@ rst_prolog = """
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'qe-lectures'
+html_theme = 'sphinx_book_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -139,7 +140,7 @@ html_theme = 'qe-lectures'
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ['_themes']
+# html_theme_path = ['_themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -367,6 +368,8 @@ linkcheck_ignore = [r'https:\/\/github\.com\/.*?#.*'] #Anchors on Github seem to
 
 linkcheck_timeout = 30 
 
+# {{ tomyst-remove-start }}
+
 # --------------------------------------------
 # jupyter Sphinx Extension conversion settings
 # --------------------------------------------
@@ -477,3 +480,13 @@ jupyter_pdf_book_name = "python_programming_for_economics_finance"
 
 # pdf toc file
 jupyter_pdf_book_index = "index_toc"
+
+# tomyst Config
+
+# Set Destination path
+tomyst_static_file_path = ['source/rst/_static']
+tomyst_parser = "myst_nb"
+tomyst_conf_removeblocks = True
+tomyst_conf_dropcontaining = ["sphinxcontrib.jupyter"]
+
+# {{ tomyst-remove-finish }}
