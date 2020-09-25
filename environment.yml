@@ -10,3 +10,4 @@ dependencies:
     - sphinxcontrib-jupyter
     - sphinxcontrib-bibtex
     - joblib
+    - git+https://github.com/executablebooks/sphinx-tomyst
