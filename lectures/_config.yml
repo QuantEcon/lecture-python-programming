@@ -26,7 +26,8 @@ sphinx:
                        'https://data.oecd.org/',
                        'https://www.reddit.com/',
                        'https://openai.com',
-                       'https://chatgpt.com/']
+                       'https://chatgpt.com/',
+                       'https://fred.stlouisfed.org/.*']
     nb_merge_streams: true
     # sphinx-exercise
     exercise_style: "solution_follow_exercise"
