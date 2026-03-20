@@ -342,7 +342,15 @@ df.select([
 ])
 ```
 
-However as you can see from the warning issued by Polars there is often a better way to achieve this using the Polars API.
+```{note}
+As you can see from the warning, Polars discourages `map_elements` because it
+bypasses the optimized expression engine.
+We include it here so you know the escape hatch exists---for example, when
+wrapping a function that has no native Polars equivalent---but in
+practice you should prefer the expressions API shown below.
+```
+
+There is often a better way to achieve this using the Polars API.
 
 ```{code-cell} ipython3
 df.select([
@@ -499,6 +507,11 @@ df
 
 One of the nice things about Polars `DataFrame` and `Series` objects is that they can be easily converted to pandas for visualization through Matplotlib.
 
+```{note}
+Polars also provides a built-in plotting API via [Altair](https://docs.pola.rs/api/python/stable/reference/dataframe/plot.html).
+We use matplotlib in this lecture for consistency with other lectures in this series.
+```
+
 For example, we can easily generate a bar plot of GDP per capita
 
 ```{code-cell} ipython3
@@ -624,6 +637,15 @@ result_optimized.head()
 - Need immediate results for debugging
 
 The lazy API is particularly powerful for data processing pipelines where multiple transformations can be optimized together as a single operation.
+
+```{tip}
+Polars also provides `scan_csv` which returns a `LazyFrame` directly,
+avoiding the need to load the entire file into memory before applying
+filters and projections.
+This is especially useful when working with large CSV files.
+See [the Polars I/O documentation](https://docs.pola.rs/user-guide/io/csv/)
+for more details.
+```
 
 ## On-Line Data Sources
 
