@@ -30,7 +30,7 @@ In addition to what's in Anaconda, this lecture will need the following librarie
 ```{code-cell} ipython3
 :tags: [hide-output]
 
-!pip install --upgrade polars wbgapi yfinance pyarrow
+!pip install --upgrade polars yfinance
 ```
 
 ## Overview
@@ -96,7 +96,7 @@ s
 ```
 
 ```{note}
-You may notice the above series has no indices, unlike in [pd.Series](pandas:series); this is because Polars' is column centric and accessing data is predominantly managed through filtering and boolean masks; here is [an interesting blog post discussing this in more detail](https://medium.com/data-science/understand-polars-lack-of-indexes-526ea75e413).
+You may notice the above series has no indices, unlike in {ref}`pandas Series <pandas:series>`; this is because Polars is column-centric and accessing data is predominantly managed through filtering and boolean masks; here is [an interesting blog post discussing this in more detail](https://medium.com/data-science/understand-polars-lack-of-indexes-526ea75e413).
 ```
 
 Polars `Series` are built on top of Apache Arrow arrays and support many similar operations to Pandas `Series`.
@@ -197,7 +197,7 @@ We'll read this in from a URL using the Polars function `read_csv`.
 
 ```{code-cell} ipython3
 URL = ('https://raw.githubusercontent.com/QuantEcon/'
-       'lecture-python-programming/master/source/_static/'
+       'lecture-python-programming/main/lectures/_static/'
        'lecture_specific/pandas/data/test_pwt.csv')
 df = pl.read_csv(URL)
 type(df)
@@ -209,7 +209,7 @@ Here is the content of `test_pwt.csv`
 df
 ```
 
-### Select data by position
+### Select Data by Position
 
 In practice, one thing that we do all the time is to find, select and work with a
 subset of the data of our interests.
@@ -238,7 +238,7 @@ To select rows and columns using a mixture of integers and labels, we can use mo
 df[2:5].select(['country', 'tcgdp'])
 ```
 
-### Select data by conditions
+### Select Data by Conditions
 
 Instead of indexing rows and columns using integers and names, we can also obtain a sub-dataframe of our interests that satisfies certain (potentially complicated) conditions.
 
@@ -317,7 +317,7 @@ We can then save the smaller dataset for further analysis.
 df_subset.write_csv('pwt_subset.csv')
 ```
 
-### Apply and map operations
+### Apply and Map Operations
 
 Polars provides powerful methods for applying functions to data.
 
@@ -338,7 +338,7 @@ For more complex operations, we can use `map_elements` (similar to pandas' apply
 ```{code-cell} ipython3
 df.select([
     pl.col('country'),
-    pl.col('POP').map_elements(lambda x: x * 2).alias('POP_doubled')
+    pl.col('POP').map_elements(lambda x: x * 2, return_dtype=pl.Float64).alias('POP_doubled')
 ])
 ```
 
@@ -365,7 +365,7 @@ df.filter(complex_condition).select([
 ])
 ```
 
-### Make changes in DataFrames
+### Make Changes in DataFrames
 
 The ability to make changes in DataFrames is important to generate a clean dataset for future analysis.
 
@@ -459,7 +459,7 @@ Missing value imputation is a big area in data science involving various machine
 
 There are also more [advanced tools](https://scikit-learn.org/stable/modules/impute.html) in Python to impute missing values.
 
-### Standardization and visualization
+### Standardization and Visualization
 
 Let's imagine that we're only interested in the population (`POP`) and total GDP (`tcgdp`).
 
@@ -467,12 +467,6 @@ One way to strip the data frame `df` down to only these variables is to overwrit
 
 ```{code-cell} ipython3
 df = df.select(['country', 'POP', 'tcgdp'])
-df
-```
-
-While Polars doesn't have a traditional index like pandas, we can work with country names directly
-
-```{code-cell} ipython3
 df
 ```
 
@@ -541,7 +535,7 @@ plt.show()
 
 One of Polars' most powerful features is **lazy evaluation**. This allows Polars to optimize your entire query before executing it, leading to significant performance improvements.
 
-### Eager vs lazy APIs
+### Eager vs Lazy APIs
 
 Polars provides two APIs:
 
@@ -553,7 +547,7 @@ Let's see the difference using our dataset:
 ```{code-cell} ipython3
 # First, let's reload our original dataset for this example
 URL = ('https://raw.githubusercontent.com/QuantEcon/'
-       'lecture-python-programming/master/source/_static/'
+       'lecture-python-programming/main/lectures/_static/'
        'lecture_specific/pandas/data/test_pwt.csv')
 df_full = pl.read_csv(URL)
 
@@ -587,7 +581,7 @@ print("Lazy result shape:", result_lazy.shape)
 result_lazy.head()
 ```
 
-### Query optimization
+### Query Optimization
 
 The lazy API allows Polars to perform several optimizations:
 
@@ -616,7 +610,7 @@ result_optimized = optimized_query.collect()
 result_optimized.head()
 ```
 
-### When to use lazy vs eager
+### When to Use Lazy vs Eager
 
 **Use Lazy API when:**
 - Working with large datasets
@@ -631,7 +625,7 @@ result_optimized.head()
 
 The lazy API is particularly powerful for data processing pipelines where multiple transformations can be optimized together as a single operation.
 
-## Online data sources
+## On-Line Data Sources
 
 ```{index} single: Data Sources
 ```
@@ -972,8 +966,8 @@ for index_name in indices_list.values():
 ax.set_xlabel("year", fontsize=12)
 ax.set_ylabel("yearly return (%)", fontsize=12)
 ax.set_title("Yearly returns of major stock indices (2001-2021)", fontsize=14)
+ax.axhline(y=0, color='k', linestyle='--', alpha=0.5)
 ax.legend()
-ax.axhline(y=0, color='k', linestyle='--', alpha=0.5, label='zero line')
 plt.tight_layout()
 plt.show()
 ```
