@@ -4,4 +4,4 @@
 
 Notebooks for https://python-programming.quantecon.org
 
-**Note:** This README should be edited [here](https://github.com/quantecon/lecture-python-programming.myst/.binder)
+**Note:** This README should be edited [here](https://github.com/quantecon/lecture-python-programming/.binder)

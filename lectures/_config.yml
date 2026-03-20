@@ -42,7 +42,7 @@ sphinx:
       dark_logo: quantecon-logo-transparent.png
       header_organisation_url: https://quantecon.org
       header_organisation: QuantEcon
-      repository_url: https://github.com/QuantEcon/lecture-python-programming.myst
+      repository_url: https://github.com/QuantEcon/lecture-python-programming
       nb_repository_url: https://github.com/QuantEcon/lecture-python-programming.notebooks
       path_to_docs: lectures
       twitter: quantecon
