@@ -1,0 +1,30 @@
+# Sync Translations — Simplified Chinese
+# On merged PR, translate changed lectures into the zh-cn target repo.
+name: Sync Translations (Simplified Chinese)
+
+on:
+  pull_request:
+    types: [closed]
+    paths:
+      - 'lectures/**/*.md'
+      - 'lectures/_toc.yml'
+
+jobs:
+  sync:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+
+      - uses: QuantEcon/action-translation@v0.11.1
+        with:
+          mode: sync
+          target-repo: QuantEcon/lecture-python-programming.zh-cn
+          target-language: zh-cn
+          source-language: en
+          docs-folder: lectures
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github-token: ${{ secrets.QUANTECON_SERVICES_PAT }}

@@ -3,15 +3,15 @@ channels:
   - default
 dependencies:
   - python=3.13
-  - anaconda=2025.06
+  - anaconda=2025.12
   - pip
   - pip:
-    - jupyter-book==1.0.4post1
-    - quantecon-book-theme==0.9.2
-    - sphinx-tojupyter==0.3.1
-    - sphinxext-rediraffe==0.2.7
-    - sphinx-exercise==1.0.1
+    - jupyter-book>=1.0.4post1,<2.0
+    - quantecon-book-theme==0.19.0
+    - sphinx-tojupyter==0.6.0
+    - sphinxext-rediraffe==0.3.0
+    - sphinx-exercise==1.2.1
     - sphinxcontrib-youtube==1.4.1
-    - sphinx-togglebutton==0.3.2
+    - sphinx-togglebutton==0.4.4
 
 
