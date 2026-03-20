@@ -1,6 +1,6 @@
-# Sync Translations — Farsi
-# On merged PR, translate changed lectures into the Farsi target repo.
-name: Sync Translations (Farsi)
+# Sync Translations — Simplified Chinese
+# On merged PR, translate changed lectures into the zh-cn target repo.
+name: Sync Translations (Simplified Chinese)
 
 on:
   pull_request:
@@ -22,8 +22,8 @@ jobs:
       - uses: QuantEcon/action-translation@v0.11.1
         with:
           mode: sync
-          target-repo: QuantEcon/lecture-python-programming.fa
-          target-language: fa
+          target-repo: QuantEcon/lecture-python-programming.zh-cn
+          target-language: zh-cn
           source-language: en
           docs-folder: lectures
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
