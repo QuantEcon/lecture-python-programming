@@ -470,7 +470,8 @@ Python is a *dynamically typed* language, meaning you don't need to declare the 
 
 However, Python supports optional **type hints** (also called type annotations) that allow you to indicate the expected types of variables, function parameters, and return values.
 
-Type hints were introduced in Python 3.5 and have become increasingly common in modern Python code.
+Type hints were introduced starting in Python 3.5 and have evolved in subsequent versions.
+All of the syntax shown here works in Python 3.9 and later.
 
 ```{note}
 Type hints are *ignored by the Python interpreter at runtime* --- they do not affect how your code executes. They are purely informational and serve as documentation for humans and tools.
@@ -533,9 +534,11 @@ Python will not raise an error if you pass the "wrong" type:
 def add(x: int, y: int) -> int:
     return x + y
 
-# Works fine, despite passing strings
-add('foo', 'bar')
+# Passes floats — Python doesn't complain
+add(1.5, 2.7)
 ```
+
+The hints say `int`, but Python happily accepts `float` arguments and returns `4.2` --- also not an `int`.
 
 This is a key difference from statically typed languages like C or Java, where mismatched types cause compilation errors.
 
