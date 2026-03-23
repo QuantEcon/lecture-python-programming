@@ -29,6 +29,7 @@ parts:
   numbered: true
   chapters:
   - file: pandas
+  - file: polars
   - file: pandas_panel
 - caption: More Python Programming
   numbered: true
