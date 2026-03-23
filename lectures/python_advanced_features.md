@@ -1170,7 +1170,7 @@ In summary, iterables
 :label: paf_ex1
 ```
 
-Complete the following code, and test it using [this csv file](https://raw.githubusercontent.com/QuantEcon/lecture-python-programming/master/source/_static/lecture_specific/python_advanced_features/test_table.csv), which we assume that you've put in your current working directory
+Complete the following code, and test it using [this csv file](https://raw.githubusercontent.com/QuantEcon/lecture-python-programming/main/lectures/_static/lecture_specific/python_advanced_features/test_table.csv), which we assume that you've put in your current working directory
 
 ```{code-block} python3
 :class: no-execute
