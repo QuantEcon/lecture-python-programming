@@ -35,6 +35,17 @@ sphinx:
     html_theme: quantecon_book_theme
     html_static_path: ['_static']
     html_theme_options:
+      languages:
+        - code: en
+          name: English
+          url: https://python-programming.quantecon.org
+        - code: fa
+          name: فارسی
+          url: https://quantecon.github.io/lecture-python-programming.fa
+        - code: zh-cn
+          name: 中文
+          url: https://quantecon.github.io/lecture-python-programming.zh-cn
+      current_language: en
       authors:
         - name: Thomas J. Sargent
           url: http://www.tomsargent.com/
