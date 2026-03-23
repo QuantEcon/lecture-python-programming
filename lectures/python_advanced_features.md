@@ -473,8 +473,7 @@ However, Python supports optional **type hints** (also called type annotations) 
 Type hints were introduced in Python 3.5 and have become increasingly common in modern Python code.
 
 ```{note}
-Type hints are **ignored by the Python interpreter at runtime** --- they do not affect how your code executes.
-They are purely informational and serve as documentation for humans and tools.
+Type hints are **ignored by the Python interpreter at runtime** --- they do not affect how your code executes. They are purely informational and serve as documentation for humans and tools.
 ```
 
 ### Basic Syntax
