@@ -51,6 +51,18 @@ sphinx:
         notebook_interface        : classic  # The interface interactive links will activate ["classic", "jupyterlab"]
         colab_url                 : https://colab.research.google.com
         thebe                     : false  # Add a thebe button to pages (requires the repository to run on Binder)
+      languages:
+        - code: en
+          name: English
+          url: https://python-programming.quantecon.org
+        - code: fa
+          name: فارسی
+          url: https://quantecon.github.io/lecture-python-programming.fa
+          rtl: true
+        - code: zh-cn
+          name: 中文
+          url: https://quantecon.github.io/lecture-python-programming.zh-cn
+      current_language: en
     mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
     rediraffe_redirects:
       index_toc.md: intro.md
