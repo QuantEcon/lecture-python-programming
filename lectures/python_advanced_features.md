@@ -22,16 +22,16 @@ kernelspec:
 
 ## Overview
 
-With this last lecture, our advice is to **skip it on first pass**, unless you have a burning desire to read it.
+With this last lecture, our advice is to *skip it on first pass*, unless you have a burning desire to read it.
 
 It's here
 
 1. as a reference, so we can link back to it when required, and
 1. for those who have worked through a number of applications, and now want to learn more about the Python language
 
-A variety of topics are treated in the lecture, including iterators, decorators and descriptors, and generators.
+A variety of topics are treated in the lecture, including iterators, type hints, decorators and descriptors, and generators.
 
-## Iterables and Iterators
+## Iterables and iterators
 
 ```{index} single: Python; Iteration
 ```
@@ -130,7 +130,7 @@ next(nikkei_data)
 next(nikkei_data)
 ```
 
-### Iterators in For Loops
+### Iterators in for loops
 
 ```{index} single: Python; Iterators
 ```
@@ -286,14 +286,14 @@ tags: [raises-exception]
 max(y)
 ```
 
-## `*` and `**` Operators
+## `*` and `**` operators
 
 `*` and `**` are convenient and widely used tools to unpack lists and tuples and to allow users to define functions that take arbitrarily many arguments as input.
 
 In this section, we will explore how to use them and distinguish their use cases.
 
 
-### Unpacking Arguments
+### Unpacking arguments
 
 When we operate on a list of parameters, we often need to extract the content of the list as individual arguments instead of a collection when passing them into functions.
 
@@ -400,7 +400,7 @@ To summarize, when `*list`/`*tuple` and `**dictionary` are passed into *function
 
 The difference is that `*` will unpack lists and tuples into *positional arguments*, while `**` will unpack dictionaries into *keyword arguments*.
 
-### Arbitrary Arguments
+### Arbitrary arguments
 
 When we *define* functions, it is sometimes desirable to allow users to put as many arguments as they want into a function. 
 
@@ -459,7 +459,109 @@ Overall, `*args` and `**kargs` are used when *defining a function*; they enable 
 
 The difference is that functions with `*args` will be able to take *positional arguments* with an arbitrary size, while `**kargs` will allow functions to take arbitrarily many *keyword arguments*.
 
-## Decorators and Descriptors
+## Type hints
+
+```{index} single: Python; Type Hints
+```
+
+Python is a *dynamically typed* language, meaning you don't need to declare the types of variables.
+
+(See our {doc}`earlier discussion <need_for_speed>` of dynamic versus static types.)
+
+However, Python supports optional **type hints** (also called type annotations) that allow you to indicate the expected types of variables, function parameters, and return values.
+
+Type hints were introduced starting in Python 3.5 and have evolved in subsequent versions.
+All of the syntax shown here works in Python 3.9 and later.
+
+```{note}
+Type hints are *ignored by the Python interpreter at runtime* --- they do not affect how your code executes. They are purely informational and serve as documentation for humans and tools.
+```
+
+### Basic syntax
+
+Type hints use the colon `:` to annotate variables and parameters, and the arrow `->` to annotate return types.
+
+Here is a simple example:
+
+```{code-cell} python3
+def greet(name: str, times: int) -> str:
+    return (name + '! ') * times
+
+greet('hello', 3)
+```
+
+In this function definition:
+
+- `name: str` indicates `name` is expected to be a string
+- `times: int` indicates `times` is expected to be an integer
+- `-> str` indicates the function returns a string
+
+You can also annotate variables directly:
+
+```{code-cell} python3
+x: int = 10
+y: float = 3.14
+name: str = 'Python'
+```
+
+### Common types
+
+The most frequently used type hints are the built-in types:
+
+| Type      | Example                          |
+|-----------|----------------------------------|
+| `int`     | `x: int = 5`                    |
+| `float`   | `x: float = 3.14`              |
+| `str`     | `x: str = 'hello'`             |
+| `bool`    | `x: bool = True`               |
+| `list`    | `x: list = [1, 2, 3]`          |
+| `dict`    | `x: dict = {'a': 1}`           |
+
+For containers, you can specify the types of their elements:
+
+```{code-cell} python3
+prices: list[float] = [9.99, 4.50, 2.89]
+counts: dict[str, int] = {'apples': 3, 'oranges': 5}
+```
+
+### Hints don't enforce types
+
+An important point for new Python programmers: type hints are *not enforced* at runtime.
+
+Python will not raise an error if you pass the "wrong" type:
+
+```{code-cell} python3
+def add(x: int, y: int) -> int:
+    return x + y
+
+# Passes floats — Python doesn't complain
+add(1.5, 2.7)
+```
+
+The hints say `int`, but Python happily accepts `float` arguments and returns `4.2` --- also not an `int`.
+
+This is a key difference from statically typed languages like C or Java, where mismatched types cause compilation errors.
+
+### Why use type hints?
+
+If Python ignores them, why bother?
+
+1. **Readability**: Type hints make function signatures self-documenting. A reader immediately knows what types a function expects and returns.
+2. **Editor support**: IDEs like VS Code use type hints to provide better autocompletion, error detection, and inline documentation.
+3. **Error checking**: Tools like [mypy](https://mypy.readthedocs.io/) and [pyrefly](https://pyrefly.org/) analyze type hints to catch bugs *before* you run your code.
+4. **LLM-generated code**: Large language models frequently produce code with type hints, so understanding the syntax helps you read and use their output.
+
+### Type hints in scientific Python
+
+Type hints connect to the {doc}`need for speed <need_for_speed>` discussion:
+
+* High-performance libraries like [JAX](https://jax.readthedocs.io/) and [Numba](https://numba.pydata.org/) rely on knowing variable types to compile fast machine code.
+* While these libraries infer types at runtime rather than reading Python type hints directly, the *concept* is the same --- explicit type information enables optimization.
+* As the Python ecosystem evolves, the connection between type hints and performance tools is expected to grow.
+
+For now, the main benefit of type hints in day-to-day Python is *clarity and tooling support*, which becomes increasingly valuable as programs grow in size.
+
+## Decorators and descriptors
 
 ```{index} single: Python; Decorators
 ```
@@ -485,7 +587,7 @@ It's very easy to say what decorators do.
 
 On the other hand it takes a bit of effort to explain *why* you might use them.
 
-#### An Example
+#### An example
 
 Suppose we are working on a program that looks something like this
 
@@ -576,7 +678,7 @@ Now the behavior of `f` is as we desire, and the same is true of `g`.
 
 At the same time, the test logic is written only once.
 
-#### Enter Decorators
+#### Enter decorators
 
 ```{index} single: Python; Decorators
 ```
@@ -677,7 +779,7 @@ In the last two lines we see that `miles` and `kms` are out of sync.
 
 What we really want is some mechanism whereby each time a user sets one of these variables, *the other is automatically updated*.
 
-#### A Solution
+#### A solution
 
 In Python, this issue is solved using *descriptors*.
 
@@ -728,7 +830,7 @@ car.kms
 
 Yep, that's what we want --- `car.kms` is automatically updated.
 
-#### How it Works
+#### How it works
 
 The names `_miles` and `_kms` are arbitrary names we are using to store the values of the variables.
 
@@ -746,7 +848,7 @@ For example, after `car` is created as an instance of `Car`, the object `car.mil
 Being a property, when we set its value via `car.miles = 6000` its setter
 method is triggered --- in this case `set_miles`.
 
-#### Decorators and Properties
+#### Decorators and properties
 
 ```{index} single: Python; Decorators
 ```
@@ -799,7 +901,7 @@ A generator is a kind of iterator (i.e., it works with a `next` function).
 
 We will study two ways to build generators: generator expressions and generator functions.
 
-### Generator Expressions
+### Generator expressions
 
 The easiest way to build generators is using *generator expressions*.
 
@@ -855,7 +957,7 @@ In fact, we can omit the outer brackets in this case
 sum(x * x for x in range(10))
 ```
 
-### Generator Functions
+### Generator functions
 
 ```{index} single: Python; Generator Functions
 ```
@@ -1002,7 +1104,7 @@ def g(x):
         x = x * x
 ```
 
-### Advantages of Iterators
+### Advantages of iterators
 
 What's the advantage of using an iterator here?
 
