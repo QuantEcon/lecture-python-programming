@@ -29,7 +29,7 @@ It's here
 1. as a reference, so we can link back to it when required, and
 1. for those who have worked through a number of applications, and now want to learn more about the Python language
 
-A variety of topics are treated in the lecture, including iterators, decorators and descriptors, and generators.
+A variety of topics are treated in the lecture, including iterators, type hints, decorators and descriptors, and generators.
 
 ## Iterables and Iterators
 
@@ -458,6 +458,106 @@ arb(l1=l1, l2=l2, l3=l3)
 Overall, `*args` and `**kargs` are used when *defining a function*; they enable the function to take input with an arbitrary size.
 
 The difference is that functions with `*args` will be able to take *positional arguments* with an arbitrary size, while `**kargs` will allow functions to take arbitrarily many *keyword arguments*.
+
+## Type Hints
+
+```{index} single: Python; Type Hints
+```
+
+Python is a *dynamically typed* language, meaning you don't need to declare the types of variables.
+
+(See our {doc}`earlier discussion <need_for_speed>` of dynamic versus static types.)
+
+However, Python supports optional **type hints** (also called type annotations) that allow you to indicate the expected types of variables, function parameters, and return values.
+
+Type hints were introduced in Python 3.5 and have become increasingly common in modern Python code.
+
+```{note}
+Type hints are **ignored by the Python interpreter at runtime** --- they do not affect how your code executes.
+They are purely informational and serve as documentation for humans and tools.
+```
+
+### Basic Syntax
+
+Type hints use the colon `:` to annotate variables and parameters, and the arrow `->` to annotate return types.
+
+Here is a simple example:
+
+```{code-cell} python3
+def greet(name: str, times: int) -> str:
+    return (name + '! ') * times
+
+greet('hello', 3)
+```
+
+In this function definition:
+
+- `name: str` indicates `name` is expected to be a string
+- `times: int` indicates `times` is expected to be an integer
+- `-> str` indicates the function returns a string
+
+You can also annotate variables directly:
+
+```{code-cell} python3
+x: int = 10
+y: float = 3.14
+name: str = 'Python'
+```
+
+### Common Types
+
+The most frequently used type hints are the built-in types:
+
+| Type      | Example                          |
+|-----------|----------------------------------|
+| `int`     | `x: int = 5`                    |
+| `float`   | `x: float = 3.14`              |
+| `str`     | `x: str = 'hello'`             |
+| `bool`    | `x: bool = True`               |
+| `list`    | `x: list = [1, 2, 3]`          |
+| `dict`    | `x: dict = {'a': 1}`           |
+
+For containers, you can specify the types of their elements:
+
+```{code-cell} python3
+prices: list[float] = [9.99, 4.50, 2.89]
+counts: dict[str, int] = {'apples': 3, 'oranges': 5}
+```
+
+### Hints Don't Enforce Types
+
+An important point for new Python programmers: type hints are **not enforced** at runtime.
+
+Python will not raise an error if you pass the "wrong" type:
+
+```{code-cell} python3
+def add(x: int, y: int) -> int:
+    return x + y
+
+# Works fine, despite passing strings
+add('foo', 'bar')
+```
+
+This is a key difference from statically typed languages like C or Java, where mismatched types cause compilation errors.
+
+### Why Use Type Hints?
+
+If Python ignores them, why bother?
+
+1. **Readability**: Type hints make function signatures self-documenting. A reader immediately knows what types a function expects and returns.
+2. **Editor support**: IDEs like VS Code use type hints to provide better autocompletion, error detection, and inline documentation.
+3. **Error checking**: Tools like [mypy](https://mypy.readthedocs.io/) and [pyrefly](https://pyrefly.org/) analyze type hints to catch bugs *before* you run your code.
+4. **LLM-generated code**: Large language models frequently produce code with type hints, so understanding the syntax helps you read and use their output.
+
+### Type Hints in Scientific Python
+
+Type hints connect to the {doc}`need for speed <need_for_speed>` discussion:
+
+* High-performance libraries like [JAX](https://jax.readthedocs.io/) and [Numba](https://numba.pydata.org/) rely on knowing variable types to compile fast machine code.
+* While these libraries infer types at runtime rather than reading Python type hints directly, the *concept* is the same --- explicit type information enables optimization.
+* As the Python ecosystem evolves, the connection between type hints and performance tools is expected to grow.
+
+For now, the main benefit of type hints in day-to-day Python is **clarity and tooling support**, which becomes increasingly valuable as programs grow in size.
 
 ## Decorators and Descriptors
 
