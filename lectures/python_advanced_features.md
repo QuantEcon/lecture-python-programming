@@ -22,7 +22,7 @@ kernelspec:
 
 ## Overview
 
-With this last lecture, our advice is to **skip it on first pass**, unless you have a burning desire to read it.
+With this last lecture, our advice is to *skip it on first pass*, unless you have a burning desire to read it.
 
 It's here
 
@@ -473,7 +473,7 @@ However, Python supports optional **type hints** (also called type annotations) 
 Type hints were introduced in Python 3.5 and have become increasingly common in modern Python code.
 
 ```{note}
-Type hints are **ignored by the Python interpreter at runtime** --- they do not affect how your code executes. They are purely informational and serve as documentation for humans and tools.
+Type hints are *ignored by the Python interpreter at runtime* --- they do not affect how your code executes. They are purely informational and serve as documentation for humans and tools.
 ```
 
 ### Basic syntax
@@ -525,7 +525,7 @@ counts: dict[str, int] = {'apples': 3, 'oranges': 5}
 
 ### Hints don't enforce types
 
-An important point for new Python programmers: type hints are **not enforced** at runtime.
+An important point for new Python programmers: type hints are *not enforced* at runtime.
 
 Python will not raise an error if you pass the "wrong" type:
 
@@ -556,7 +556,7 @@ Type hints connect to the {doc}`need for speed <need_for_speed>` discussion:
 * While these libraries infer types at runtime rather than reading Python type hints directly, the *concept* is the same --- explicit type information enables optimization.
 * As the Python ecosystem evolves, the connection between type hints and performance tools is expected to grow.
 
-For now, the main benefit of type hints in day-to-day Python is **clarity and tooling support**, which becomes increasingly valuable as programs grow in size.
+For now, the main benefit of type hints in day-to-day Python is *clarity and tooling support*, which becomes increasingly valuable as programs grow in size.
 
 ## Decorators and descriptors
 
