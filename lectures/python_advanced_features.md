@@ -459,7 +459,7 @@ Overall, `*args` and `**kargs` are used when *defining a function*; they enable 
 
 The difference is that functions with `*args` will be able to take *positional arguments* with an arbitrary size, while `**kargs` will allow functions to take arbitrarily many *keyword arguments*.
 
-## Type Hints
+## Type hints
 
 ```{index} single: Python; Type Hints
 ```
@@ -476,7 +476,7 @@ Type hints were introduced in Python 3.5 and have become increasingly common in 
 Type hints are **ignored by the Python interpreter at runtime** --- they do not affect how your code executes. They are purely informational and serve as documentation for humans and tools.
 ```
 
-### Basic Syntax
+### Basic syntax
 
 Type hints use the colon `:` to annotate variables and parameters, and the arrow `->` to annotate return types.
 
@@ -503,7 +503,7 @@ y: float = 3.14
 name: str = 'Python'
 ```
 
-### Common Types
+### Common types
 
 The most frequently used type hints are the built-in types:
 
@@ -523,7 +523,7 @@ prices: list[float] = [9.99, 4.50, 2.89]
 counts: dict[str, int] = {'apples': 3, 'oranges': 5}
 ```
 
-### Hints Don't Enforce Types
+### Hints don't enforce types
 
 An important point for new Python programmers: type hints are **not enforced** at runtime.
 
@@ -539,7 +539,7 @@ add('foo', 'bar')
 
 This is a key difference from statically typed languages like C or Java, where mismatched types cause compilation errors.
 
-### Why Use Type Hints?
+### Why use type hints?
 
 If Python ignores them, why bother?
 
@@ -548,7 +548,7 @@ If Python ignores them, why bother?
 3. **Error checking**: Tools like [mypy](https://mypy.readthedocs.io/) and [pyrefly](https://pyrefly.org/) analyze type hints to catch bugs *before* you run your code.
 4. **LLM-generated code**: Large language models frequently produce code with type hints, so understanding the syntax helps you read and use their output.
 
-### Type Hints in Scientific Python
+### Type hints in scientific Python
 
 Type hints connect to the {doc}`need for speed <need_for_speed>` discussion:
 
