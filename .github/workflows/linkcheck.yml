@@ -11,15 +11,21 @@ jobs:
     permissions:
       issues: write   # required for QuantEcon link-checker
     steps:
-      # Checkout the live site (html)
-      - name: Checkout
-        uses: actions/checkout@v6
+      # Download the latest deployed site artifact
+      - name: Download latest Pages artifact
+        uses: dawidd6/action-download-artifact@v19
         with:
-          ref: gh-pages
+          workflow: publish.yml
+          name: github-pages
+          path: _site_artifact
+      - name: Extract Pages artifact
+        run: |
+          mkdir -p _site
+          tar -xf _site_artifact/artifact.tar -C _site
       - name: AI-Powered Link Checker
         uses: QuantEcon/action-link-checker@main
         with:
-          html-path: '.'            # gh-pages live html
+          html-path: '_site'
           fail-on-broken: 'false'
           silent-codes: '403,503'
           ai-suggestions: 'true'
