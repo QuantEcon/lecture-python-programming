@@ -20,7 +20,7 @@ kernelspec:
 </div>
 ```
 
-# {index}`Polars <single: Polars>`
+# Polars
 
 ```{index} single: Python; Polars
 ```
@@ -51,7 +51,7 @@ Polars is designed with performance and memory efficiency in mind, leveraging:
 
 * **Memory**: pandas typically needs 5--10x your dataset size in RAM; Polars needs only 2--4x
 * **Speed**: Polars is 10--100x faster for many common operations
-* **See**: [Polars vs pandas comparison](https://blog.jetbrains.com/pycharm/2024/07/polars-vs-pandas/) for detailed benchmarks
+* **See**: [Polars TPC-H benchmarks](https://www.pola.rs/benchmarks/) for up-to-date performance comparisons
 ```
 
 Throughout the lecture, we will assume that the following imports have taken place
@@ -95,9 +95,13 @@ Polars `Series` are built on top of [Apache Arrow](https://arrow.apache.org/) ar
 s * 100
 ```
 
+Absolute values are available as a method
+
 ```{code-cell} ipython3
 s.abs()
 ```
+
+We can also get quick summary statistics
 
 ```{code-cell} ipython3
 s.describe()
@@ -135,6 +139,8 @@ df = df.with_columns(
 df
 ```
 
+We can also check membership
+
 ```{code-cell} ipython3
 'AAPL' in df['company']
 ```
@@ -166,9 +172,13 @@ We can select rows by slicing and columns by name
 df[2:5]
 ```
 
+To select specific columns, pass a list of names to `select`
+
 ```{code-cell} ipython3
 df.select(['country', 'tcgdp'])
 ```
+
+These can be combined
 
 ```{code-cell} ipython3
 df[2:5].select(['country', 'tcgdp'])
@@ -387,56 +397,129 @@ print("Optimized plan:")
 print(optimized.explain())
 ```
 
+Executing the plan gives us the final result
+
 ```{code-cell} ipython3
 optimized.collect()
 ```
 
 ### Performance comparison
 
-Let's compare eager vs lazy on a larger synthetic dataset
+Let's compare pandas, Polars eager, and Polars lazy on the same task.
+
+We start with a small dataset (the Penn World Tables we used above) to show
+that for small data the differences are negligible
 
 ```{code-cell} ipython3
+import pandas as pd
 import time
 
-n = 5_000_000
-big_df = pl.DataFrame({
-    'group': np.random.choice(['A', 'B', 'C', 'D'], n),
-    'value': np.random.randn(n),
-    'weight': np.random.rand(n),
-    'extra1': np.random.randn(n),
-    'extra2': np.random.randn(n),
-})
-
-# Eager
-start = time.perf_counter()
-result_e = (big_df
-    .filter(pl.col('value') > 0)
-    .select(['group', 'value', 'weight'])
-    .with_columns(
-        (pl.col('value') * pl.col('weight')).alias('weighted')
-    )
-    .group_by('group')
-    .agg(pl.col('weighted').mean())
-)
-eager_time = time.perf_counter() - start
-
-# Lazy
-start = time.perf_counter()
-result_l = (big_df.lazy()
-    .filter(pl.col('value') > 0)
-    .select(['group', 'value', 'weight'])
-    .with_columns(
-        (pl.col('value') * pl.col('weight')).alias('weighted')
-    )
-    .group_by('group')
-    .agg(pl.col('weighted').mean())
-    .collect()
-)
-lazy_time = time.perf_counter() - start
-
-print(f"Eager: {eager_time:.4f}s")
-print(f"Lazy:  {lazy_time:.4f}s")
+# Small dataset -- Penn World Tables (~8 rows)
+url = ('https://raw.githubusercontent.com/QuantEcon/'
+       'lecture-python-programming/main/lectures/_static/'
+       'lecture_specific/pandas/data/test_pwt.csv')
+small_pd = pd.read_csv(url)
+small_pl = pl.read_csv(url)
 ```
+
+Now we time the same filter-select-sort operation in each library
+
+```{code-cell} ipython3
+# pandas
+start = time.perf_counter()
+_ = (small_pd
+     .query('tcgdp > 500')
+     [['country', 'year', 'tcgdp', 'POP']]
+     .assign(gdp_pc=lambda d: d['tcgdp'] / d['POP'])
+     .sort_values('gdp_pc', ascending=False))
+pd_small = time.perf_counter() - start
+
+# Polars eager
+start = time.perf_counter()
+_ = (small_pl
+     .filter(pl.col('tcgdp') > 500)
+     .select(['country', 'year', 'tcgdp', 'POP'])
+     .with_columns((pl.col('tcgdp') / pl.col('POP')).alias('gdp_pc'))
+     .sort('gdp_pc', descending=True))
+pl_small = time.perf_counter() - start
+
+print(f"Small data  --  pandas: {pd_small:.4f}s | Polars eager: {pl_small:.4f}s")
+```
+
+On a handful of rows the speed difference is immaterial --- use whichever
+API you find more convenient.
+
+Now let's scale up to 5 million rows where the difference becomes clear
+
+```{code-cell} ipython3
+n = 5_000_000
+np.random.seed(42)
+
+groups = np.random.choice(['A', 'B', 'C', 'D'], n)
+values = np.random.randn(n)
+weights = np.random.rand(n)
+extra1 = np.random.randn(n)
+extra2 = np.random.randn(n)
+
+big_pd = pd.DataFrame({
+    'group': groups, 'value': values,
+    'weight': weights, 'extra1': extra1, 'extra2': extra2
+})
+big_pl = pl.DataFrame({
+    'group': groups, 'value': values,
+    'weight': weights, 'extra1': extra1, 'extra2': extra2
+})
+```
+
+First, the pandas baseline
+
+```{code-cell} ipython3
+start = time.perf_counter()
+tmp = big_pd[big_pd['value'] > 0][['group', 'value', 'weight']].copy()
+tmp['weighted'] = tmp['value'] * tmp['weight']
+_ = tmp.groupby('group')['weighted'].mean()
+pd_time = time.perf_counter() - start
+print(f"pandas:       {pd_time:.4f}s")
+```
+
+Next, Polars in eager mode
+
+```{code-cell} ipython3
+start = time.perf_counter()
+_ = (big_pl
+    .filter(pl.col('value') > 0)
+    .select(['group', 'value', 'weight'])
+    .with_columns(
+        (pl.col('value') * pl.col('weight')).alias('weighted'))
+    .group_by('group')
+    .agg(pl.col('weighted').mean()))
+eager_time = time.perf_counter() - start
+print(f"Polars eager: {eager_time:.4f}s")
+```
+
+And finally, Polars in lazy mode
+
+```{code-cell} ipython3
+start = time.perf_counter()
+_ = (big_pl.lazy()
+    .filter(pl.col('value') > 0)
+    .select(['group', 'value', 'weight'])
+    .with_columns(
+        (pl.col('value') * pl.col('weight')).alias('weighted'))
+    .group_by('group')
+    .agg(pl.col('weighted').mean())
+    .collect())
+lazy_time = time.perf_counter() - start
+print(f"Polars lazy:  {lazy_time:.4f}s")
+```
+
+The take-away:
+
+* For **small data** (thousands of rows), pandas and Polars perform
+  similarly --- choose based on API preference and ecosystem fit.
+* For **medium to large data** (hundreds of thousands of rows and above),
+  Polars can be significantly faster thanks to its Rust engine, parallel
+  execution, and (in lazy mode) query optimization.
 
 The lazy API is particularly powerful when reading from disk --- `scan_csv` returns a `LazyFrame` directly, so filters and projections are pushed down to the file reader.
 
@@ -479,9 +562,13 @@ fred_url = ('https://fred.stlouisfed.org/graph/fredgraph.csv?'
 data = pl.read_csv(fred_url, try_parse_dates=True)
 ```
 
+Let's inspect the first few rows
+
 ```{code-cell} ipython3
 data.head()
 ```
+
+And get summary statistics
 
 ```{code-cell} ipython3
 data.describe()
