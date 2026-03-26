@@ -449,7 +449,11 @@ print(f"Small data  --  pandas: {pd_small:.4f}s | Polars eager: {pl_small:.4f}s"
 On a handful of rows the speed difference is immaterial --- use whichever
 API you find more convenient.
 
-Now let's scale up to 5 million rows where the difference becomes clear
+Now let's scale up to 5 million rows where the difference becomes clear.
+
+The task is: filter rows where `value > 0`, compute a weighted product
+`value * weight`, then take the mean of that product within each group ---
+a grouped weighted average.
 
 ```{code-cell} ipython3
 n = 5_000_000
@@ -727,7 +731,7 @@ Plot the result as a time series graph.
 ```{code-cell} ipython3
 indices_data = read_data_polars(
     indices_list,
-    start=dt.datetime(2000, 1, 1),
+    start=dt.datetime(1971, 1, 1),
     end=dt.datetime(2021, 12, 31)
 )
 
@@ -754,7 +758,6 @@ for idx, name in indices_list.items():
 
 yearly_returns = (yearly_returns
     .select(['year', *indices_list.values()])
-    .filter(pl.col('year') >= 2001)
     .sort('year')
 )
 print(yearly_returns)
