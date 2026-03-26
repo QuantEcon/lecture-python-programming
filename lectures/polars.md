@@ -314,6 +314,12 @@ df
 
 We can extract columns directly for matplotlib
 
+```{note}
+Polars also provides a built-in [plotting API](https://docs.pola.rs/user-guide/misc/visualization/)
+based on Altair (e.g., `df.plot.bar(x=..., y=...)`).
+We use matplotlib here for consistency with the rest of the lecture series.
+```
+
 ```{code-cell} ipython3
 fig, ax = plt.subplots()
 ax.bar(df['country'].to_list(), df['GDP percap'].to_list())
