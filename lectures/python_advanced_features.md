@@ -548,14 +548,14 @@ If Python ignores them, why bother?
 
 1. **Readability**: Type hints make function signatures self-documenting. A reader immediately knows what types a function expects and returns.
 2. **Editor support**: IDEs like VS Code use type hints to provide better autocompletion, error detection, and inline documentation.
-3. **Error checking**: Tools like [mypy](https://mypy.readthedocs.io/) and [pyrefly](https://pyrefly.org/) analyze type hints to catch bugs *before* you run your code.
+3. **Error checking**: Tools like [mypy](https://mypy.readthedocs.io/en/stable/) and [pyrefly](https://pyrefly.org/) analyze type hints to catch bugs *before* you run your code.
 4. **LLM-generated code**: Large language models frequently produce code with type hints, so understanding the syntax helps you read and use their output.
 
 ### Type hints in scientific Python
 
 Type hints connect to the {doc}`need for speed <need_for_speed>` discussion:
 
-* High-performance libraries like [JAX](https://jax.readthedocs.io/) and [Numba](https://numba.pydata.org/) rely on knowing variable types to compile fast machine code.
+* High-performance libraries like [JAX](https://docs.jax.dev/en/latest/) and [Numba](https://numba.pydata.org/) rely on knowing variable types to compile fast machine code.
 * While these libraries infer types at runtime rather than reading Python type hints directly, the *concept* is the same --- explicit type information enables optimization.
 * As the Python ecosystem evolves, the connection between type hints and performance tools is expected to grow.
 
