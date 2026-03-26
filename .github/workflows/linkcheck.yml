@@ -11,15 +11,23 @@ jobs:
     permissions:
       issues: write   # required for QuantEcon link-checker
     steps:
-      # Checkout the live site (html)
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          ref: gh-pages
+      # Download the latest release HTML archive (permanent, not subject to artifact expiry)
+      - name: Get latest release asset URL
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ASSET_URL=$(gh api repos/${{ github.repository }}/releases/latest \
+            --jq '.assets[] | select(.name | endswith(".tar.gz")) | .browser_download_url')
+          echo "asset-url=$ASSET_URL" >> $GITHUB_OUTPUT
+      - name: Download and extract release HTML
+        run: |
+          mkdir -p _site
+          curl -sL "${{ steps.release.outputs.asset-url }}" | tar -xz -C _site
       - name: AI-Powered Link Checker
         uses: QuantEcon/action-link-checker@main
         with:
-          html-path: '.'            # gh-pages live html
+          html-path: '_site'
           fail-on-broken: 'false'
           silent-codes: '403,503'
           ai-suggestions: 'true'
