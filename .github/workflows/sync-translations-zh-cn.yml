@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 2
 
-      - uses: QuantEcon/action-translation@v0.13.0
+      - uses: QuantEcon/action-translation@v0.13.1
         with:
           mode: sync
           target-repo: QuantEcon/lecture-python-programming.zh-cn
