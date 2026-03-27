@@ -137,7 +137,7 @@ jobs:
           path: _build/html/
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       - name: Prepare lecture-python-programming.notebooks sync
         shell: bash -l {0}
         run: |
