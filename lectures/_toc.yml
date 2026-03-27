@@ -30,6 +30,7 @@ parts:
   chapters:
   - file: pandas
   - file: pandas_panel
+  - file: polars
 - caption: More Python Programming
   numbered: true
   chapters:
