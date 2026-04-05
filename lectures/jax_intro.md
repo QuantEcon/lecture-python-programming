@@ -11,6 +11,8 @@ kernelspec:
   name: python3
 ---
 
+(jax_intro)=
+
 # JAX
 
 This lecture provides a short introduction to [Google JAX](https://github.com/jax-ml/jax).
@@ -51,16 +53,16 @@ We'll use the following imports
 
 ```{code-cell} ipython3
 import jax
+import jax.numpy as jnp
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import numpy as np
 import quantecon as qe
 ```
 
-In addition, we replace `import numpy as np` with
+Notice that we import `jax.numpy as jnp`, which provides a NumPy-like interface.
 
-```{code-cell} ipython3
-import jax.numpy as jnp
-```
-
-Now we can use `jnp` in place of `np` for the usual array operations:
+Here are some standard array operations using `jnp`:
 
 ```{code-cell} ipython3
 a = jnp.asarray((1.0, 3.2, -1.5))
@@ -150,7 +152,6 @@ As a NumPy replacement, a more significant difference is that arrays are treated
 For example, with NumPy we can write
 
 ```{code-cell} ipython3
-import numpy as np
 a = np.linspace(0, 1, 3)
 a
 ```
@@ -310,7 +311,7 @@ First we produce a key, which seeds the random number generator.
 
 ```{code-cell} ipython3
 seed = 1234
-key = jax.random.PRNGKey(seed)
+key = jax.random.key(seed)
 ```
 
 Now we can use the key to generate some random numbers:
@@ -340,6 +341,79 @@ jax.random.normal(key, (3, 3))
 jax.random.normal(subkey, (3, 3))
 ```
 
+The following diagram illustrates how `split` produces a tree of keys from a
+single root, with each key generating independent random draws.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.set_xlim(-0.5, 6.5)
+ax.set_ylim(-0.5, 3.5)
+ax.set_aspect('equal')
+ax.axis('off')
+
+box_style = dict(boxstyle="round,pad=0.3", facecolor="white",
+                 edgecolor="black", linewidth=1.5)
+box_used = dict(boxstyle="round,pad=0.3", facecolor="#d4edda",
+                edgecolor="black", linewidth=1.5)
+
+# Root key
+ax.text(3, 3, "key₀", ha='center', va='center', fontsize=11,
+        bbox=box_style)
+
+# Level 1
+ax.annotate("", xy=(1.5, 2), xytext=(3, 2.7),
+            arrowprops=dict(arrowstyle="->", lw=1.5))
+ax.annotate("", xy=(4.5, 2), xytext=(3, 2.7),
+            arrowprops=dict(arrowstyle="->", lw=1.5))
+ax.text(1.5, 2, "key₁", ha='center', va='center', fontsize=11,
+        bbox=box_style)
+ax.text(4.5, 2, "subkey₁", ha='center', va='center', fontsize=11,
+        bbox=box_used)
+ax.text(5.7, 2, "→ draw", ha='left', va='center', fontsize=10,
+        color='green')
+
+# Label the split
+ax.text(2, 2.65, "split", ha='center', va='center', fontsize=9,
+        fontstyle='italic', color='gray')
+
+# Level 2
+ax.annotate("", xy=(0.5, 1), xytext=(1.5, 1.7),
+            arrowprops=dict(arrowstyle="->", lw=1.5))
+ax.annotate("", xy=(2.5, 1), xytext=(1.5, 1.7),
+            arrowprops=dict(arrowstyle="->", lw=1.5))
+ax.text(0.5, 1, "key₂", ha='center', va='center', fontsize=11,
+        bbox=box_style)
+ax.text(2.5, 1, "subkey₂", ha='center', va='center', fontsize=11,
+        bbox=box_used)
+ax.text(3.7, 1, "→ draw", ha='left', va='center', fontsize=10,
+        color='green')
+
+ax.text(0.7, 1.65, "split", ha='center', va='center', fontsize=9,
+        fontstyle='italic', color='gray')
+
+# Level 3
+ax.annotate("", xy=(0, 0), xytext=(0.5, 0.7),
+            arrowprops=dict(arrowstyle="->", lw=1.5))
+ax.annotate("", xy=(1.5, 0), xytext=(0.5, 0.7),
+            arrowprops=dict(arrowstyle="->", lw=1.5))
+ax.text(0, 0, "key₃", ha='center', va='center', fontsize=11,
+        bbox=box_style)
+ax.text(1.5, 0, "subkey₃", ha='center', va='center', fontsize=11,
+        bbox=box_used)
+ax.text(2.7, 0, "→ draw", ha='left', va='center', fontsize=10,
+        color='green')
+ax.text(0, 0.65, "split", ha='center', va='center', fontsize=9,
+        fontstyle='italic', color='gray')
+
+ax.text(3, -0.5, "⋮", ha='center', va='center', fontsize=14)
+
+ax.set_title("PRNG Key Splitting Tree", fontsize=13, pad=10)
+plt.tight_layout()
+plt.show()
+```
+
 This syntax will seem unusual for a NumPy or Matlab user --- but will make a lot
 of sense when we progress to parallel programming.
 
@@ -358,7 +432,7 @@ def gen_random_matrices(key, n=2, k=3):
 
 ```{code-cell} ipython3
 seed = 42
-key = jax.random.PRNGKey(seed)
+key = jax.random.key(seed)
 matrices = gen_random_matrices(key)
 ```
 
@@ -376,7 +450,7 @@ def gen_random_matrices(key, n=2, k=3):
 ```
 
 ```{code-cell} ipython3
-key = jax.random.PRNGKey(seed)
+key = jax.random.key(seed)
 matrices = gen_random_matrices(key)
 ```
 
@@ -426,7 +500,7 @@ def random_sum_jax(key):
 With the same key, we always get the same result:
 
 ```{code-cell} ipython3
-key = jax.random.PRNGKey(42)
+key = jax.random.key(42)
 random_sum_jax(key)
 ```
 
@@ -576,7 +650,7 @@ Let's try the same thing with a more complex function.
 
 ```{code-cell}
 def f(x):
-    y = np.cos(2 * x**2) + np.sqrt(np.abs(x)) + 2 * np.sin(x**4) - 0.1 * x**2
+    y = np.cos(2 * x**2) + np.sqrt(np.abs(x)) + 2 * np.sin(x**4) - x**2
     return y
 ```
 
@@ -628,10 +702,72 @@ with qe.Timer():
 
 The outcome is similar to the `cos` example --- JAX is faster, especially on the second run after JIT compilation.
 
-Moreover, with JAX, we have another trick up our sleeve:
+Moreover, with JAX, we have another trick up our sleeve --- we can JIT-compile
+the *entire* function, not just individual operations.
+
+### How JIT compilation works
+
+When we apply `jax.jit` to a function, JAX *traces* it: instead of executing
+the operations immediately, it records the sequence of operations as a
+computational graph and hands that graph to the
+[XLA](https://openxla.org/xla) compiler.
+
+XLA then fuses and optimizes the operations into a single compiled kernel
+tailored to the available hardware (CPU, GPU, or TPU).
+
+The following diagram shows this pipeline for a simple function:
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+fig, ax = plt.subplots(figsize=(9, 3.5))
+ax.set_xlim(-0.5, 9)
+ax.set_ylim(-0.5, 3)
+ax.set_aspect('equal')
+ax.axis('off')
+
+# Boxes for pipeline stages
+stages = [
+    (0.8, 1.5, "Python\nfunction"),
+    (3.2, 1.5, "JAX\ntraces →\ncomp. graph"),
+    (5.8, 1.5, "XLA\ncompiles →\noptimized\nkernel"),
+    (8.2, 1.5, "fast\nexecution"),
+]
+
+colors = ["#e3f2fd", "#fff9c4", "#f3e5f5", "#d4edda"]
+
+for (x, y, label), color in zip(stages, colors):
+    box = mpatches.FancyBboxPatch(
+        (x - 0.9, y - 0.8), 1.8, 1.6,
+        boxstyle="round,pad=0.15",
+        facecolor=color, edgecolor="black", linewidth=1.5)
+    ax.add_patch(box)
+    ax.text(x, y, label, ha='center', va='center', fontsize=10)
+
+# Arrows
+for x_start, x_end in [(1.7, 2.3), (4.1, 4.9), (6.7, 7.3)]:
+    ax.annotate("", xy=(x_end, 1.5), xytext=(x_start, 1.5),
+                arrowprops=dict(arrowstyle="->", lw=2, color="gray"))
+
+# Labels
+ax.text(2.0, 0.35, "jax.jit(f)", ha='center', fontsize=9,
+        fontstyle='italic', color='gray')
+ax.text(4.5, 0.35, "first call", ha='center', fontsize=9,
+        fontstyle='italic', color='gray')
+ax.text(7.0, 0.35, "subsequent\ncalls", ha='center', fontsize=9,
+        fontstyle='italic', color='gray')
+
+ax.set_title("JIT Compilation Pipeline", fontsize=13, pad=10)
+plt.tight_layout()
+plt.show()
+```
+
+The first call to a JIT-compiled function incurs compilation overhead, but
+subsequent calls with the same input shapes and types reuse the cached
+compiled code and run at full speed.
 
 
-### Compiling the Whole Function
+### Compiling the whole function
 
 The JAX just-in-time (JIT) compiler can accelerate execution within functions by fusing linear
 algebra operations into a single optimized kernel.
@@ -736,24 +872,73 @@ The compiler loves pure functions and functional programming because
 * Pure functions are easier to parallelize and optimize (don't depend on shared mutable state)
 
 
-## Gradients
+## Vectorization with `vmap`
+
+Another powerful JAX transformation is `jax.vmap`, which automatically
+vectorizes a function written for a single input so that it operates over
+batches.
+
+This avoids the need to manually write vectorized code or use explicit loops.
+
+### A simple example
+
+Suppose we have a function that processes a single vector:
+
+```{code-cell} ipython3
+def scalar_func(x):
+    return jnp.sum(x ** 2)
+```
+
+We can apply it to a single vector:
+
+```{code-cell} ipython3
+x = jnp.array([1.0, 2.0, 3.0])
+scalar_func(x)
+```
+
+To apply it across a *batch* of vectors (i.e., rows of a matrix), we use `vmap`:
+
+```{code-cell} ipython3
+batch_func = jax.vmap(scalar_func)
+
+X = jnp.array([[1.0, 2.0, 3.0],
+               [4.0, 5.0, 6.0],
+               [7.0, 8.0, 9.0]])
+
+batch_func(X)
+```
+
+Without `vmap`, we would need to write an explicit loop or reshape the
+computation manually.
+
+### Combining transformations
+
+One of JAX's strengths is that transformations compose naturally.
+
+For example, we can JIT-compile a vectorized function:
+
+```{code-cell} ipython3
+fast_batch_func = jax.jit(jax.vmap(scalar_func))
+fast_batch_func(X)
+```
+
+This composition of `jit`, `vmap`, and (as we'll see next) `grad` is central to
+JAX's design and makes it especially powerful for scientific computing and
+machine learning.
+
+
+## Automatic differentiation: a preview
 
 JAX can use automatic differentiation to compute gradients.
 
 This can be extremely useful for optimization and solving nonlinear systems.
 
-We will see significant applications later in this lecture series.
-
-For now, here's a very simple illustration involving the function
+Here's a simple illustration involving the function $f(x) = x^2 / 2$:
 
 ```{code-cell} ipython3
 def f(x):
     return (x**2) / 2
-```
 
-Let's take the derivative:
-
-```{code-cell} ipython3
 f_prime = jax.grad(f)
 ```
 
@@ -764,8 +949,6 @@ f_prime(10.0)
 Let's plot the function and derivative, noting that $f'(x) = x$.
 
 ```{code-cell} ipython3
-import matplotlib.pyplot as plt
-
 fig, ax = plt.subplots()
 x_grid = jnp.linspace(-4, 4, 200)
 ax.plot(x_grid, f(x_grid), label="$f$")
@@ -774,7 +957,9 @@ ax.legend(loc='upper center')
 plt.show()
 ```
 
-We defer further exploration of automatic differentiation with JAX until {doc}`jax:autodiff`.
+Automatic differentiation is a deep topic with many applications in economics
+and finance.  We provide a more thorough treatment in {doc}`our lecture on
+autodiff <autodiff>`.
 
 
 ## Exercises
@@ -819,7 +1004,7 @@ def compute_call_price_jax(β=β,
                            ρ=ρ,
                            ν=ν,
                            M=M,
-                           key=jax.random.PRNGKey(1)):
+                           key=jax.random.key(1)):
 
     s = jnp.full(M, np.log(S0))
     h = jnp.full(M, h0)
