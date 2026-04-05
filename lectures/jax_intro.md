@@ -882,34 +882,46 @@ This avoids the need to manually write vectorized code or use explicit loops.
 
 ### A simple example
 
-Suppose we have a function that processes a single vector:
+Suppose we have a function that computes summary statistics for a single array:
 
 ```{code-cell} ipython3
-def scalar_func(x):
-    return jnp.sum(x ** 2)
+def summary(x):
+    return jnp.mean(x), jnp.median(x)
 ```
 
 We can apply it to a single vector:
 
 ```{code-cell} ipython3
-x = jnp.array([1.0, 2.0, 3.0])
-scalar_func(x)
+x = jnp.array([1.0, 2.0, 5.0])
+summary(x)
 ```
 
-To apply it across a *batch* of vectors (i.e., rows of a matrix), we use `vmap`:
+Now suppose we have a matrix and want to compute these statistics for each row.
+
+Without `vmap`, we'd need an explicit loop:
 
 ```{code-cell} ipython3
-batch_func = jax.vmap(scalar_func)
-
-X = jnp.array([[1.0, 2.0, 3.0],
+X = jnp.array([[1.0, 2.0, 5.0],
                [4.0, 5.0, 6.0],
-               [7.0, 8.0, 9.0]])
+               [1.0, 8.0, 9.0]])
 
-batch_func(X)
+for row in X:
+    print(summary(row))
 ```
 
-Without `vmap`, we would need to write an explicit loop or reshape the
-computation manually.
+However, Python loops are slow and cannot be efficiently compiled or
+parallelized by JAX.
+
+Using `vmap` keeps the computation on the accelerator and composes with other
+JAX transformations like `jit` and `grad`:
+
+```{code-cell} ipython3
+batch_summary = jax.vmap(summary)
+batch_summary(X)
+```
+
+The function `summary` was written for a single array, and `vmap` automatically
+lifted it to operate row-wise over a matrix --- no loops, no reshaping.
 
 ### Combining transformations
 
@@ -918,8 +930,8 @@ One of JAX's strengths is that transformations compose naturally.
 For example, we can JIT-compile a vectorized function:
 
 ```{code-cell} ipython3
-fast_batch_func = jax.jit(jax.vmap(scalar_func))
-fast_batch_func(X)
+fast_batch_summary = jax.jit(jax.vmap(summary))
+fast_batch_summary(X)
 ```
 
 This composition of `jit`, `vmap`, and (as we'll see next) `grad` is central to
