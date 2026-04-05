@@ -720,44 +720,42 @@ The following diagram shows this pipeline for a simple function:
 ```{code-cell} ipython3
 :tags: [hide-input]
 
-fig, ax = plt.subplots(figsize=(9, 3.5))
-ax.set_xlim(-0.5, 9)
-ax.set_ylim(-0.5, 3)
-ax.set_aspect('equal')
+fig, ax = plt.subplots(figsize=(7, 2))
+ax.set_xlim(-0.2, 7.2)
+ax.set_ylim(0.2, 2.2)
 ax.axis('off')
 
 # Boxes for pipeline stages
 stages = [
-    (0.8, 1.5, "Python\nfunction"),
-    (3.2, 1.5, "JAX\ntraces →\ncomp. graph"),
-    (5.8, 1.5, "XLA\ncompiles →\noptimized\nkernel"),
-    (8.2, 1.5, "fast\nexecution"),
+    (0.7, 1.2, "Python\nfunction"),
+    (2.6, 1.2, "computational\ngraph"),
+    (4.5, 1.2, "optimized\nkernel"),
+    (6.4, 1.2, "fast\nexecution"),
 ]
 
 colors = ["#e3f2fd", "#fff9c4", "#f3e5f5", "#d4edda"]
 
 for (x, y, label), color in zip(stages, colors):
     box = mpatches.FancyBboxPatch(
-        (x - 0.9, y - 0.8), 1.8, 1.6,
+        (x - 0.7, y - 0.5), 1.4, 1.0,
         boxstyle="round,pad=0.15",
         facecolor=color, edgecolor="black", linewidth=1.5)
     ax.add_patch(box)
-    ax.text(x, y, label, ha='center', va='center', fontsize=10)
+    ax.text(x, y, label, ha='center', va='center', fontsize=9)
 
-# Arrows
-for x_start, x_end in [(1.7, 2.3), (4.1, 4.9), (6.7, 7.3)]:
-    ax.annotate("", xy=(x_end, 1.5), xytext=(x_start, 1.5),
-                arrowprops=dict(arrowstyle="->", lw=2, color="gray"))
+# Arrows with labels
+arrows = [
+    (1.4, 1.9, "trace"),
+    (3.3, 3.8, "XLA"),
+    (5.2, 5.7, "run"),
+]
 
-# Labels
-ax.text(2.0, 0.35, "jax.jit(f)", ha='center', fontsize=9,
-        fontstyle='italic', color='gray')
-ax.text(4.5, 0.35, "first call", ha='center', fontsize=9,
-        fontstyle='italic', color='gray')
-ax.text(7.0, 0.35, "subsequent\ncalls", ha='center', fontsize=9,
-        fontstyle='italic', color='gray')
+for x_start, x_end, label in arrows:
+    ax.annotate("", xy=(x_end, 1.2), xytext=(x_start, 1.2),
+                arrowprops=dict(arrowstyle="->", lw=1.5, color="gray"))
+    ax.text((x_start + x_end) / 2, 1.55, label,
+            ha='center', fontsize=8, color='gray')
 
-ax.set_title("JIT Compilation Pipeline", fontsize=13, pad=10)
 plt.tight_layout()
 plt.show()
 ```
