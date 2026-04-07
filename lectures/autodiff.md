@@ -11,8 +11,6 @@ kernelspec:
   name: python3
 ---
 
-(autodiff)=
-
 # Adventures with Autodiff
 
 

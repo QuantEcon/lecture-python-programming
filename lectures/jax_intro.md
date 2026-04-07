@@ -11,8 +11,6 @@ kernelspec:
   name: python3
 ---
 
-(jax_intro)=
-
 # JAX
 
 This lecture provides a short introduction to [Google JAX](https://github.com/jax-ml/jax).
