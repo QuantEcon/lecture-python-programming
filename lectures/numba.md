@@ -46,9 +46,9 @@ import matplotlib.pyplot as plt
 ## Overview
 
 In an {doc}`earlier lecture <need_for_speed>` we discussed vectorization, 
-can improve execution speed by sending array processing operations in batch to efficient low-level code.
+which can improve execution speed by sending array processing operations in batch to efficient low-level code.
 
-However, as {ref}`discussed previously <numba-p_c_vectorization>`, traditional vectorization schemes, such as those found in Matlab, Julia, and NumPy, have several weaknesses.
+However, as {ref}`discussed previously <numba-p_c_vectorization>`, traditional vectorization schemes, such as those found in MATLAB, Julia, and NumPy, have several weaknesses.
 
 For example, they can be highly memory-intensive and, for some algorithms, vectorization is ineffective or impossible.
 
