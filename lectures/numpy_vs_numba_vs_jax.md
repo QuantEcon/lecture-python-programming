@@ -55,13 +55,17 @@ We will use the following imports.
 
 ```{code-cell} ipython3
 import random
+from functools import partial
+
 import numpy as np
+import numba
 import quantecon as qe
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 from matplotlib import cm
 import jax
 import jax.numpy as jnp
+from jax import lax
 ```
 
 ## Vectorized operations
@@ -101,7 +105,7 @@ ax.plot_surface(x,
                 y,
                 f(x, y),
                 rstride=2, cstride=2,
-                cmap=cm.jet,
+                cmap=cm.viridis,
                 alpha=0.7,
                 linewidth=0.25)
 ax.set_zlim(-0.5, 1.0)
@@ -162,8 +166,6 @@ before it sees the size of the arrays `x` and `y`.)
 Now let's see if we can achieve better performance using Numba with a simple loop.
 
 ```{code-cell} ipython3
-import numba
-
 @numba.jit
 def compute_max_numba(grid):
     m = -np.inf
@@ -177,9 +179,9 @@ def compute_max_numba(grid):
 grid = np.linspace(-3, 3, 3_000)
 
 with qe.Timer(precision=8):
-    z_max_numpy = compute_max_numba(grid)
+    z_max_numba = compute_max_numba(grid)
 
-print(f"Numba result: {z_max_numpy:.6f}")
+print(f"Numba result: {z_max_numba:.6f}")
 ```
 
 Let's run again to eliminate compile time.
@@ -232,7 +234,7 @@ The reason is that the variable `m` is shared across threads and not properly co
 
 When multiple threads try to read and write `m` simultaneously, they interfere with each other. 
 
-Threads read stale values of `m` or overwrite each other's updates --— or `m` never gets updated from its initial value.
+Threads read stale values of `m` or overwrite each other's updates --- or `m` never gets updated from its initial value.
 
 Here's a more carefully written version.
 
@@ -299,7 +301,7 @@ calculation, we can use a `meshgrid` operation designed for this purpose:
 
 ```{code-cell} ipython3
 grid = jnp.linspace(-3, 3, 3_000)
-x_mesh, y_mesh = np.meshgrid(grid, grid)
+x_mesh, y_mesh = jnp.meshgrid(grid, grid)
 
 with qe.Timer(precision=8):
     z_max = jnp.max(f(x_mesh, y_mesh))
@@ -316,7 +318,7 @@ with qe.Timer(precision=8):
     z_max.block_until_ready()
 ```
 
-Once compiled, JAX is significantly faster than NumPy due to GPU acceleration.
+Once compiled, JAX is significantly faster than NumPy, especially on a GPU.
 
 The compilation overhead is a one-time cost that pays off when the function is called repeatedly.
 
@@ -419,7 +421,7 @@ Let's try it.
 with qe.Timer(precision=8):
     z_max = compute_max_vmap_v2(grid).block_until_ready()
 
-print(f"JAX vmap v1 result: {z_max:.6f}")
+print(f"JAX vmap v2 result: {z_max:.6f}")
 ```
 
 Let's run it again to eliminate compilation time:
@@ -508,9 +510,6 @@ Now let's create a JAX version using `lax.scan`:
 (We'll hold `n` static because it affects array size and hence JAX wants to specialize on its value in the compiled code.)
 
 ```{code-cell} ipython3
-from jax import lax
-from functools import partial
-
 cpu = jax.devices("cpu")[0]
 
 @partial(jax.jit, static_argnums=(1,), device=cpu)
@@ -574,4 +573,41 @@ Additionally, JAX's immutable arrays mean we cannot simply update array elements
 
 For this type of sequential operation, Numba is the clear winner in terms of
 code clarity and ease of implementation, as well as high performance.
+
+
+## Overall recommendations
+
+Let's now step back and summarize the trade-offs.
+
+For **vectorized operations**, JAX is the strongest choice.
+
+It matches or exceeds NumPy in speed, thanks to JIT compilation and efficient
+parallelization across CPUs and GPUs.
+
+The `vmap` transformation reduces memory usage and often leads to clearer code
+than traditional meshgrid-based vectorization.
+
+In addition, JAX functions are automatically differentiable, as we explore in
+{doc}`autodiff`.
+
+For **sequential operations**, Numba has clear advantages.
+
+The code is natural and readable --- just a Python loop with a decorator ---
+and performance is excellent.
+
+JAX can handle sequential problems via `lax.scan`, but the syntax is less
+intuitive and the performance gain is minimal for purely sequential work.
+
+That said, `lax.scan` has one important advantage: it supports automatic
+differentiation through the loop, which Numba cannot do.
+
+If you need to differentiate through a sequential computation (e.g., computing
+sensitivities of a trajectory to model parameters), JAX is the better choice
+despite the less natural syntax.
+
+In practice, many problems involve a mix of both patterns.
+
+A good rule of thumb: default to JAX for new projects, especially when
+hardware acceleration or differentiability might be useful, and reach for Numba
+when you have a tight sequential loop that needs to be fast and readable.
 
