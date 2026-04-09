@@ -24,6 +24,22 @@ jobs:
         run: |
           mkdir -p _site
           curl -sL "${{ steps.release.outputs.asset-url }}" | tar -xz -C _site
+      - name: Pre-process HTML to exclude known bot-blocking domains
+        run: |
+          python3 - <<'PYEOF'
+          import re
+          from pathlib import Path
+          # These domains block automated crawlers; they are also excluded via
+          # linkcheck_ignore in lectures/_config.yml for the Sphinx link checker.
+          skip_domains = ['fred.stlouisfed.org']
+          for html_file in Path('_site').rglob('*.html'):
+              content = html_file.read_text(encoding='utf-8', errors='replace')
+              for domain in skip_domains:
+                  pattern = r'href="https?://' + re.escape(domain) + r'[^"]*"'
+                  content = re.sub(pattern, 'href="#"', content)
+              html_file.write_text(content, encoding='utf-8')
+          print("Pre-processing complete")
+          PYEOF
       - name: AI-Powered Link Checker
         uses: QuantEcon/action-link-checker@main
         with:
