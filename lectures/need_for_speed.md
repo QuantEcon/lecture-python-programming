@@ -27,7 +27,7 @@ premature optimization is the root of all evil." -- Donald Knuth
 
 ## Overview
 
-It's probably safe to say that Python is the most popular language for scientific computing.
+Python is the most popular language for many aspects of scientific computing.
 
 This is due to 
 
@@ -74,29 +74,30 @@ Let's briefly review Python's scientific libraries.
 
 ### Why do we need them?
 
-One reason we use scientific libraries is because they implement routines we want to use.
+We need Python's scientific libraries for two reasons:
+
+1. Python is small
+2. Python is slow
+
+**Python in small** 
+
+Core python is small by design -- this helps with optimization, accessibility, and maintenance
+
+Scientific libraries provide the routines we don't want to -- and probably shouldn't -- write oursives
 
 * numerical integration, interpolation, linear algebra, root finding, etc.
 
-For example, it's usually better to use an existing routine for root finding than to write a new one from scratch.
+**Python is slow**
 
-(For standard algorithms, efficiency is maximized if the community can
-coordinate on a common set of implementations, written by experts and tuned by
-users to be as fast and robust as possible!)
+Another reason we need the scientific libraries is that pure Python is relatively slow.
 
-But this is not the only reason that we use Python's scientific libraries.
+Scientific libraries accelerate execution using three main strategies:
 
-Another is that pure Python is not fast.
+1. Vectorization: providing compiled machine code and interfaces that make this code accessible
+1. JIT compilation: compilers that convert Python-like statements into fast machine code at runtime
+2. Parallelization: Shifting tasks across multiple threads/ CPUs / GPUs /TPUs
 
-So we need libraries that are designed to accelerate execution of Python code.
-
-They do this using two strategies:
-
-1. using compilers that convert Python-like statements into fast machine code for individual threads of logic and
-2. parallelizing tasks across multiple "workers" (e.g., CPUs, individual threads inside GPUs).
-
-We will discuss these ideas extensively in this and the remaining lectures from
-this series.
+We will discuss these ideas in depth below.
 
 
 ### Python's Scientific Ecosystem
@@ -123,7 +124,7 @@ Here's how they fit together:
 * Pandas provides types and functions for manipulating data.
 * Numba provides a just-in-time compiler that plays well with NumPy and helps accelerate Python code.
 
-We will discuss all of these libraries extensively in this lecture series.
+We will discuss all of these libraries at length in this lecture series.
 
 
 ## Pure Python is slow
@@ -189,15 +190,13 @@ a, b = ['foo'], ['bar']
 a + b
 ```
 
-(We say that the operator `+` is *overloaded* --- its action depends on the
-type of the objects on which it acts)
 
-As a result, when executing `a + b`, Python must first check the type of the objects and then call the correct operation.
+As a result, when executing `a + b`, Python must first check the type of the
+objects and then call the correct operation.
 
-This involves a nontrivial overhead.
+This involves overhead.
 
-If we repeatedly execute this expression in a tight loop, the nontrivial
-overhead becomes a large overhead.
+If we repeatedly execute this expression in a tight loop, the overhead becomes large.
 
 
 #### Static types
@@ -243,38 +242,29 @@ To illustrate, let's consider the problem of summing some data --- say, a collec
 
 #### Summing with Compiled Code
 
-In C or Fortran, these integers would typically be stored in an array, which
-is a simple data structure for storing homogeneous data.
+In C or Fortran, an array of integers is stored in a single contiguous block of memory
 
-Such an array is stored in a single contiguous block of memory
-
-* In modern computers, memory addresses are allocated to each byte (one byte = 8 bits).
 * For example, a 64 bit integer is stored in 8 bytes of memory.
 * An array of $n$ such integers occupies $8n$ *consecutive* memory slots.
 
-Moreover, the compiler is made aware of the data type by the programmer.
-
-* In this case 64 bit integers
+Moreover, the data type is known at compile time. 
 
 Hence, each successive data point can be accessed by shifting forward in memory
 space by a known and fixed amount.
 
-* In this case 8 bytes
 
 #### Summing in Pure Python
 
 Python tries to replicate these ideas to some degree.
 
-For example, in the standard Python implementation (CPython), list elements are placed in memory locations that are in a sense contiguous.
+For example, in the standard Python implementation (CPython), list elements are
+placed in memory locations that are in a sense contiguous.
 
 However, these list elements are more like pointers to data rather than actual data.
 
 Hence, there is still overhead involved in accessing the data values themselves.
 
-This is a considerable drag on speed.
-
-In fact, it's generally true that memory traffic is a major culprit when it comes to slow execution.
-
+Such overhead is a major culprit when it comes to slow execution.
 
 
 ### Summary
@@ -295,15 +285,11 @@ synonymous with parallelization.
 
 This task is best left to specialized compilers!
 
-Certain Python libraries have outstanding capabilities for parallelizing scientific code -- we'll discuss this more as we go along.
-
-
 
 
 ## Accelerating Python
 
-In this section we look at three related techniques for accelerating Python
-code.
+In this section we look at three related techniques for accelerating Python code.
 
 Here we'll focus on the fundamental ideas.
 
@@ -325,10 +311,11 @@ Many economists usually refer to array programming as "vectorization."
 In computer science, this term has [a slightly different meaning](https://en.wikipedia.org/wiki/Automatic_vectorization).
 ```
 
-The key idea is to send array processing operations in batch to pre-compiled
-and efficient native machine code.
+The key idea is to send array processing operations in batch to pre-compiled and
+efficient native machine code.
 
-The machine code itself is typically compiled from carefully optimized C or Fortran.
+The machine code itself is typically compiled from carefully optimized C or
+Fortran.
 
 For example, when working in a high level language, the operation of inverting a
 large matrix can be subcontracted to efficient machine code that is pre-compiled
@@ -346,6 +333,7 @@ The idea of vectorization dates back to MATLAB, which uses vectorization extensi
 ```{figure} /_static/lecture_specific/need_for_speed/matlab.png
 ```
 
+NumPy uses a similar model, inspired by MATLAB
 
 
 ### Vectorization vs for pure Python loops
@@ -423,19 +411,17 @@ can be run) has slowed dramatically in recent years.
 Chip designers and computer programmers have responded to the slowdown by
 seeking a different path to fast execution: parallelization.
 
-Hardware makers have increased the number of cores (physical CPUs) embedded in each machine.
+This involves
 
-For programmers, the challenge has been to exploit these multiple CPUs by
-running many processes in parallel (i.e., simultaneously).
+1. increasing the number of CPUs embedded in each machine
+1. connecting hardware accelerators such as GPUs and TPUs
 
-This is particularly important in scientific programming, which requires handling
-
-* large amounts of data and
-* CPU intensive simulations and other calculations.
+For programmers, the challenge has been to exploit this hardware
+running many processes in parallel.
 
 Below we discuss parallelization for scientific computing, with a focus on
 
-1. the best tools for parallelization in Python and
+1. tools for parallelization in Python and
 1. how these tools can be applied to quantitative economic problems.
 
 
@@ -447,22 +433,18 @@ scientific computing and discuss their pros and cons.
 
 #### Multiprocessing
 
-Multiprocessing means concurrent execution of multiple processes using more than one processor.
-
-In this context, a **process** is a chain of instructions (i.e., a program).
+Multiprocessing means concurrent execution of multiple threads of logic using more than one processor.
 
 Multiprocessing can be carried out on one machine with multiple CPUs or on a
-collection of machines connected by a network.
+cluster of machines connected by a network.
 
-In the latter case, the collection of machines is usually called a
-**cluster**.
+With multiprocessing, *each process has its own memory space*, although the physical memory chip might be shared.
 
-With multiprocessing, each process has its own memory space, although the
-physical memory chip might be shared.
 
 #### Multithreading
 
-Multithreading is similar to multiprocessing, except that, during execution, the threads all share the same memory space.
+Multithreading is similar to multiprocessing, except that, during execution, the
+threads all *share the same memory space*.
 
 Native Python struggles to implement multithreading due to some [legacy design
 features](https://wiki.python.org/moin/GlobalInterpreterLock).
@@ -471,6 +453,7 @@ But this is not a restriction for scientific libraries like NumPy and Numba.
 
 Functions imported from these libraries and JIT-compiled code run in low level
 execution environments where Python's legacy restrictions don't apply.
+
 
 #### Advantages and Disadvantages
 
