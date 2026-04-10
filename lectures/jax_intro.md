@@ -121,6 +121,7 @@ eigvals
 
 Let's now look at some differences between JAX and NumPy array operations.
 
+(jax_speed)=
 #### Speed!
 
 Let's say we want to evaluate the cosine function at many points.
@@ -631,15 +632,20 @@ The explicitness of JAX brings significant benefits:
 The last point is expanded on in the next section.
 
 
-## JIT compilation
+## JIT Compilation
 
 The JAX just-in-time (JIT) compiler accelerates execution by generating
 efficient machine code that varies with both task size and hardware.
 
+We saw the power of JAX's JIT compiler combined with parallel hardware when we
+{ref}`above <jax_speed>`, when we applied `cos` to a large array.
+
+Let's try the same thing with a more complex function.
+
 
 ### Evaluating a more complicated function
 
-Let's try the same thing with a more complex function.
+Consider the function
 
 ```{code-cell}
 def f(x):
@@ -695,14 +701,14 @@ with qe.Timer():
 
 The outcome is similar to the `cos` example --- JAX is faster, especially on the second run after JIT compilation.
 
-Moreover, with JAX, we have another trick up our sleeve --- we can JIT-compile
+However, with JAX, we have another trick up our sleeve --- we can JIT-compile
 the *entire* function, not just individual operations.
 
 
 ### Compiling the whole function
 
-The JAX just-in-time (JIT) compiler can accelerate execution within functions by fusing linear
-algebra operations into a single optimized kernel.
+The JAX just-in-time (JIT) compiler can accelerate execution within functions by fusing array
+operations into a single optimized kernel.
 
 Let's try this with the function `f`:
 
@@ -756,9 +762,11 @@ compiled code and run at full speed.
 
 ### Compiling non-pure functions
 
-Now that we've seen how powerful JIT compilation can be, it's important to understand its relationship with pure functions.
+Now that we've seen how powerful JIT compilation can be, it's important to
+understand its relationship with pure functions.
 
-While JAX will not usually throw errors when compiling impure functions, execution becomes unpredictable.
+While JAX will not usually throw errors when compiling impure functions,
+execution becomes unpredictable.
 
 Here's an illustration of this fact, using global variables:
 
