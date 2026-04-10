@@ -48,11 +48,13 @@ import matplotlib.pyplot as plt
 In an {doc}`earlier lecture <need_for_speed>` we discussed vectorization, 
 which can improve execution speed by sending array processing operations in batch to efficient low-level code.
 
-However, as {ref}`discussed previously <numba-p_c_vectorization>`, traditional vectorization schemes, such as those found in MATLAB, Julia, and NumPy, have several weaknesses.
+However, as {ref}`discussed in that lecture <numba-p_c_vectorization>`,
+traditional vectorization schemes, such as those found in MATLAB, Julia, and NumPy, have weaknesses.
 
-For example, they can be highly memory-intensive and, for some algorithms, vectorization is ineffective or impossible.
+* Highly memory-intensive for compound array operations
+* Ineffective or impossible for some algorithms.
 
-One way around these problems is through [Numba](https://numba.pydata.org/), a
+One way to circumvent these problems is by using [Numba](https://numba.pydata.org/), a
 **just in time (JIT) compiler** for Python that is oriented towards numerical work.
 
 Numba compiles functions to native machine code instructions during runtime.
@@ -61,6 +63,14 @@ When it succeeds, Numba will be on par with machine code from low-level language
 
 In addition, Numba can do other useful tricks, such as {ref}`multithreading` or
 interfacing with GPUs (through `numba.cuda`).
+
+Numba's JIT compiler is in many ways similar to the JIT compiler in JULIA
+
+The main difference is that it is less ambitious, attempting to compile a smaller subset of the language.
+
+Although this might sound like a defficiency, it is in some ways an advantage.
+
+Numba is lean, easy to use, and very good at what it does.
 
 This lecture introduces the core ideas.
 
@@ -74,10 +84,10 @@ This lecture introduces the core ideas.
 (quad_map_eg)=
 ### An Example
 
-Let's consider a problem that's difficult to vectorize: generating the
-trajectory of a difference equation given an initial condition.
+Let's consider a problem that's difficult to vectorize (i.e., hand off to array
+processing operations). 
 
-We will take the difference equation to be the quadratic map
+The problem involves generating the trajectory via the quadratic map
 
 $$
     x_{t+1} = \alpha x_t (1 - x_t)
@@ -168,20 +178,21 @@ The basic idea is this:
 * Python is very flexible and hence we could call the function qm with many
   types.
     * e.g., `x0` could be a NumPy array or a list, `n` could be an integer or a float, etc.
-* This makes it hard to *pre*-compile the function (i.e., compile before runtime).
-* However, when we do actually call the function, say by running `qm(0.5, 10)`,
-  the types of `x0` and `n` become clear.
+* This makes it very difficult to generate efficient machine code *ahead of time* (i.e., before runtime).
+* However, when we do actually *call* the function, say by running `qm(0.5, 10)`,
+      the types of `x0` and `n` become clear.
 * Moreover, the types of *other variables* in `qm` *can be inferred once the input types are known*.
-* So the strategy of Numba and other JIT compilers is to wait until this
-  moment, and then compile the function.
+* So the strategy of Numba and other JIT compilers is to *wait until the function is called*, and then compile.
 
-That's why it is called "just-in-time" compilation.
+That's is called "just-in-time" compilation.
 
-Note that, if you make the call `qm(0.5, 10)` and then follow it with `qm(0.9, 20)`, compilation only takes place on the first call.
+Note that, if you make the call `qm(0.5, 10)` and then follow it with `qm(0.9,
+20)`, compilation only takes place on the first call.
 
 This is because compiled code is cached and reused as required.
 
 This is why, in the code above, `time3` is smaller than `time2`.
+
 
 
 ## Decorator Notation
@@ -226,29 +237,21 @@ with qe.Timer(precision=4):
 
 Numba also provides several arguments for decorators to accelerate computation and cache functions -- see [here](https://numba.readthedocs.io/en/stable/user/performance-tips.html).
 
+
 ## Type Inference
 
 Successful type inference is a key part of JIT compilation.
 
-As you can imagine, inferring types is easier for simple Python objects (e.g., simple scalar data types such as floats and integers).
+As you can imagine, inferring types is easier for simple Python objects (e.g.,
+simple scalar data types such as floats and integers).
 
 Numba also plays well with NumPy arrays, which have well-defined types.
 
 In an ideal setting, Numba can infer all necessary type information.
 
-This allows it to generate native machine code, without having to call the Python runtime environment.
+This allows it to generate efficient native machine code, without having to call the Python runtime environment.
 
 When Numba cannot infer all type information, it will raise an error.
-
-```{note}
-In older versions of Numba, the `@jit` decorator would silently fall back
-to "object mode" when it could not infer all types, which provided little or
-no speed gain.  Current versions of Numba use `nopython` mode by default,
-meaning the compiler insists on full type inference and raises an error if
-it fails.  You will often see `@njit` used in other code, which is simply
-an alias for `@jit(nopython=True)`.  Since nopython mode is now the default,
-`@jit` and `@njit` are equivalent.
-```
 
 For example, in the (artificial) setting below, Numba is unable to determine the type of function `mean` when compiling the function `bootstrap`
 
@@ -297,9 +300,7 @@ Let's add some cautionary notes.
 As we've seen, Numba needs to infer type information on
 all variables to generate fast machine-level instructions.
 
-For simple routines, Numba infers types very well.
-
-For larger ones, or for routines using external libraries, it can easily fail.
+For large routines or those using external libraries, this process can easily fail.
 
 Hence, it's best to focus on speeding up small, time-critical snippets of code.
 
@@ -333,32 +334,14 @@ function.
 
 When Numba compiles machine code for functions, it treats global variables as constants to ensure type stability.
 
-### Caching Compiled Code
-
-By default, Numba recompiles functions each time a new Python session starts.
-
-To avoid this overhead, you can pass `cache=True` to the decorator:
-
-```{code-cell} ipython3
-@jit(cache=True)
-def qm(x0, n):
-    x = np.empty(n+1)
-    x[0] = x0
-    for t in range(n):
-        x[t+1] = α * x[t] * (1 - x[t])
-    return x
-```
-
-This stores the compiled code on disk so that subsequent sessions can skip
-the compilation step.
 
 (multithreading)=
 ## Multithreaded Loops in Numba
 
-In addition to JIT compilation, Numba provides support for parallel computing on CPUs.
+In addition to JIT compilation, Numba provides support for parallel computing on CPUs and GPUs.
 
-The key tool for parallelization in Numba is the `prange` function, which tells
-Numba to execute loop iterations in parallel across available CPU cores.
+The key tool for parallelization on CPUs in Numba is the `prange` function, which tells
+Numba to execute loop iterations in parallel across available cores.
 
 To illustrate, let's look first at a simple, single-threaded (i.e., non-parallelized) piece of code.
 
@@ -418,27 +401,10 @@ Now let's suppose that we have a large population of households and we want to
 know what median wealth will be.
 
 This is not easy to solve with pencil and paper, so we will use simulation
-instead.
+instead:
 
-In particular, we will simulate a large number of households and then
-calculate median wealth for this group.
-
-Suppose we are interested in the long-run average of this median over time.
-
-For the specification that we've chosen above, we can
-calculate this by taking a one-period cross-sectional snapshot of median
-wealth of the group at the end of a long simulation.
-
-Moreover, provided the simulation period is long enough, initial conditions don't matter.
-
-(This is due to [ergodicity](https://python.quantecon.org/finite_markov.html#id15).)
-
-So, in summary, we are going to simulate 50,000 households by
-
-1. arbitrarily setting initial wealth to 1 and
-1. simulating forward in time for 1,000 periods.
-
-Then we'll calculate median wealth at the end period.
+1. Simulate a large number of households forward in time
+2. Calculate median wealth 
 
 Here's the code:
 
@@ -492,6 +458,8 @@ with qe.Timer():
 
 The speed-up is significant.
 
+Notice that we parallelize across households rather than over time -- updates of
+an individual household across time periods are inherently sequential
 
 ## Exercises
 
@@ -550,8 +518,9 @@ So we get a speed gain of 2 orders of magnitude by adding four characters.
 :label: speed_ex2
 ```
 
-In the [Introduction to Quantitative Economics with Python](https://intro.quantecon.org/intro.html) lecture series you can
-learn all about finite-state Markov chains.
+In the [Introduction to Quantitative Economics with
+Python](https://intro.quantecon.org/intro.html) lecture series you can learn all
+about finite-state Markov chains.
 
 For now, let's just concentrate on simulating a very simple example of such a chain.
 
