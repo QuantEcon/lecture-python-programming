@@ -645,12 +645,7 @@ efficient machine code that varies with both task size and hardware.
 We saw the power of JAX's JIT compiler combined with parallel hardware when we
 {ref}`above <jax_speed>`, when we applied `cos` to a large array.
 
-Let's try the same thing with a more complex function.
-
-
-### Evaluating a more complicated function
-
-Consider the function
+Let's try the same thing with a more complex function:
 
 ```{code-cell}
 def f(x):
@@ -658,7 +653,7 @@ def f(x):
     return y
 ```
 
-#### With NumPy
+### With NumPy
 
 We'll try first with NumPy
 
@@ -675,7 +670,7 @@ with qe.Timer():
 
 
 
-#### With JAX
+### With JAX
 
 Now let's try again with JAX.
 
@@ -712,10 +707,10 @@ The outcome is similar to the `cos` example --- JAX is faster, especially on the
 second run after JIT compilation.
 
 However, with JAX, we have another trick up our sleeve --- we can JIT-compile
-the *entire* function, not just individual operations.
+the entire function, not just individual operations.
 
 
-### Compiling the whole function
+### Compiling the Whole Function
 
 The JAX just-in-time (JIT) compiler can accelerate execution within functions by fusing array
 operations into a single optimized kernel.
