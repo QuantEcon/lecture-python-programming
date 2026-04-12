@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-(numba)=
+(numba_lecture)=
 ```{raw} jupyter
 <div id="qe-notebook-header" align="right" style="text-align:right;">
         <a href="https://quantecon.org/" title="quantecon.org">
@@ -193,7 +193,7 @@ This is because compiled code is cached and reused as required.
 
 This is why, in the code above, `time3` is smaller than `time2`.
 
-```{remark}
+```{admonition} Remark
 In practice, rather than writing `qm_numba = jit(qm)`, we use *decorator* syntax and put `@jit` before the function definition. This is equivalent to adding `qm = jit(qm)` after the definition. We use this syntax throughout the rest of the lecture. (See {doc}`python_advanced_features` for more on decorators.)
 ```
 
