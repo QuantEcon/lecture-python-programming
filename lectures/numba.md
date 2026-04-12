@@ -42,37 +42,39 @@ import matplotlib.pyplot as plt
 ```
 
 
-
 ## Overview
 
 In an {doc}`earlier lecture <need_for_speed>` we discussed vectorization, 
 which can improve execution speed by sending array processing operations in batch to efficient low-level code.
 
 However, as {ref}`discussed in that lecture <numba-p_c_vectorization>`,
-traditional vectorization schemes, such as those found in MATLAB and NumPy, have weaknesses.
+traditional vectorization schemes have weaknesses:
 
 * Highly memory-intensive for compound array operations
-* Ineffective or impossible for some algorithms.
+* Ineffective or impossible for some algorithms
 
 One way to circumvent these problems is by using [Numba](https://numba.pydata.org/), a
-**just in time (JIT) compiler** for Python that is oriented towards numerical work.
+**just in time (JIT) compiler** for Python.
 
-Numba compiles functions to native machine code instructions during runtime.
+Numba compiles functions to native machine code instructions at runtime.
 
 When it succeeds, the result is performance comparable to compiled C or Fortran.
 
-In addition, Numba can do other useful tricks, such as {ref}`multithreading` or
-interfacing with GPUs (through `numba.cuda`).
-
-Numba's JIT compiler is in many ways similar to the JIT compiler in Julia
-
-The main difference is that it is less ambitious, attempting to compile a smaller subset of the language.
-
-Although this might sound like a deficiency, it is in some ways an advantage.
-
-Numba is lean, easy to use, and very good at what it does.
+In addition, Numba can do useful tricks such as {ref}`multithreading <multithreading>`.
 
 This lecture introduces the core ideas.
+
+
+```{note}
+Some readers might be curious about the relationship between Numba and [Julia](https://julialang.org/),
+which contains its own JIT compiler.  While the two compilers are similar in
+many ways, Numba is less ambitious, attempting only to compile a small subset of
+the Python language. Although this might sound like a deficiency, it is also a
+strength: the more restrictive nature of Numba makes it easy to use well and
+good at what it does.
+```
+
+
 
 (numba_link)=
 ## {index}`Compiling Functions <single: Compiling Functions>`
@@ -93,16 +95,14 @@ $$
     x_{t+1} = \alpha x_t (1 - x_t)
 $$
 
-In what follows we set
+In what follows we set $\alpha = 4$.
 
-```{code-cell} ipython3
-α = 4.0
-```
+#### Base Version
 
 Here's the plot of a typical trajectory, starting from $x_0 = 0.1$, with $t$ on the x-axis
 
 ```{code-cell} ipython3
-def qm(x0, n):
+def qm(x0, n, α=4.0):
     x = np.empty(n+1)
     x[0] = x0
     for t in range(n):
@@ -117,11 +117,30 @@ ax.set_ylabel('$x_{t}$', fontsize = 12)
 plt.show()
 ```
 
-To speed the function `qm` up using Numba, our first step is
+Let's see how long this takes to run for large $n$
+
+```{code-cell} ipython3
+n = 10_000_000
+
+with qe.Timer() as timer1:
+    # Time Python base version
+    x = qm(0.1, int(n))
+
+```
+
+
+#### Acceleration via Numba
+
+To speed the function `qm` up using Numba, we first import the `jit` function
+
 
 ```{code-cell} ipython3
 from numba import jit
+```
 
+Now we apply it to `qm`, producing a new function:
+
+```{code-cell} ipython3
 qm_numba = jit(qm)
 ```
 
@@ -130,44 +149,41 @@ JIT-compilation.
 
 We will explain what this means momentarily.
 
-Let's time and compare identical function calls across these two versions, starting with the original function `qm`:
-
-```{code-cell} ipython3
-n = 10_000_000
-
-with qe.Timer() as timer1:
-    qm(0.1, int(n))
-time1 = timer1.elapsed
-```
-
-Now let's try qm_numba
+Let's time this new version:
 
 ```{code-cell} ipython3
 with qe.Timer() as timer2:
-    qm_numba(0.1, int(n))
-time2 = timer2.elapsed
+    # Time jitted version
+    x = qm_numba(0.1, int(n))
 ```
 
-This is already a very large speed gain.
+This is a large speed gain.
 
-In fact, the next time and all subsequent times it runs even faster as the function has been compiled and is in memory:
+In fact, the next time and all subsequent times it runs even faster as the
+function has been compiled and is in memory:
 
 (qm_numba_result)=
 
 ```{code-cell} ipython3
 with qe.Timer() as timer3:
-    qm_numba(0.1, int(n))
-time3 = timer3.elapsed
+    # Second run
+    x = qm_numba(0.1, int(n))
 ```
+
+Here's the speed gain
 
 ```{code-cell} ipython3
-time1 / time3  # Calculate speed gain
+timer1.elapsed /  timer3.elapsed
 ```
 
+This is a big boost for a small modification to our original code.
+
+Let's discuss how this works.
 
 ### How and When it Works
 
-Numba attempts to generate fast machine code using the infrastructure provided by the [LLVM Project](https://llvm.org/).
+Numba attempts to generate fast machine code using the infrastructure provided
+by the [LLVM Project](https://llvm.org/).
 
 It does this by inferring type information on the fly.
 
@@ -175,45 +191,45 @@ It does this by inferring type information on the fly.
 
 The basic idea is this:
 
-* Python is very flexible and hence we could call the function qm with many
-  types.
+* Python is very flexible and hence we could call the function qm with many types.
     * e.g., `x0` could be a NumPy array or a list, `n` could be an integer or a float, etc.
 * This makes it very difficult to generate efficient machine code *ahead of time* (i.e., before runtime).
 * However, when we do actually *call* the function, say by running `qm(0.5, 10)`,
-      the types of `x0` and `n` become clear.
+      the types of `x0`, `α`  and `n` are determined.
 * Moreover, the types of *other variables* in `qm` *can be inferred once the input types are known*.
 * So the strategy of Numba and other JIT compilers is to *wait until the function is called*, and then compile.
 
 That is called "just-in-time" compilation.
 
-Note that, if you make the call `qm(0.5, 10)` and then follow it with `qm(0.9,
-20)`, compilation only takes place on the first call.
+Note that, if you make the call `qm_numba(0.5, 10)` and then follow it with `qm_numba(0.9, 20)`, compilation only takes place on the first call.
 
 This is because compiled code is cached and reused as required.
 
-This is why, in the code above, `time3` is smaller than `time2`.
+This is why, in the code above, the second run of `qm_numba` is faster.
 
 ```{admonition} Remark
-In practice, rather than writing `qm_numba = jit(qm)`, we use *decorator* syntax and put `@jit` before the function definition. This is equivalent to adding `qm = jit(qm)` after the definition. We use this syntax throughout the rest of the lecture. (See {doc}`python_advanced_features` for more on decorators.)
+In practice, rather than writing `qm_numba = jit(qm)`, we typically use
+*decorator* syntax and put `@jit` before the function definition. This is
+equivalent to adding `qm = jit(qm)` after the definition. 
 ```
 
 
-## Type Inference
+## Sharp Bits
 
-Successful type inference is a key part of JIT compilation.
+Numba is relatively easy to use but not always  seamless.
 
-As you can imagine, inferring types is easier for simple Python objects (e.g.,
-simple scalar data types such as floats and integers).
+Let's review some of the issues users run into.
 
-Numba also plays well with NumPy arrays, which have well-defined types.
+### Typing
+
+Successful type inference is the key to JIT compilation.
 
 In an ideal setting, Numba can infer all necessary type information.
 
-This allows it to generate efficient native machine code, without having to call the Python runtime environment.
+When Numba *cannot* infer all type information, it will raise an error.
 
-When Numba cannot infer all type information, it will raise an error.
-
-For example, in the setting below, Numba is unable to determine the type of the function `g` when compiling `iterate`
+For example, in the setting below, Numba is unable to determine the type of the
+function `g` when compiling `iterate`
 
 ```{code-cell} ipython3
 @jit
@@ -234,7 +250,7 @@ except Exception as e:
     print(e)
 ```
 
-We can fix this easily by compiling `g`.
+In the present case, we can fix this easily by compiling `g`.
 
 ```{code-cell} ipython3
 @jit
@@ -244,28 +260,16 @@ def g(x):
 iterate(g, 0.5, 100)
 ```
 
-
-## Dangers and Limitations
-
-Let's add some cautionary notes.
-
-### Limitations
-
-As we've seen, Numba needs to infer type information on
-all variables to generate fast machine-level instructions.
-
-For large routines or those using external libraries, this process can easily fail.
-
-Hence, it's best to focus on speeding up small, time-critical snippets of code.
-
-This will give you much better performance than blanketing your Python programs with `@jit` statements.
+In other cases, such as when we want to use functions from external libaries
+such as `SciPy`, there might not be any easy workaround.
 
 
-### A Gotcha: Global Variables
+### Global Variables
 
-Here's another thing to be careful about when using Numba.
+Another thing to be careful about when using Numba is handling of global
+variables.
 
-Consider the following example
+For example, consider the following code
 
 ```{code-cell} ipython3
 a = 1
@@ -284,9 +288,10 @@ print(add_a(10))
 ```
 
 Notice that changing the global had no effect on the value returned by the
-function.
+function 😱.
 
-When Numba compiles machine code for functions, it treats global variables as constants to ensure type stability.
+When Numba compiles machine code for functions, it treats global variables as
+constants to ensure type stability.
 
 To avoid this, pass values as function arguments rather than relying on globals.
 
@@ -320,15 +325,11 @@ Here's the code:
 
 ```{code-cell} ipython3
 @jit
-def h(w, r=0.1, s=0.3, v1=0.1, v2=1.0):
-    """
-    Updates household wealth.
-    """
-
+def update(w, r=0.1, s=0.3, v1=0.1, v2=1.0):
+    " Updates household wealth. "
     # Draw shocks
     R = np.exp(v1 * np.random.randn()) * (1 + r)
     y = np.exp(v2 * np.random.randn())
-
     # Update wealth
     w = R * s * w + y
     return w
@@ -343,7 +344,7 @@ T = 100
 w = np.empty(T)
 w[0] = 5
 for t in range(T-1):
-    w[t+1] = h(w[t])
+    w[t+1] = update(w[t])
 
 ax.plot(w)
 ax.set_xlabel('$t$', fontsize=12)
@@ -365,14 +366,16 @@ Here's the code:
 ```{code-cell} ipython3
 @jit
 def compute_long_run_median(w0=1, T=1000, num_reps=50_000):
-
     obs = np.empty(num_reps)
+    # For each household
     for i in range(num_reps):
+        # Set the initial condition and run forward in time
         w = w0
         for t in range(T):
-            w = h(w)
+            w = update(w)
+        # Record the final value
         obs[i] = w
-
+    # Take the median of all final values
     return np.median(obs)
 ```
 
@@ -380,6 +383,13 @@ Let's see how fast this runs:
 
 ```{code-cell} ipython3
 with qe.Timer():
+    # Warm up
+    compute_long_run_median()
+```
+
+```{code-cell} ipython3
+with qe.Timer():
+    # Second run
     compute_long_run_median()
 ```
 
@@ -391,15 +401,15 @@ To do so, we add the `parallel=True` flag and change `range` to `prange`:
 from numba import prange
 
 @jit(parallel=True)
-def compute_long_run_median_parallel(w0=1, T=1000, num_reps=50_000):
-
+def compute_long_run_median_parallel(
+        w0=1, T=1000, num_reps=50_000
+    ):
     obs = np.empty(num_reps)
-    for i in prange(num_reps):
+    for i in prange(num_reps):  # Parallelize over households
         w = w0
         for t in range(T):
-            w = h(w)
+            w = update(w)
         obs[i] = w
-
     return np.median(obs)
 ```
 
@@ -407,6 +417,13 @@ Let's look at the timing:
 
 ```{code-cell} ipython3
 with qe.Timer():
+    # Warm up
+    compute_long_run_median_parallel()
+```
+
+```{code-cell} ipython3
+with qe.Timer():
+    # Second run
     compute_long_run_median_parallel()
 ```
 
