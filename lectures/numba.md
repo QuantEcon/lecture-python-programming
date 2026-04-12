@@ -60,24 +60,26 @@ Numba compiles functions to native machine code instructions at runtime.
 
 When it succeeds, the result is performance comparable to compiled C or Fortran.
 
-In addition, Numba can do useful tricks such as {ref}`multithreading`.
+In addition, Numba can do useful tricks such as {ref}`multithreading <multithreading>`.
 
 This lecture introduces the core ideas.
 
-(numba_link)=
-## {index}`Compiling Functions <single: Compiling Functions>`
 
-```{index} single: Python; Numba
-```
-
-{note}
-```
+```{note}
 Some readers might be curious about the relationship between Numba and [Julia](https://julialang.org/),
 which contains its own JIT compiler.  While the two compilers are similar in
 many ways, Numba is less ambitious, attempting only to compile a small subset of
 the Python language. Although this might sound like a deficiency, it is also a
 strength: the more restrictive nature of Numba makes it easy to use well and
 good at what it does.
+```
+
+
+
+(numba_link)=
+## {index}`Compiling Functions <single: Compiling Functions>`
+
+```{index} single: Python; Numba
 ```
 
 
