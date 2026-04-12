@@ -9,7 +9,7 @@ kernelspec:
   name: python3
 ---
 
-(parallel)=
+(numpy_numba_jax)=
 ```{raw} jupyter
 <div id="qe-notebook-header" align="right" style="text-align:right;">
         <a href="https://quantecon.org/" title="quantecon.org">
@@ -141,7 +141,7 @@ code executes relatively quickly.
 Here we use `np.meshgrid` to create two-dimensional input grids `x` and `y` such
 that `f(x, y)` generates all evaluations on the product grid.
 
-(This strategy dates back to Matlab.)
+(This strategy dates back to MATLAB.)
 
 ```{code-cell} ipython3
 grid = np.linspace(-3, 3, 3_000)
@@ -223,24 +223,50 @@ def compute_max_numba_parallel(grid):
 
 ```
 
-Usually this returns an incorrect result:
+This returns `-inf` --- the initial value of `m`, as if it were never updated:
 
 ```{code-cell} ipython3
 z_max_parallel_incorrect = compute_max_numba_parallel(grid)
 print(f"Numba result: {z_max_parallel_incorrect} 😱")
 ```
 
-The reason is that the variable `m` is shared across threads and not properly controlled.
+To understand why, recall that `prange` splits the outer loop across threads.
 
-When multiple threads try to read and write `m` simultaneously, they interfere with each other. 
+Each thread gets its own private copy of `m`, initialized to `-np.inf`, and
+correctly updates it within its chunk of iterations.
 
-Threads read stale values of `m` or overwrite each other's updates --- or `m` never gets updated from its initial value.
+But at the end of the loop, Numba needs to combine the per-thread copies of `m`
+back into a single value --- a **reduction**.
 
-Here's a more carefully written version.
+For patterns it recognizes, such as `m += z` (sum) or `m = max(m, z)` (max),
+Numba knows the combining operator.
+
+But it does not recognize the `if z > m: m = z` pattern as a max reduction, so
+the per-thread results are never combined and `m` retains its initial value.
+
+The simplest fix is to replace the conditional with `max`, which Numba
+recognizes:
 
 ```{code-cell} ipython3
 @numba.jit(parallel=True)
 def compute_max_numba_parallel(grid):
+    n = len(grid)
+    m = -np.inf
+    for i in numba.prange(n):
+        for j in range(n):
+            x = grid[i]
+            y = grid[j]
+            z = np.cos(x**2 + y**2) / (1 + x**2 + y**2)
+            m = max(m, z)
+    return m
+```
+
+An alternative is to make the loop body fully independent across `i` and
+handle the reduction ourselves:
+
+```{code-cell} ipython3
+@numba.jit(parallel=True)
+def compute_max_numba_parallel_v2(grid):
     n = len(grid)
     row_maxes = np.empty(n)
     for i in numba.prange(n):
@@ -255,11 +281,8 @@ def compute_max_numba_parallel(grid):
     return np.max(row_maxes)
 ```
 
-Now the code block that `for i in numba.prange(n)` acts over is independent
-across `i`.
-
-Each thread writes to a separate element of the array `row_maxes` and 
-the parallelization is safe.
+Here each thread writes to a separate element of `row_maxes`, so we handle the
+reduction ourselves via `np.max`.
 
 ```{code-cell} ipython3
 z_max_parallel = compute_max_numba_parallel(grid)
@@ -325,7 +348,7 @@ The compilation overhead is a one-time cost that pays off when the function is c
 
 ### JAX plus vmap
 
-There is one problem with both the NumPy code and the JAX code: 
+There is one problem with both the NumPy code and the JAX code above:
 
 While the flat arrays are low-memory
 
@@ -341,12 +364,13 @@ x_mesh.nbytes + y_mesh.nbytes
 
 This extra memory usage can be a big problem in actual research calculations.
 
-Fortunately, JAX admits a different approach 
+Fortunately, JAX admits a different approach
 using [jax.vmap](https://docs.jax.dev/en/latest/_autosummary/jax.vmap.html).
 
-#### Version 1
+The idea of `vmap` is to break vectorization into stages, transforming a
+function that operates on single values into one that operates on arrays.
 
-Here's one way we can apply `vmap`.
+Here's how we can apply it to our problem.
 
 ```{code-cell} ipython3
 # Set up f to compute f(x, y) at every x for any given y
@@ -373,33 +397,23 @@ with qe.Timer(precision=8):
     z_max.block_until_ready()
 ```
 
-By avoiding the large input arrays `x_mesh` and `y_mesh`, this `vmap` version uses far less memory.
+By avoiding the large input arrays `x_mesh` and `y_mesh`, this `vmap` version
+uses far less memory, with similar runtime.
 
-When run on a CPU, its runtime is similar to that of the meshgrid version.
+But we are still leaving speed gains on the table.
 
-When run on a GPU, it is usually significantly faster.
+The code above computes the full two-dimensional array `f(x,y)` and then takes
+the max.
 
-In fact, using `vmap` has another advantage: It allows us to break vectorization up into stages.
+Moreover, the `jnp.max` call sits outside the JIT-compiled function `f`, so the
+compiler cannot fuse these operations into a single kernel.
 
-This leads to code that is often easier to comprehend than traditional vectorized code.
-
-We will investigate these ideas more when we tackle larger problems.
-
-
-### vmap version 2
-
-We can be still more memory efficient using vmap.
-
-While we avoid large input arrays in the preceding version, 
-we still create the large output array `f(x,y)` before we compute the max.
-
-Let's try a slightly different approach that takes the max to the inside.
-
-Because of this change, we never compute the two-dimensional array `f(x,y)`.
+We can fix both problems by pushing the max inside and wrapping everything in
+a single `@jax.jit`:
 
 ```{code-cell} ipython3
 @jax.jit
-def compute_max_vmap_v2(grid):
+def compute_max_vmap(grid):
     # Construct a function that takes the max along each row
     f_vec_x_max = lambda y: jnp.max(f(grid, y))
     # Vectorize the function so we can call on all rows simultaneously
@@ -408,30 +422,34 @@ def compute_max_vmap_v2(grid):
     return jnp.max(f_vec_max(grid))
 ```
 
-Here 
+Here
 
 * `f_vec_x_max` computes the max along any given row
 * `f_vec_max` is a vectorized version that can compute the max of all rows in parallel.
 
 We apply this function to all rows and then take the max of the row maxes.
 
+Because we push the max inside, we never construct the full two-dimensional
+array `f(x,y)`, saving even more memory.
+
+And because everything is under a single `@jax.jit`, the compiler can fuse
+all operations into one optimized kernel.
+
 Let's try it.
 
 ```{code-cell} ipython3
 with qe.Timer(precision=8):
-    z_max = compute_max_vmap_v2(grid).block_until_ready()
+    z_max = compute_max_vmap(grid).block_until_ready()
 
-print(f"JAX vmap v2 result: {z_max:.6f}")
+print(f"JAX vmap result: {z_max:.6f}")
 ```
 
 Let's run it again to eliminate compilation time:
 
 ```{code-cell} ipython3
 with qe.Timer(precision=8):
-    z_max = compute_max_vmap_v2(grid).block_until_ready()
+    z_max = compute_max_vmap(grid).block_until_ready()
 ```
-
-If you are running this on a GPU, as we are, you should see another nontrivial speed gain.
 
 
 ### Summary
@@ -552,9 +570,7 @@ with qe.Timer(precision=8):
 
 JAX is also quite efficient for this sequential operation.
 
-Both JAX and Numba deliver strong performance after compilation, with Numba
-typically (but not always) offering slightly better speeds on purely sequential
-operations.
+Both JAX and Numba deliver strong performance after compilation.
 
 
 ### Summary
@@ -572,7 +588,7 @@ The JAX version, on the other hand, requires using `lax.scan`, which is signific
 Additionally, JAX's immutable arrays mean we cannot simply update array elements in place, making it hard to directly replicate the algorithm used by Numba.
 
 For this type of sequential operation, Numba is the clear winner in terms of
-code clarity and ease of implementation, as well as high performance.
+code clarity and ease of implementation.
 
 
 ## Overall recommendations
@@ -596,14 +612,15 @@ The code is natural and readable --- just a Python loop with a decorator ---
 and performance is excellent.
 
 JAX can handle sequential problems via `lax.scan`, but the syntax is less
-intuitive and the performance gain is minimal for purely sequential work.
+intuitive.
 
-That said, `lax.scan` has one important advantage: it supports automatic
+```{note}
+One important advantage of `lax.scan` is that it supports automatic
 differentiation through the loop, which Numba cannot do.
-
 If you need to differentiate through a sequential computation (e.g., computing
 sensitivities of a trajectory to model parameters), JAX is the better choice
 despite the less natural syntax.
+```
 
 In practice, many problems involve a mix of both patterns.
 
