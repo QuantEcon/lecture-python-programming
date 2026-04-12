@@ -79,11 +79,11 @@ We need Python's scientific libraries for two reasons:
 1. Python is small
 2. Python is slow
 
-**Python in small** 
+**Python is small** 
 
 Core python is small by design -- this helps with optimization, accessibility, and maintenance
 
-Scientific libraries provide the routines we don't want to -- and probably shouldn't -- write oursives
+Scientific libraries provide the routines we don't want to -- and probably shouldn't -- write ourselves
 
 * numerical integration, interpolation, linear algebra, root finding, etc.
 
@@ -127,37 +127,17 @@ Here's how they fit together:
 We will discuss all of these libraries at length in this lecture series.
 
 
-## Pure Python is slow
+## Why is Pure Python Slow?
 
-As mentioned above, one major attraction of the scientific libraries is greater execution speeds.
+As mentioned above, numerical code written in pure Python is relatively slow.
 
-We will discuss how scientific libraries can help us accelerate code.
+Let's try to understand what's driving slow execution speeds.
 
-For this topic, it will be helpful if we understand what's driving slow execution speeds.
+### Type Checking
 
+One source of overhead in pure Python operations is type checking.
 
-### High vs low level code
-
-Higher-level languages like Python are optimized for humans.
-
-This means that the programmer can leave many details to the runtime environment
-
-* specifying variable types
-* memory allocation/deallocation
-* etc.
-
-In addition, pure Python is run by an [interpreter](https://en.wikipedia.org/wiki/Interpreter_(computing)), which executes code statement-by-statement.
-
-This makes Python flexible, interactive, easy to write, easy to read, and relatively easy to debug.
-
-On the other hand, the standard implementation of Python (called CPython) cannot
-match the speed of compiled languages such as C or Fortran.
-
-
-### Where are the bottlenecks?
-
-Why is this the case?
-
+Let's try to understand the issues.
 
 #### Dynamic typing
 
@@ -245,7 +225,7 @@ To illustrate, let's consider the problem of summing some data --- say, a collec
 In C or Fortran, an array of integers is stored in a single contiguous block of memory
 
 * For example, a 64 bit integer is stored in 8 bytes of memory.
-* An array of $n$ such integers occupies $8n$ *consecutive* memory slots.
+* An array of $n$ such integers occupies $8n$ consecutive bytes.
 
 Moreover, the data type is known at compile time. 
 
@@ -336,7 +316,7 @@ The idea of vectorization dates back to MATLAB, which uses vectorization extensi
 NumPy uses a similar model, inspired by MATLAB
 
 
-### Vectorization vs for pure Python loops
+### Vectorization vs pure Python loops
 
 Let's try a quick speed comparison to illustrate how vectorization can
 accelerate code.
@@ -431,61 +411,45 @@ Let's review the two main kinds of CPU-based parallelization commonly used in
 scientific computing and discuss their pros and cons.
 
 
-#### Multiprocessing
-
-Multiprocessing means concurrent execution of multiple threads of logic using more than one processor.
-
-Multiprocessing can be carried out on one machine with multiple CPUs or on a
-cluster of machines connected by a network.
-
-With multiprocessing, *each process has its own memory space*, although the physical memory chip might be shared.
-
-
 #### Multithreading
 
-Multithreading is similar to multiprocessing, except that, during execution, the
-threads all *share the same memory space*.
+Multithreading means running multiple threads of execution within a single process.
 
+All threads share the same memory space, so they can read from and write to the same arrays without copying data.
+
+For example, when a numerical operation on a large array runs on a modern laptop, the workload can be split across the machine's multiple CPU cores, with each core handling a portion of the array.
+
+```{note}
 Native Python struggles to implement multithreading due to some [legacy design
 features](https://wiki.python.org/moin/GlobalInterpreterLock).
-
 But this is not a restriction for scientific libraries like NumPy and Numba.
-
-Functions imported from these libraries and JIT-compiled code run in low level
+Functions imported from these libraries and JIT-compiled code run in low-level
 execution environments where Python's legacy restrictions don't apply.
+```
 
 
-#### Advantages and Disadvantages
+#### Multiprocessing
 
-Multithreading is more lightweight because most system and memory resources
-are shared by the threads.
+Multiprocessing means running multiple independent processes, each with its own separate memory space.
 
-In addition, the fact that multiple threads all access a shared pool of memory
-is extremely convenient for numerical programming.
+Because memory is not shared, processes communicate by passing data between them.
 
-On the other hand, multiprocessing is more flexible and can be distributed
-across clusters.
+Multiprocessing can run on a single machine or be distributed across a cluster of machines connected by a network.
 
-For the great majority of what we do in these lectures, multithreading will
-suffice.
+
+#### Which Should We Use?
+
+For numerical work on a single machine, multithreading is usually preferred --- it is lightweight and the shared memory model is very convenient.
+
+Multiprocessing becomes important when scaling beyond a single machine.
+
+For the great majority of what we do in these lectures, multithreading will suffice.
 
 
 ### Hardware Accelerators
 
-While CPUs with multiple cores have become standard for parallel computing, a
-more dramatic shift has occurred with the rise of specialized hardware
-accelerators.
-
-These accelerators are designed specifically for the kinds of highly parallel
-computations that arise in scientific computing, machine learning, and data
-science.
-
-#### GPUs and TPUs
-
-The two most important types of hardware accelerators are
-
-* **GPUs** (Graphics Processing Units) and
-* **TPUs** (Tensor Processing Units).
+A more dramatic source of parallelism comes from specialized hardware
+accelerators, particularly **GPUs** (Graphics Processing Units).
 
 GPUs were originally designed for rendering graphics, which requires performing
 the same operation on many pixels simultaneously.
@@ -494,63 +458,42 @@ the same operation on many pixels simultaneously.
 :scale: 40
 ```
 
-Scientists and engineers realized that this same architecture --- many simple
-processors working in parallel --- is ideal for scientific computing tasks
+This architecture --- thousands of simple cores executing the same instruction
+on different data points --- turns out to be ideal for scientific computing.
 
-TPUs are a more recent development, designed by Google specifically for machine learning workloads.
+```{note}
+A **core** is an independent processing unit within a chip --- a circuit that
+can execute instructions on its own. A CPU typically has a small number of
+powerful cores, each capable of handling complex sequences of operations. A GPU
+instead packs thousands of smaller, simpler cores, each designed to perform
+basic arithmetic operations. The GPU's power comes from having all of these
+cores work on different pieces of the same problem simultaneously.
+```
 
-Like GPUs, TPUs excel at performing massive numbers of matrix operations in parallel.
-
-
-#### Why TPUs/GPUs Matter 
-
-The performance gains from using hardware accelerators can be dramatic.
-
-For example, a modern GPU can contain thousands of small processing cores,
-compared to the 8-64 cores typically found in CPUs.
-
-When a problem can be expressed as many independent operations on arrays of
+When a computation can be expressed as independent operations on large arrays of
 data, GPUs can be orders of magnitude faster than CPUs.
 
-This is particularly relevant for scientific computing because many algorithms 
-naturally map onto the parallel architecture of GPUs.
+**TPUs** (Tensor Processing Units), designed by Google for machine learning,
+follow a similar philosophy, optimizing for massive parallel matrix operations.
 
 
-### Single GPUs vs GPU Servers
+### Accessing GPU Resources
 
-There are two common ways to access GPU resources:
-
-#### Single GPU Systems
-
-Many workstations and laptops now come with capable GPUs, or can be equipped with them.
-
-A single modern GPU can dramatically accelerate many scientific computing tasks.
-
-For individual researchers and small projects, a single GPU is often sufficient.
+Many workstations and laptops now come with capable GPUs, and a single modern
+GPU is often sufficient for individual research projects.
 
 Modern Python libraries like JAX, discussed extensively in this lecture series,
 automatically detect and use available GPUs with minimal code changes.
 
-
-#### Multi-GPU Servers
-
-For larger-scale problems, servers containing multiple GPUs (often 4-8 GPUs per server) are increasingly common.
+For larger-scale problems, multi-GPU servers (often 4--8 GPUs per machine) are
+increasingly common.
 
 ```{figure} /_static/lecture_specific/need_for_speed/dgx.png
 :scale: 40
 ```
 
-
-With appropriate software, computations can be distributed across multiple GPUs, either within a single server or across multiple servers.
-
-This enables researchers to tackle problems that would be infeasible on a single GPU or CPU.
-
-
-### Summary
-
-GPU computing is becoming far more accessible, particularly from within Python.
-
-Some Python scientific libraries, like JAX, now support GPU acceleration with minimal changes to existing code.
+With appropriate software, computations can be distributed across multiple GPUs,
+either within a single server or across a cluster.
 
 We will explore GPU computing in more detail in later lectures, applying it to a
 range of economic applications.
