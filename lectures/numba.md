@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-(speed)=
+(numba)=
 ```{raw} jupyter
 <div id="qe-notebook-header" align="right" style="text-align:right;">
         <a href="https://quantecon.org/" title="quantecon.org">
@@ -49,7 +49,7 @@ In an {doc}`earlier lecture <need_for_speed>` we discussed vectorization,
 which can improve execution speed by sending array processing operations in batch to efficient low-level code.
 
 However, as {ref}`discussed in that lecture <numba-p_c_vectorization>`,
-traditional vectorization schemes, such as those found in MATLAB, Julia, and NumPy, have weaknesses.
+traditional vectorization schemes, such as those found in MATLAB and NumPy, have weaknesses.
 
 * Highly memory-intensive for compound array operations
 * Ineffective or impossible for some algorithms.
@@ -59,16 +59,16 @@ One way to circumvent these problems is by using [Numba](https://numba.pydata.or
 
 Numba compiles functions to native machine code instructions during runtime.
 
-When it succeeds, Numba will be on par with machine code from low-level languages.
+When it succeeds, the result is performance comparable to compiled C or Fortran.
 
 In addition, Numba can do other useful tricks, such as {ref}`multithreading` or
 interfacing with GPUs (through `numba.cuda`).
 
-Numba's JIT compiler is in many ways similar to the JIT compiler in JULIA
+Numba's JIT compiler is in many ways similar to the JIT compiler in Julia
 
 The main difference is that it is less ambitious, attempting to compile a smaller subset of the language.
 
-Although this might sound like a defficiency, it is in some ways an advantage.
+Although this might sound like a deficiency, it is in some ways an advantage.
 
 Numba is lean, easy to use, and very good at what it does.
 
@@ -184,7 +184,7 @@ The basic idea is this:
 * Moreover, the types of *other variables* in `qm` *can be inferred once the input types are known*.
 * So the strategy of Numba and other JIT compilers is to *wait until the function is called*, and then compile.
 
-That's is called "just-in-time" compilation.
+That is called "just-in-time" compilation.
 
 Note that, if you make the call `qm(0.5, 10)` and then follow it with `qm(0.9,
 20)`, compilation only takes place on the first call.
@@ -193,49 +193,9 @@ This is because compiled code is cached and reused as required.
 
 This is why, in the code above, `time3` is smaller than `time2`.
 
-
-
-## Decorator Notation
-
-In the code above we created a JIT compiled version of `qm` via the call
-
-```{code-cell} ipython3
-qm_numba = jit(qm)
+```{remark}
+In practice, rather than writing `qm_numba = jit(qm)`, we use *decorator* syntax and put `@jit` before the function definition. This is equivalent to adding `qm = jit(qm)` after the definition. We use this syntax throughout the rest of the lecture. (See {doc}`python_advanced_features` for more on decorators.)
 ```
-
-In practice this would typically be done using an alternative *decorator* syntax.
-
-(We discuss decorators in a {doc}`separate lecture <python_advanced_features>` but you can skip the details at this stage.)
-
-Specifically, to target a function for JIT compilation we can put `@jit` before the function definition.
-
-Here's what this looks like for `qm`
-
-```{code-cell} ipython3
-@jit
-def qm(x0, n):
-    x = np.empty(n+1)
-    x[0] = x0
-    for t in range(n):
-        x[t+1] = α * x[t] * (1 - x[t])
-    return x
-```
-
-This is equivalent to adding `qm = jit(qm)` after the function definition.
-
-The following now uses the jitted version:
-
-```{code-cell} ipython3
-with qe.Timer(precision=4):
-    qm(0.1, 100_000)
-```
-
-```{code-cell} ipython3
-with qe.Timer(precision=4):
-    qm(0.1, 100_000)
-```
-
-Numba also provides several arguments for decorators to accelerate computation and cache functions -- see [here](https://numba.readthedocs.io/en/stable/user/performance-tips.html).
 
 
 ## Type Inference
@@ -253,41 +213,35 @@ This allows it to generate efficient native machine code, without having to call
 
 When Numba cannot infer all type information, it will raise an error.
 
-For example, in the (artificial) setting below, Numba is unable to determine the type of function `mean` when compiling the function `bootstrap`
+For example, in the setting below, Numba is unable to determine the type of the function `g` when compiling `iterate`
 
 ```{code-cell} ipython3
 @jit
-def bootstrap(data, statistics, n_resamples):
-    bootstrap_stat = np.empty(n_resamples)
-    n = len(data)
-    for i in range(n_resamples):
-        resample = np.random.choice(data, size=n, replace=True)
-        bootstrap_stat[i] = statistics(resample)
-    return bootstrap_stat
+def iterate(f, x0, n):
+    x = x0
+    for t in range(n):
+        x = f(x)
+    return x
 
-# No decorator here.
-def mean(data):
-    return np.mean(data)
-
-data = np.array((2.3, 3.1, 4.3, 5.9, 2.1, 3.8, 2.2))
-n_resamples = 10
+# Not jitted
+def g(x):
+    return np.cos(x) - 2 * np.sin(x)
 
 # This code throws an error
 try:
-    bootstrap(data, mean, n_resamples)
+    iterate(g, 0.5, 100)
 except Exception as e:
     print(e)
 ```
 
-We can fix this error easily in this case by compiling `mean`.
+We can fix this easily by compiling `g`.
 
 ```{code-cell} ipython3
 @jit
-def mean(data):
-    return np.mean(data)
+def g(x):
+    return np.cos(x) - 2 * np.sin(x)
 
-with qe.Timer():
-    bootstrap(data, mean, n_resamples)
+iterate(g, 0.5, 100)
 ```
 
 
@@ -334,6 +288,8 @@ function.
 
 When Numba compiles machine code for functions, it treats global variables as constants to ensure type stability.
 
+To avoid this, pass values as function arguments rather than relying on globals.
+
 
 (multithreading)=
 ## Multithreaded Loops in Numba
@@ -363,8 +319,6 @@ distribution.
 Here's the code:
 
 ```{code-cell} ipython3
-from numba import jit
-
 @jit
 def h(w, r=0.1, s=0.3, v1=0.1, v2=1.0):
     """
@@ -459,7 +413,9 @@ with qe.Timer():
 The speed-up is significant.
 
 Notice that we parallelize across households rather than over time -- updates of
-an individual household across time periods are inherently sequential
+an individual household across time periods are inherently sequential.
+
+For GPU-based parallelization, see our {doc}`lectures on JAX <jax_intro>`.
 
 ## Exercises
 
