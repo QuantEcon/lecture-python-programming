@@ -46,20 +46,21 @@ import numpy as np
 import quantecon as qe
 ```
 
-Notice that we import `jax.numpy as jnp`, which provides a NumPy-like interface.
 
 
 ## JAX as a NumPy Replacement
-
-One of the attractive features of JAX is that, whenever possible, its array
-processing operations conform to the NumPy API.
-
-This means that, in many cases, we can use JAX as a drop-in NumPy replacement.
 
 Let's look at the similarities and differences between JAX and NumPy.
 
 ### Similarities
 
+Above we import `jax.numpy as jnp`, which provides a NumPy-like interface to
+array operations.
+
+One of the attractive features of JAX is that, whenever possible, this interface
+conform to the NumPy API.
+
+As a result, we can often use JAX as a drop-in NumPy replacement.
 
 Here are some standard array operations using `jnp`:
 
@@ -79,7 +80,7 @@ print(jnp.sum(a))
 print(jnp.dot(a, a))
 ```
 
-However, the array object `a` is not a NumPy array:
+It should be remembered, however, that the array object `a` is not a NumPy array:
 
 ```{code-cell} ipython3
 a
@@ -104,11 +105,13 @@ Let's now look at some differences between JAX and NumPy array operations.
 (jax_speed)=
 #### Speed!
 
-Let's say we want to evaluate the cosine function at many points.
+One major difference is that JAX is faster --- and sometimes much faster.
+
+To illustrate, suppose that we want to evaluate the cosine function at many points.
 
 ```{code-cell}
 n = 50_000_000
-x = np.linspace(0, 10, n)
+x = np.linspace(0, 10, n)   # NumPy array
 ```
 
 ##### With NumPy
@@ -150,28 +153,24 @@ with qe.Timer():
     # First run
     y = jnp.cos(x)
     # Hold the interpreter until the array operation finishes
-    jax.block_until_ready(y);
+    y.block_until_ready()
 ```
 
 ```{note}
-Here, in order to measure actual speed, we use the `block_until_ready` method
-to hold the interpreter until the results of the computation are returned.
-
-This is necessary because JAX uses asynchronous dispatch, which
+Above, the `block_until_ready` method
+holds the interpreter until the results of the computation are returned.
+This is necessary for timing execution because JAX uses asynchronous dispatch, which
 allows the Python interpreter to run ahead of numerical computations.
-
-For non-timed code, you can drop the line containing `block_until_ready`.
 ```
 
-And let's time it again.
-
+Now let's time it again.
 
 ```{code-cell}
 with qe.Timer():
     # Second run
     y = jnp.cos(x)
     # Hold interpreter 
-    jax.block_until_ready(y);
+    y.block_until_ready()
 ```
 
 On a GPU, this code runs much faster than its NumPy equivalent.
@@ -190,7 +189,11 @@ being used (as well as the data type).
 The size matters for generating optimized code because efficient parallelization
 requires matching the size of the task to the available hardware.
 
-We can verify the claim that JAX specializes on array size by changing the input size and watching the runtimes. 
+
+#### Size Experiment
+
+We can verify the claim that JAX specializes on array size by changing the input
+size and watching the runtimes. 
 
 ```{code-cell}
 x = jnp.linspace(0, 10, n + 1)
@@ -201,7 +204,7 @@ with qe.Timer():
     # First run
     y = jnp.cos(x)
     # Hold interpreter
-    jax.block_until_ready(y);
+    y.block_until_ready()
 ```
 
 
@@ -210,7 +213,7 @@ with qe.Timer():
     # Second run
     y = jnp.cos(x)
     # Hold interpreter
-    jax.block_until_ready(y);
+    y.block_until_ready()
 ```
 
 The run time increases and then falls again (this will be more obvious on the GPU).
@@ -263,7 +266,8 @@ a[0] = 1
 a
 ```
 
-In JAX this fails!
+In JAX this fails 😱.
+
 
 ```{code-cell} ipython3
 a = jnp.linspace(0, 1, 3)
@@ -278,14 +282,19 @@ except Exception as e:
 
 ```
 
-The designers of JAX chose to make arrays immutable because JAX uses a
-functional programming style, which we discuss below.
+The designers of JAX chose to make arrays immutable because 
+
+1. JAX uses a *functional programming style* and
+2. functional programming typically avoids mutable data
+
+We discuss these ideas {ref}`below <jax_func>`.
 
 
-#### A workaround
+(jax_at_workaround)=
+#### A Workaround
 
-We note that JAX does provide an alternative to in-place array modification
-using the [`at` method](https://docs.jax.dev/en/latest/_autosummary/jax.numpy.ndarray.at.html).
+JAX does provide a direct alternative to in-place array modification
+via the [`at` method](https://docs.jax.dev/en/latest/_autosummary/jax.numpy.ndarray.at.html).
 
 ```{code-cell} ipython3
 a = jnp.linspace(0, 1, 3)
@@ -308,6 +317,7 @@ Hence, for the most part, we try to avoid this syntax.
 (Although it can in fact be efficient inside JIT-compiled functions -- but let's put this aside for now.)
 
 
+(jax_func)=
 ## Functional Programming
 
 From JAX's documentation:

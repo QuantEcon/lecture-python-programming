@@ -54,7 +54,6 @@ tags: [hide-output]
 We will use the following imports.
 
 ```{code-cell} ipython3
-import random
 from functools import partial
 
 import numpy as np
@@ -483,18 +482,67 @@ Notice that the second run is significantly faster after JIT compilation complet
 
 Numba's compilation is typically quite fast, and the resulting code performance is excellent for sequential operations like this one.
 
+
 ### JAX Version
 
-Now let's create a JAX version using `lax.scan`:
+Now let's create a JAX version using `at[t].set` style syntax, which, as
+{ref}`discussed in the JAX lecture <jax_at_workaround>`, provides a workaround for immutable arrays.
 
-(We'll hold `n` static because it affects array size and hence JAX wants to
-specialize on its value in the compiled code.)
+We'll apply a `lax.fori_loop`, which is a version of a for loop that can be compiled by XLA.
 
 ```{code-cell} ipython3
 cpu = jax.devices("cpu")[0]
 
-@partial(jax.jit, static_argnames=('n',), device=cpu)
-def qm_jax(x0, n, α=4.0):
+@partial(jax.jit, static_argnames=("n",), device=cpu)
+def qm_jax_fori(x0, n, α=4.0):
+
+    x = jnp.empty(n + 1).at[0].set(x0)
+
+    def update(t, x):
+        return x.at[t + 1].set(α * x[t] * (1 - x[t]))
+
+    x = lax.fori_loop(0, n, update, x)
+    return x
+
+```
+
+* We hold `n` static because it affects array size and hence JAX wants to specialize on its value in the compiled code.
+* We pin to the CPU via `device=cpu` because this sequential workload consists of many small operations, leaving little opportunity for GPU parallelism.
+
+Although `at[t].set` appears to create a new array at each step, inside a JIT-compiled function the compiler detects that the old array is no longer needed and performs the update in place.
+
+Let's time it with the same parameters:
+
+```{code-cell} ipython3
+with qe.Timer():
+    # First run
+    x_jax = qm_jax_fori(0.1, n)
+    # Hold interpreter
+    x_jax.block_until_ready()
+```
+
+Let's run it again to eliminate compilation overhead:
+
+```{code-cell} ipython3
+with qe.Timer():
+    # Second run
+    x_jax = qm_jax_fori(0.1, n)
+    # Hold interpreter
+    x_jax.block_until_ready()
+```
+
+JAX is also quite efficient for this sequential operation.
+
+
+There's another way we can implement the loop that uses `lax.scan`.
+
+This alternative is arguably more in line with JAX's functional approach ---
+although the syntax is difficult to remember.
+
+
+```{code-cell} ipython3
+@partial(jax.jit, static_argnames=("n",), device=cpu)
+def qm_jax_scan(x0, n, α=4.0):
     def update(x, t):
         x_new = α * x * (1 - x)
         return x_new, x_new
@@ -505,20 +553,12 @@ def qm_jax(x0, n, α=4.0):
 
 This code is not easy to read but, in essence, `lax.scan` repeatedly calls `update` and accumulates the returns `x_new` into an array.
 
-```{note}
-We specify `device=cpu` in the `jax.jit` decorator because this computation
-consists of many small sequential operations, leaving little opportunity for the
-GPU to exploit parallelism. As a result, kernel-launch overhead tends to
-dominate on the GPU, making the CPU a better
-fit.
-```
-
 Let's time it with the same parameters:
 
 ```{code-cell} ipython3
 with qe.Timer():
     # First run
-    x_jax = qm_jax(0.1, n)
+    x_jax = qm_jax_scan(0.1, n)
     # Hold interpreter
     x_jax.block_until_ready()
 ```
@@ -528,12 +568,10 @@ Let's run it again to eliminate compilation overhead:
 ```{code-cell} ipython3
 with qe.Timer():
     # Second run
-    x_jax = qm_jax(0.1, n)
+    x_jax = qm_jax_scan(0.1, n)
     # Hold interpreter
     x_jax.block_until_ready()
 ```
-
-JAX is also quite efficient for this sequential operation.
 
 Both JAX and Numba deliver strong performance after compilation.
 
@@ -547,9 +585,11 @@ array and fill it element by element using a standard Python loop.
 
 This is exactly how most programmers think about the algorithm.
 
-The JAX version, on the other hand, requires using `lax.scan`, which is significantly less intuitive.
+The JAX versions, on the other hand, require either `lax.fori_loop` or
+`lax.scan`, both of which are less intuitive than a standard Python loop.
 
-Additionally, JAX's immutable arrays mean we cannot simply update array elements in place, making it hard to directly replicate the algorithm used by Numba.
+While JAX's `at[t].set` syntax does allow element-wise updates, the overall code
+remains harder to read than the Numba equivalent.
 
 For this type of sequential operation, Numba is the clear winner in terms of
 code clarity and ease of implementation.
@@ -575,12 +615,12 @@ For **sequential operations**, Numba has clear advantages.
 The code is natural and readable --- just a Python loop with a decorator ---
 and performance is excellent.
 
-JAX can handle sequential problems via `lax.scan`, but the syntax is less
-intuitive.
+JAX can handle sequential problems via `lax.fori_loop` or `lax.scan`, but
+the syntax is less intuitive.
 
 ```{note}
-One important advantage of `lax.scan` is that it supports automatic
-differentiation through the loop, which Numba cannot do.
+One important advantage of `lax.fori_loop` and `lax.scan` is that they
+support automatic differentiation through the loop, which Numba cannot do.
 If you need to differentiate through a sequential computation (e.g., computing
 sensitivities of a trajectory to model parameters), JAX is the better choice
 despite the less natural syntax.
