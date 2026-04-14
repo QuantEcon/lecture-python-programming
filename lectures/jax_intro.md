@@ -351,19 +351,20 @@ In particular, pure functions will always return the same result if invoked with
 
 
 
-### Examples
+### Examples -- Pure and Impure
 
-Here's an example of a *non-pure* function
+Here's an example of a *impure* function
 
 ```{code-cell} ipython3
 tax_rate = 0.1
-prices = [10.0, 20.0]
 
 def add_tax(prices):
     for i, price in enumerate(prices):
         prices[i] = price * (1 + tax_rate)
-    print('Post-tax prices: ', prices)
-    return prices
+
+prices = [10.0, 20.0]
+add_tax(prices)
+prices
 ```
 
 This function fails to be pure because
@@ -375,15 +376,22 @@ This function fails to be pure because
 Here's a *pure* version
 
 ```{code-cell} ipython3
-tax_rate = 0.1
-prices = (10.0, 20.0)
 
 def add_tax_pure(prices, tax_rate):
     new_prices = [price * (1 + tax_rate) for price in prices]
     return new_prices
+
+tax_rate = 0.1
+prices = (10.0, 20.0)
+after_tax_prices = add_tax_pure(prices, tax_rate)
+after_tax_prices
 ```
 
-This pure version makes all dependencies explicit through function arguments, and doesn't modify any external state.
+This is pure because 
+
+* all dependencies explicit through function arguments
+* and doesn't modify any external state 
+
 
 ### Why Functional Programming?
 
@@ -438,8 +446,8 @@ This function is *not pure* because:
 * It's non-deterministic: same inputs, different outputs
 * It has side effects: it modifies the global random number generator state
 
-Dangerous under parallelization --- must carefully control what happens in each
-thread!
+This is dangerous under parallelization --- must carefully control what happens in each
+thread.
 
 
 ### JAX
@@ -560,7 +568,11 @@ sense when we get to parallel programming.
 The function below produces `k` (quasi-) independent random `n x n` matrices using `split`.
 
 ```{code-cell} ipython3
-def gen_random_matrices(key, n=2, k=3):
+def gen_random_matrices(
+        key,   # JAX key for random numbers
+        n=2,   # Matrices will be n x n
+        k=3    # Number of matrices to generate
+    ):
     matrices = []
     for _ in range(k):
         key, subkey = jax.random.split(key)
@@ -583,7 +595,7 @@ This function is *pure*
 
 ### Benefits
 
-The explicitness of JAX brings significant benefits:
+As mentioned above, this explicitness is valuable:
 
 * Reproducibility: Easy to reproduce results by reusing keys
 * Parallelization: Control what happens on separate threads 
@@ -672,8 +684,14 @@ with qe.Timer():
 The outcome is similar to the `cos` example --- JAX is faster, especially on the
 second run after JIT compilation.
 
-But we are still using eager execution --- lots of memory and read/write
+This is because the individual array operations are parallelized on the GPU
 
+But we are still using eager execution 
+
+* lots of memory due to intermediate arrays
+* lots of memory read/writes
+
+Also, many separate kernels launched on the GPU
 
 ### Compiling the Whole Function
 
@@ -708,7 +726,8 @@ The runtime has improved again --- now because we fused all the operations
 
 * Aggressive optimization based on entire computational sequence
 * Eliminates multiple calls to the hardware accelerator 
-* No creation of intermediate arrays
+
+The memory footprint is also much lower --- no creation of intermediate arrays
 
 Incidentally, a more common syntax when targeting a function for the JIT
 compiler is
