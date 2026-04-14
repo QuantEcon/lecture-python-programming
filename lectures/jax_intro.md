@@ -383,7 +383,7 @@ def add_tax_pure(prices, tax_rate):
 
 tax_rate = 0.1
 prices = (10.0, 20.0)
-after_tax_prices = add_tax(prices)
+after_tax_prices = add_tax_pure(prices, tax_rate)
 after_tax_prices
 ```
 
