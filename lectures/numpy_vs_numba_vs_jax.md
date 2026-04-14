@@ -135,18 +135,37 @@ for x in grid:
 
 Let's switch to NumPy and use a larger grid
 
-Here we use `np.meshgrid` to create two-dimensional input grids `x` and `y` such
-that `f(x, y)` generates all evaluations on the product grid.
+```{code-cell} ipython3
+grid = np.linspace(-3, 3, 3_000)  # Large grid
+```
+
+As a first pass of vectorization we might try something like this
+
+```{code-cell} ipython3
+# Large grid
+z = np.max(f(grid, grid))    # This is wrong!
+```
+
+The problem here is that `f(grid, grid)` doesn't obey the nested loop.
+
+In terms of the figure above, it only computes the values of `f` along the
+diagonal.
+
+To trick NumPy into calculating `f(x,y)` on every `x,y` pair, we need to use `np.meshgrid`.
+
+Here we use `np.meshgrid` to create two-dimensional input grids `x` and `y` 
+
+such that `f(x, y)` generates all evaluations on the product grid.
 
 
 ```{code-cell} ipython3
 # Large grid
 grid = np.linspace(-3, 3, 3_000)
 
-x, y = np.meshgrid(grid, grid)    # MATLAB style meshgrid
+x_mesh, y_mesh = np.meshgrid(grid, grid)      # MATLAB style meshgrid
 
 with qe.Timer():
-    z_max_numpy = np.max(f(x, y))
+    z_max_numpy = np.max(f(x_mesh, y_mesh))   # This works
 ```
 
 In the vectorized version, all the looping takes place in compiled code.
@@ -159,11 +178,30 @@ The output should be close to one:
 print(f"NumPy result: {z_max_numpy:.6f}")
 ```
 
+### Memory Issues
+
+So we have the right solution reasonable time --- but memory usage is huge.
+
+While the flat arrays are low-memory
+
+```{code-cell} ipython3
+grid.nbytes 
+```
+
+the mesh grids are two-dimensional and hence very memory intensive
+
+```{code-cell} ipython3
+x_mesh.nbytes + y_mesh.nbytes
+```
+
+Moreover, NumPy's eager execution creates many intermediate arrays of the same size!
+
+This kind of memory usage can be a big problem in actual research calculations.
 
 
 ### A Comparison with Numba
 
-Now let's see if we can achieve better performance using Numba with a simple loop.
+Let's see if we can achieve better performance using Numba with a simple loop.
 
 ```{code-cell} ipython3
 @numba.jit
@@ -194,15 +232,13 @@ with qe.Timer():
     compute_max_numba(grid)
 ```
 
-Depending on your machine, the Numba version might be either slower or faster than NumPy.
+Notice how we are using almost no memory --- we just need the one-dimensional `grid`
 
-In most cases we find that Numba is slightly better.
+Moreover, execution speed is good.
 
-On the one hand, NumPy combines efficient arithmetic with some
-multithreading, which provides an advantage.
+On most machines, the Numba version will be somewhat faster than NumPy.
 
-On the other hand, the Numba routine uses much less memory, since we are only
-working with a single one-dimensional grid.
+The reason is efficient machine code plus less memory read-write.
 
 
 ### Parallelized Numba
@@ -301,27 +337,11 @@ The compilation overhead is a one-time cost that pays off when the function is c
 
 ### JAX plus vmap
 
-There is one problem with both the NumPy code and the JAX code above:
+Because we use'd `jax.jit` above, we avoided creating many intermediate arrays.
 
-While the flat arrays are low-memory
+But we still create the big arrays `z_max`, `x_mesh`, and `y_mesh`.
 
-```{code-cell} ipython3
-grid.nbytes 
-```
-
-the mesh grids are memory intensive
-
-```{code-cell} ipython3
-x_mesh.nbytes + y_mesh.nbytes
-```
-
-This extra memory usage can be a big problem in actual research calculations.
-
-Fortunately, JAX admits a different approach
-using [jax.vmap](https://docs.jax.dev/en/latest/_autosummary/jax.vmap.html).
-
-The idea of `vmap` is to break vectorization into stages, transforming a
-function that operates on single values into one that operates on arrays.
+Fortunately, we can avoid this by using [jax.vmap](https://docs.jax.dev/en/latest/_autosummary/jax.vmap.html).
 
 Here's how we can apply it to our problem.
 
@@ -330,13 +350,13 @@ Here's how we can apply it to our problem.
 @jax.jit
 def compute_max_vmap(grid):
     # Construct a function that takes the max over all x for given y
-    f_vec_x_max = lambda y: jnp.max(f(grid, y))
+    compute_column_max = lambda y: jnp.max(f(grid, y))
     # Vectorize the function so we can call on all y simultaneously
-    f_vec_max = jax.vmap(f_vec_x_max)
-    # Compute the max across x at every y
-    maxes = f_vec_max(grid)
-    # Compute the max of the maxes and return
-    return jnp.max(maxes)
+    vectorized_compute_column_max = jax.vmap(compute_column_max)
+    # Compute the column max at every row
+    column_maxes = vectorized_compute_column_max(grid)
+    # Compute the max of the column maxes and return
+    return jnp.max(column_maxes)
 ```
 
 Note that we never create 
@@ -344,6 +364,8 @@ Note that we never create
 * the two-dimensional grid `x_mesh`
 * the two-dimensional grid `y_mesh` or
 * the two-dimensional array `f(x,y)`
+
+Like Numba, we just use the flat array `grid`.
 
 And because everything is under a single `@jax.jit`, the compiler can fuse
 all operations into one optimized kernel.
@@ -378,18 +400,14 @@ In our view, JAX is the winner for vectorized operations.
 It dominates NumPy both in terms of speed (via JIT-compilation and
 parallelization) and memory efficiency (via vmap).
 
-Moreover, the `vmap` approach can sometimes lead to significantly clearer code.
+It also dominates Numba when run on the GPU.
 
-While Numba is impressive, the beauty of JAX is that, with fully vectorized
-operations, we can run exactly the same code on machines with hardware
-accelerators and reap all the benefits without extra effort.
-
-Moreover, JAX already knows how to effectively parallelize many common array
-operations, which is key to fast execution.
-
-For most cases encountered in economics, econometrics, and finance, it is
+```{note}
+Numba can support GPU programming through `numba.cuda` but then we need to
+parallelize by hand. For most cases encountered in economics, econometrics, and finance, it is
 far better to hand over to the JAX compiler for efficient parallelization than to
-try to hand code these routines ourselves.
+try to hand-code these routines ourselves.
+```
 
 
 ## Sequential operations
@@ -554,8 +572,6 @@ The JAX versions, on the other hand, require either `lax.fori_loop` or
 While JAX's `at[t].set` syntax does allow element-wise updates, the overall code
 remains harder to read than the Numba equivalent.
 
-For this type of sequential operation, Numba is the clear winner in terms of
-code clarity and ease of implementation.
 
 
 ## Overall recommendations
@@ -573,7 +589,7 @@ than traditional meshgrid-based vectorization.
 In addition, JAX functions are automatically differentiable, as we explore in
 {doc}`autodiff`.
 
-For **sequential operations**, Numba has clear advantages.
+For **sequential operations**, Numba has nicer syntax.
 
 The code is natural and readable --- just a Python loop with a decorator ---
 and performance is excellent.
@@ -581,17 +597,9 @@ and performance is excellent.
 JAX can handle sequential problems via `lax.fori_loop` or `lax.scan`, but
 the syntax is less intuitive.
 
-```{note}
-One important advantage of `lax.fori_loop` and `lax.scan` is that they
-support automatic differentiation through the loop, which Numba cannot do.
-If you need to differentiate through a sequential computation (e.g., computing
-sensitivities of a trajectory to model parameters), JAX is the better choice
-despite the less natural syntax.
-```
+On the other hand, the JAX versions support automatic differentiation.
 
-In practice, many problems involve a mix of both patterns.
+That might be of interest if, say, we want to compute sensitivities of a
+trajectory to model parameters
 
-A good rule of thumb: default to JAX for new projects, especially when
-hardware acceleration or differentiability might be useful, and reach for Numba
-when you have a tight sequential loop that needs to be fast and readable.
 
