@@ -153,8 +153,7 @@ diagonal.
 
 To trick NumPy into calculating `f(x,y)` on every `x,y` pair, we need to use `np.meshgrid`.
 
-Here we use `np.meshgrid` to create two-dimensional input grids `x` and `y` 
-
+Here we use `np.meshgrid` to create two-dimensional input grids `x` and `y`
 such that `f(x, y)` generates all evaluations on the product grid.
 
 
@@ -180,7 +179,7 @@ print(f"NumPy result: {z_max_numpy:.6f}")
 
 ### Memory Issues
 
-So we have the right solution reasonable time --- but memory usage is huge.
+So we have the right solution in reasonable time --- but memory usage is huge.
 
 While the flat arrays are low-memory
 
@@ -337,7 +336,7 @@ The compilation overhead is a one-time cost that pays off when the function is c
 
 ### JAX plus vmap
 
-Because we use'd `jax.jit` above, we avoided creating many intermediate arrays.
+Because we used `jax.jit` above, we avoided creating many intermediate arrays.
 
 But we still create the big arrays `z_max`, `x_mesh`, and `y_mesh`.
 
