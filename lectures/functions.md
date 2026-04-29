@@ -360,7 +360,7 @@ Notes
 
 Now, there are several ways that we can simplify the code above.
 
-For example, we can get rid of the conditionals all together by just passing the desired generator type *as a function*.
+For example, we can get rid of the conditionals all together by just passing the desired generator type as a function, method, or other callable object.
 
 To understand this, consider the following version.
 
@@ -381,9 +381,9 @@ plt.show()
 Now, when we call the function `generate_data()`, we pass `rng.uniform`
 as the second argument.
 
-This object is a *function*.
+This object is a *callable* — that is, an object that can be called using parentheses.
 
-When the function call  `generate_data(100, rng.uniform)` is executed, Python runs the function code block with `n` equal to 100 and the name `generator_type` "bound" to the function `rng.uniform`.
+When the function call  `generate_data(100, rng.uniform)` is executed, Python runs the function code block with `n` equal to 100 and the name `generator_type` "bound" to the callable `rng.uniform`.
 
 * While these lines are executed, the names `generator_type` and `rng.uniform` are "synonyms", and can be used in identical ways.
 
