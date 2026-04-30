@@ -360,7 +360,7 @@ Notes
 
 Now, there are several ways that we can simplify the code above.
 
-For example, we can get rid of the conditionals all together by just passing the desired generator type as a function, method, or other callable object.
+For example, we can get rid of the conditionals all together by just passing the desired generator type as a function, method, or other [callable](https://typing.python.org/en/latest/spec/callables.html) object.
 
 To understand this, consider the following version.
 
@@ -401,9 +401,7 @@ m(7, 2, 4)
 Here we created another name for the built-in function `max()`, which could
 then be used in identical ways.
 
-In the context of our program, the ability to bind new names to functions
-means that there is no problem *passing a function as an argument to another
-function*---as we did above.
+In the context of our program, the ability to bind names to functions, or more generally to callable objects, means that there is no problem passing one callable object as an argument to another callable --- as we did with `rng.uniform` above.
 
 
 (recursive_functions)=
