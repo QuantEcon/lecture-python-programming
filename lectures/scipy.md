@@ -104,10 +104,11 @@ The `scipy.stats` subpackage supplies
 
 ### Random Variables and Distributions
 
-Recall that `numpy.random` provides functions for generating random variables
+Recall that `numpy.random` provides tools for generating random variables
 
 ```{code-cell} python3
-np.random.beta(5, 5, size=3)
+rng = np.random.default_rng()
+rng.beta(5, 5, size=3)
 ```
 
 This generates a draw from the distribution with the density function below when `a, b = 5, 5`
@@ -188,8 +189,9 @@ For example, `scipy.stats.linregress` implements simple linear regression
 ```{code-cell} python3
 from scipy.stats import linregress
 
-x = np.random.randn(200)
-y = 2 * x + 0.1 * np.random.randn(200)
+rng = np.random.default_rng()
+x = rng.standard_normal(200)
+y = 2 * x + 0.1 * rng.standard_normal(200)
 gradient, intercept, r_value, p_value, std_err = linregress(x, y)
 gradient, intercept
 ```
@@ -572,8 +574,9 @@ Set `M = 10_000_000`
 Here is one solution:
 
 ```{code-cell} ipython3
+rng = np.random.default_rng()
 M = 10_000_000
-S = np.exp(μ + σ * np.random.randn(M))
+S = np.exp(μ + σ * rng.standard_normal(M))
 return_draws = np.maximum(S - K, 0)
 P = β**n * np.mean(return_draws) 
 print(f"The Monte Carlo option price is {P:3f}")
