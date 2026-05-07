@@ -18,7 +18,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: '20'
+
+      - uses: oven-sh/setup-bun@v2
 
       - name: Install Python
         if: steps.cache-execution.outputs.cache-hit != 'true'
@@ -34,6 +36,18 @@ jobs:
 
       - name: Install jupyter book 2.0
         run: pip install "jupyter-book>=2.0.0a0"
+
+      - name: Install mystmd (QuantEcon fork)
+        run: |
+          git clone --branch quantecon --depth 1 \
+            https://github.com/QuantEcon/mystmd.git /tmp/qe-mystmd
+          cd /tmp/qe-mystmd
+          bun install
+          bun run build
+          npm install -g /tmp/qe-mystmd/packages/mystmd
+
+      - name: Verify mystmd version
+        run: myst --version
 
       - name: Build HTML
         working-directory: ./lectures
