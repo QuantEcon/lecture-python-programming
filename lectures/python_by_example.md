@@ -62,7 +62,8 @@ Here are a few lines of code that perform the task we set
 import numpy as np
 import matplotlib.pyplot as plt
 
-ϵ_values = np.random.randn(100)
+rng = np.random.default_rng()
+ϵ_values = rng.standard_normal(100)
 plt.plot(ϵ_values)
 plt.show()
 ```
@@ -131,7 +132,7 @@ print(np.__file__)
 #### Subpackages
 
 
-Consider the line `ϵ_values = np.random.randn(100)`.
+Consider the line `rng = np.random.default_rng()`.
 
 Here `np` refers to the package NumPy, while `random` is a **subpackage** of NumPy.
 
@@ -172,7 +173,7 @@ Returning to our program that plots white noise, the remaining three lines
 after the import statements are
 
 ```{code-cell} ipython
-ϵ_values = np.random.randn(100)
+ϵ_values = rng.standard_normal(100)
 plt.plot(ϵ_values)
 plt.show()
 ```
@@ -203,7 +204,7 @@ ts_length = 100
 ϵ_values = []   # empty list
 
 for i in range(ts_length):
-    e = np.random.randn()
+    e = rng.standard_normal()
     ϵ_values.append(e)
 
 plt.plot(ϵ_values)
@@ -288,7 +289,7 @@ Now let's consider the `for` loop from {ref}`the program above <firstloopprog-co
 
 ```{code-cell} python3
 for i in range(ts_length):
-    e = np.random.randn()
+    e = rng.standard_normal()
     ϵ_values.append(e)
 ```
 
@@ -359,7 +360,7 @@ ts_length = 100
 ϵ_values = []
 i = 0
 while i < ts_length:
-    e = np.random.randn()
+    e = rng.standard_normal()
     ϵ_values.append(e)
     i = i + 1
 plt.plot(ϵ_values)
@@ -466,9 +467,10 @@ Here's one solution.
 T = 200
 x = np.empty(T+1)
 x[0] = 0
+rng = np.random.default_rng()
 
 for t in range(T):
-    x[t+1] = α * x[t] + np.random.randn()
+    x[t+1] = α * x[t] + rng.standard_normal()
 
 plt.plot(x)
 plt.show()
@@ -507,11 +509,12 @@ If you can, add a legend, to help distinguish between the three time series.
 α_values = [0.0, 0.8, 0.98]
 T = 200
 x = np.empty(T+1)
+rng = np.random.default_rng()
 
 for α in α_values:
     x[0] = 0
     for t in range(T):
-        x[t+1] = α * x[t] + np.random.randn()
+        x[t+1] = α * x[t] + rng.standard_normal()
     plt.plot(x, label=f'$\\alpha = {α}$')
 
 plt.legend()
@@ -559,9 +562,10 @@ Here's one solution:
 T = 200
 x = np.empty(T+1)
 x[0] = 0
+rng = np.random.default_rng()
 
 for t in range(T):
-    x[t+1] = α * np.abs(x[t]) + np.random.randn()
+    x[t+1] = α * np.abs(x[t]) + rng.standard_normal()
 
 plt.plot(x)
 plt.show()
@@ -614,13 +618,14 @@ Here's one way:
 T = 200
 x = np.empty(T+1)
 x[0] = 0
+rng = np.random.default_rng()
 
 for t in range(T):
     if x[t] < 0:
         abs_x = - x[t]
     else:
         abs_x = x[t]
-    x[t+1] = α * abs_x + np.random.randn()
+    x[t+1] = α * abs_x + rng.standard_normal()
 
 plt.plot(x)
 plt.show()
@@ -633,10 +638,11 @@ Here's a shorter way to write the same thing:
 T = 200
 x = np.empty(T+1)
 x[0] = 0
+rng = np.random.default_rng()
 
 for t in range(T):
     abs_x = - x[t] if x[t] < 0 else x[t]
-    x[t+1] = α * abs_x + np.random.randn()
+    x[t+1] = α * abs_x + rng.standard_normal()
 
 plt.plot(x)
 plt.show()
@@ -697,12 +703,13 @@ fraction that falls into the circle.
 
 ```{code-cell} python3
 n = 1000000 # sample size for Monte Carlo simulation
+rng = np.random.default_rng()
 
 count = 0
 for i in range(n):
 
     # drawing random positions on the square
-    u, v = np.random.uniform(), np.random.uniform()
+    u, v = rng.uniform(), rng.uniform()
 
     # check whether the point falls within the boundary
     # of the unit circle centred at (0.5,0.5)

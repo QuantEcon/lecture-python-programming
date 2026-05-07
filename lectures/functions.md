@@ -276,11 +276,13 @@ We will say more about this [later](writing_good_code.md).
 Consider again this code from the [previous lecture](python_by_example.md)
 
 ```{code-cell} python3
+rng = np.random.default_rng()
+
 ts_length = 100
 ϵ_values = []   # empty list
 
 for i in range(ts_length):
-    e = np.random.randn()
+    e = rng.standard_normal()
     ϵ_values.append(e)
 
 plt.plot(ϵ_values)
@@ -300,7 +302,7 @@ This is accomplished in the next program
 def generate_data(n):
     ϵ_values = []
     for i in range(n):
-        e = np.random.randn()
+        e = rng.standard_normal()
         ϵ_values.append(e)
     return ϵ_values
 
@@ -327,9 +329,9 @@ def generate_data(n, generator_type):
     ϵ_values = []
     for i in range(n):
         if generator_type == 'U':
-            e = np.random.uniform(0, 1)
+            e = rng.uniform(0, 1)
         else:
-            e = np.random.randn()
+            e = rng.standard_normal()
         ϵ_values.append(e)
     return ϵ_values
 
@@ -349,7 +351,7 @@ Notes
 
 Now, there are several ways that we can simplify the code above.
 
-For example, we can get rid of the conditionals all together by just passing the desired generator type *as a function*.
+For example, we can get rid of the conditionals all together by just passing the desired generator type as a function, method, or other [callable](https://typing.python.org/en/latest/spec/callables.html) object.
 
 To understand this, consider the following version.
 
@@ -361,19 +363,19 @@ def generate_data(n, generator_type):
         ϵ_values.append(e)
     return ϵ_values
 
-data = generate_data(100, np.random.uniform)
+data = generate_data(100, rng.uniform)
 plt.plot(data)
 plt.show()
 ```
 
-Now, when we call the function `generate_data()`, we pass `np.random.uniform`
+Now, when we call the function `generate_data()`, we pass `rng.uniform`
 as the second argument.
 
-This object is a *function*.
+This object is a *callable* — that is, an object that can be called using parentheses.
 
-When the function call  `generate_data(100, np.random.uniform)` is executed, Python runs the function code block with `n` equal to 100 and the name `generator_type` "bound" to the function `np.random.uniform`.
+When the function call  `generate_data(100, rng.uniform)` is executed, Python runs the function code block with `n` equal to 100 and the name `generator_type` "bound" to the callable `rng.uniform`.
 
-* While these lines are executed, the names `generator_type` and `np.random.uniform` are "synonyms", and can be used in identical ways.
+* While these lines are executed, the names `generator_type` and `rng.uniform` are "synonyms", and can be used in identical ways.
 
 This principle works more generally---for example, consider the following piece of code
 
@@ -389,9 +391,7 @@ m(7, 2, 4)
 Here we created another name for the built-in function `max()`, which could
 then be used in identical ways.
 
-In the context of our program, the ability to bind new names to functions
-means that there is no problem *passing a function as an argument to another
-function*---as we did above.
+In the context of our program, the ability to bind names to functions, or more generally to callable objects, means that there is no problem passing one callable object as an argument to another callable --- as we did with `rng.uniform` above.
 
 
 (recursive_functions)=
@@ -494,7 +494,7 @@ factorial(4)
 
 The [binomial random variable](https://en.wikipedia.org/wiki/Binomial_distribution) $Y \sim Bin(n, p)$ represents the number of successes in $n$ binary trials, where each trial succeeds with probability $p$.
 
-Without any import besides `from numpy.random import uniform`, write a function
+Using `rng = np.random.default_rng()`, write a function
 `binomial_rv` such that `binomial_rv(n, p)` generates one draw of $Y$.
 
 ```{hint}
@@ -514,12 +514,12 @@ If $U$ is uniform on $(0, 1)$ and $p \in (0,1)$, then the expression `U < p` eva
 Here is one solution:
 
 ```{code-cell} python3
-from numpy.random import uniform
+rng = np.random.default_rng()
 
 def binomial_rv(n, p):
     count = 0
     for i in range(n):
-        U = uniform()
+        U = rng.uniform()
         if U < p:
             count = count + 1    # Or count += 1
     return count
@@ -545,7 +545,7 @@ Second, write another function that does the same task except that the second ru
 
 - If a head occurs `k` or more times within this sequence, pay one dollar.
 
-Use no import besides `from numpy.random import uniform`.
+Use `rng = np.random.default_rng()` to generate random numbers.
 
 ```{exercise-end}
 ```
@@ -560,7 +560,7 @@ Here's a function for the first random device.
 
 
 ```{code-cell} python3
-from numpy.random import uniform
+rng = np.random.default_rng()
 
 def draw(k):  # pays if k consecutive successes in a sequence
 
@@ -568,7 +568,7 @@ def draw(k):  # pays if k consecutive successes in a sequence
     count = 0
 
     for i in range(10):
-        U = uniform()
+        U = rng.uniform()
         count = count + 1 if U < 0.5 else 0
         print(count)    # print counts for clarity
         if count == k:
@@ -588,7 +588,7 @@ def draw_new(k):  # pays if k successes in a sequence
     count = 0
 
     for i in range(10):
-        U = uniform()
+        U = rng.uniform()
         count = count + ( 1 if U < 0.5 else 0 )
         print(count)
         if count == k:

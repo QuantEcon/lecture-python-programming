@@ -26,7 +26,8 @@ sphinx:
                        'https://data.oecd.org/',
                        'https://www.reddit.com/',
                        'https://openai.com',
-                       'https://chatgpt.com/']
+                       'https://chatgpt.com/',
+                       'https://fred.stlouisfed.org/.*']
     nb_merge_streams: true
     # sphinx-exercise
     exercise_style: "solution_follow_exercise"
@@ -42,7 +43,7 @@ sphinx:
       dark_logo: quantecon-logo-transparent.png
       header_organisation_url: https://quantecon.org
       header_organisation: QuantEcon
-      repository_url: https://github.com/QuantEcon/lecture-python-programming.myst
+      repository_url: https://github.com/QuantEcon/lecture-python-programming
       nb_repository_url: https://github.com/QuantEcon/lecture-python-programming.notebooks
       path_to_docs: lectures
       twitter: quantecon
@@ -52,6 +53,7 @@ sphinx:
       keywords: Python, QuantEcon, Quantitative Economics, Economics, Sloan, Alfred P. Sloan Foundation, Tom J. Sargent, John Stachurski
       analytics:
         google_analytics_id: G-X7DH1M2DPY
+      sticky_contents: true
       launch_buttons:
         notebook_interface        : classic  # The interface interactive links will activate ["classic", "jupyterlab"]
         colab_url                 : https://colab.research.google.com
