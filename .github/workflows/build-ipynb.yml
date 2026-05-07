@@ -12,7 +12,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: '20'
+
+      - uses: oven-sh/setup-bun@v2
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -24,23 +26,25 @@ jobs:
       - name: Install execution requirements
         run: python -m pip install -r myst_requirements.txt
 
-      - name: Clone QuantEcon/mystmd (myst-to-ipynb branch)
+      - name: Install mystmd (QuantEcon fork)
         run: |
-          git clone --depth 1 --branch myst-to-ipynb https://github.com/QuantEcon/mystmd.git /tmp/mystmd
+          git clone --branch quantecon --depth 1 \
+            https://github.com/QuantEcon/mystmd.git /tmp/qe-mystmd
+          cd /tmp/qe-mystmd
+          bun install
+          bun run build
+          npm install -g /tmp/qe-mystmd/packages/mystmd
 
-      - name: Build mystmd from source
-        working-directory: /tmp/mystmd
-        run: |
-          npm install
-          npx turbo run build
+      - name: Verify mystmd version
+        run: myst --version
 
       - name: Build HTML with custom mystmd
         working-directory: ./lectures
-        run: /tmp/mystmd/packages/mystmd/dist/myst.cjs build --html
+        run: myst build --html
 
       - name: Build ipynb exports with custom mystmd
         working-directory: ./lectures
-        run: /tmp/mystmd/packages/mystmd/dist/myst.cjs build --ipynb
+        run: myst build --ipynb
 
       - name: Audit notebooks for MyST syntax leaks
         working-directory: ./lectures
