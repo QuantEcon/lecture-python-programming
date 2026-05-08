@@ -119,7 +119,7 @@ jobs:
           }
           EOF
       - name: Upload archives to release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             lecture-python-programming-html-${{ github.ref_name }}.tar.gz
