@@ -189,7 +189,6 @@ For example, `scipy.stats.linregress` implements simple linear regression
 ```{code-cell} python3
 from scipy.stats import linregress
 
-rng = np.random.default_rng()
 x = rng.standard_normal(200)
 y = 2 * x + 0.1 * rng.standard_normal(200)
 gradient, intercept, r_value, p_value, std_err = linregress(x, y)
