@@ -464,10 +464,10 @@ Here's some example code that generates and plots a random graph, with node colo
 ```{code-cell} ipython
 import networkx as nx
 import matplotlib.pyplot as plt
-np.random.seed(1234)
+rng = np.random.default_rng(1234)
 
 # Generate a random graph
-p = dict((i, (np.random.uniform(0, 1), np.random.uniform(0, 1)))
+p = dict((i, (rng.uniform(0, 1), rng.uniform(0, 1)))
          for i in range(200))
 g = nx.random_geometric_graph(200, 0.12, pos=p)
 pos = nx.get_node_attributes(g, 'pos')
