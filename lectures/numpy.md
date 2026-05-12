@@ -1050,7 +1050,7 @@ z[z > 3]
 NumPy provides some additional functionality related to scientific programming
 through its sub-packages.
 
-We've already seen how we can generate random variables using np.random
+We've already seen how we can generate random variables using NumPy's Generator API.
 
 ```{code-cell} python3
 z = rng.standard_normal(10000)  # Generate standard normals
@@ -1248,14 +1248,14 @@ class DiscreteRV:
     probabilities given by q.
     """
 
-    def __init__(self, q):
+    def __init__(self, q, seed=None):
         """
         The argument q is a NumPy array, or array like, nonnegative and sums
         to 1
         """
         self.q = q
         self.Q = cumsum(q)
-        self.rng = np.random.default_rng()
+        self.rng = np.random.default_rng(seed)
 
     def draw(self, k=1):
         """
