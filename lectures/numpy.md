@@ -1050,7 +1050,8 @@ z[z > 3]
 NumPy provides some additional functionality related to scientific programming
 through its sub-packages.
 
-We've already seen how we can generate random variables using NumPy's Generator API.
+We've already seen how we can generate random variables using NumPy's 
+[random `Generator`](https://numpy.org/doc/stable/reference/random/generator.html#random-generator).
 
 ```{code-cell} python3
 z = rng.standard_normal(10000)  # Generate standard normals
