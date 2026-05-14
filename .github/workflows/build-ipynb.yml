@@ -28,12 +28,15 @@ jobs:
 
       - name: Install mystmd (QuantEcon fork)
         run: |
-          git clone --branch quantecon --depth 1 \
+          git clone --branch main --depth 1 \
             https://github.com/QuantEcon/mystmd.git /tmp/qe-mystmd
           cd /tmp/qe-mystmd
           bun install
           bun run build
           npm install -g /tmp/qe-mystmd/packages/mystmd
+
+      - name: Log QuantEcon/mystmd build identifier
+        run: cat /tmp/qe-mystmd/quantecon/VERSION.yml
 
       - name: Verify mystmd version
         run: myst --version
