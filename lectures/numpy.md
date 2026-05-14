@@ -839,7 +839,8 @@ a
 Mutability leads to the following behavior (which can be shocking to MATLAB programmers...)
 
 ```{code-cell} python3
-a = np.random.randn(3)
+rng = np.random.default_rng()
+a = rng.standard_normal(3)
 a
 ```
 
@@ -869,7 +870,7 @@ It is of course possible to make `b` an independent copy of `a` when required.
 This can be done using `np.copy`
 
 ```{code-cell} python3
-a = np.random.randn(3)
+a = rng.standard_normal(3)
 a
 ```
 
@@ -945,7 +946,7 @@ def f(x):
 The NumPy function `np.where` provides a vectorized alternative:
 
 ```{code-cell} python3
-x = np.random.randn(4)
+x = rng.standard_normal(4)
 x
 ```
 
@@ -1020,11 +1021,12 @@ z[z > 3]
 NumPy provides some additional functionality related to scientific programming
 through its sub-packages.
 
-We've already seen how we can generate random variables using np.random
+We've already seen how we can generate random variables using NumPy's 
+[random `Generator`](https://numpy.org/doc/stable/reference/random/generator.html#random-generator).
 
 ```{code-cell} python3
-z = np.random.randn(10000)  # Generate standard normals
-y = np.random.binomial(10, 0.5, size=1000)    # 1,000 draws from Bin(10, 0.5)
+z = rng.standard_normal(10000)  # Generate standard normals
+y = rng.binomial(10, 0.5, size=1000)    # 1,000 draws from Bin(10, 0.5)
 y.mean()
 ```
 
@@ -1064,7 +1066,7 @@ It takes a few seconds to run.
 n = 20
 m = 1000
 for i in range(n):
-    X = np.random.randn(m, m)
+    X = rng.standard_normal((m, m))
     λ = np.linalg.eigvals(X)
 ```
 
@@ -1203,7 +1205,6 @@ Here's our first pass at a solution:
 
 ```{code-cell} python3
 from numpy import cumsum
-from numpy.random import uniform
 
 class DiscreteRV:
     """
@@ -1211,20 +1212,21 @@ class DiscreteRV:
     probabilities given by q.
     """
 
-    def __init__(self, q):
+    def __init__(self, q, seed=None):
         """
         The argument q is a NumPy array, or array like, nonnegative and sums
         to 1
         """
         self.q = q
         self.Q = cumsum(q)
+        self.rng = np.random.default_rng(seed)
 
     def draw(self, k=1):
         """
         Returns k draws from q. For each such draw, the value i is returned
         with probability q[i].
         """
-        return self.Q.searchsorted(uniform(0, 1, size=k))
+        return self.Q.searchsorted(self.rng.uniform(0, 1, size=k))
 ```
 
 The logic is not obvious, but if you take your time and read it slowly,
@@ -1353,7 +1355,8 @@ Here's an example of usage
 
 ```{code-cell} python3
 fig, ax = plt.subplots()
-X = np.random.randn(1000)
+rng = np.random.default_rng()
+X = rng.standard_normal(1000)
 F = ECDF(X)
 F.plot(ax)
 ```
@@ -1374,9 +1377,9 @@ In this exercise, try to use `for` loops to replicate the result of the followin
 
 ```{code-cell} python3
 
-np.random.seed(123)
-x = np.random.randn(4, 4)
-y = np.random.randn(4)
+rng = np.random.default_rng(123)
+x = rng.standard_normal((4, 4))
+y = rng.standard_normal(4)
 A = x / y
 ```
 
@@ -1404,9 +1407,9 @@ Now we can import the quantecon package.
 
 ```{code-cell} python3
 
-np.random.seed(123)
-x = np.random.randn(1000, 100, 100)
-y = np.random.randn(100)
+rng = np.random.default_rng(123)
+x = rng.standard_normal((1000, 100, 100))
+y = rng.standard_normal(100)
 
 with qe.Timer("Broadcasting operation"):
     B = x / y
@@ -1431,9 +1434,9 @@ print(B)
 **Part 1 Solution**
 
 ```{code-cell} python3
-np.random.seed(123)
-x = np.random.randn(4, 4)
-y = np.random.randn(4)
+rng = np.random.default_rng(123)
+x = rng.standard_normal((4, 4))
+y = rng.standard_normal(4)
 
 C = np.empty_like(x)
 n = len(x)
@@ -1461,9 +1464,9 @@ print(np.array_equal(A, C))
 
 ```{code-cell} python3
 
-np.random.seed(123)
-x = np.random.randn(1000, 100, 100)
-y = np.random.randn(100)
+rng = np.random.default_rng(123)
+x = rng.standard_normal((1000, 100, 100))
+y = rng.standard_normal(100)
 
 with qe.Timer("For loop operation"):
     D = np.empty_like(x)
