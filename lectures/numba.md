@@ -454,13 +454,17 @@ Compare speed with and without Numba when the sample size is large.
 Here is one solution:
 
 ```{code-cell} ipython3
+n = 1_000_000
 rng = np.random.default_rng()
+u_draws = rng.uniform(size=n)
+v_draws = rng.uniform(size=n)
 
 @jit
-def calculate_pi(rng, n=1_000_000):
+def calculate_pi(u_draws, v_draws):
+    n = len(u_draws)
     count = 0
     for i in range(n):
-        u, v = rng.uniform(0, 1), rng.uniform(0, 1)
+        u, v = u_draws[i], v_draws[i]
         d = np.sqrt((u - 0.5)**2 + (v - 0.5)**2)
         if d < 0.5:
             count += 1
@@ -473,12 +477,12 @@ Now let's see how fast it runs:
 
 ```{code-cell} ipython3
 with qe.Timer():
-    calculate_pi(rng)
+    calculate_pi(u_draws, v_draws)
 ```
 
 ```{code-cell} ipython3
 with qe.Timer():
-    calculate_pi(rng)
+    calculate_pi(u_draws, v_draws)
 ```
 
 If we switch off JIT compilation by removing `@jit`, the code takes around
@@ -552,12 +556,13 @@ p, q = 0.1, 0.2  # Prob of leaving low and high state respectively
 Here's a pure Python version of the function
 
 ```{code-cell} ipython3
+n = 1_000_000
 rng = np.random.default_rng()
+U = rng.uniform(0, 1, size=n)
 
-def compute_series(n, rng):
+def compute_series(n, U):
     x = np.empty(n, dtype=np.int64)
     x[0] = 1  # Start in state 1
-    U = rng.uniform(0, 1, size=n)
     for t in range(1, n):
         current_x = x[t-1]
         if current_x == 0:
@@ -571,8 +576,7 @@ Let's run this code and check that the fraction of time spent in the low
 state is about 0.666
 
 ```{code-cell} ipython3
-n = 1_000_000
-x = compute_series(n, rng)
+x = compute_series(n, U)
 print(np.mean(x == 0))  # Fraction of time x is in state 0
 ```
 
@@ -582,7 +586,7 @@ Now let's time it:
 
 ```{code-cell} ipython3
 with qe.Timer():
-    compute_series(n, rng)
+    compute_series(n, U)
 ```
 
 Next let's implement a Numba version, which is easy
@@ -594,7 +598,7 @@ compute_series_numba = jit(compute_series)
 Let's check we still get the right numbers
 
 ```{code-cell} ipython3
-x = compute_series_numba(n, rng)
+x = compute_series_numba(n, U)
 print(np.mean(x == 0))
 ```
 
@@ -602,7 +606,7 @@ Let's see the time
 
 ```{code-cell} ipython3
 with qe.Timer():
-    compute_series_numba(n, rng)
+    compute_series_numba(n, U)
 ```
 
 This is a nice speed improvement for one line of code!
@@ -760,6 +764,9 @@ $$
 
 Using this fact, the solution can be written as follows.
 
+Note that random draws are kept inside the inner loop rather than pre-allocated,
+to avoid creating large shock arrays of size `M * n`.
+
 
 ```{code-cell} ipython3
 M = 10_000_000
@@ -783,7 +790,6 @@ def compute_call_price_parallel(β=β,
         s = np.log(S0)
         h = h0
         # Simulate forward in time
-        # Draws are kept inside the loop to avoid pre-allocating large shock arrays.
         for t in range(n):
             s = s + μ + np.exp(h) * np.random.randn()
             h = ρ * h + ν * np.random.randn()
