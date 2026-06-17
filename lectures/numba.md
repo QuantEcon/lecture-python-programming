@@ -436,6 +436,17 @@ For GPU-based parallelization, see our {doc}`lectures on JAX <jax_intro>`.
 
 ## Exercises
 
+{ref}`speed_ex1` and {ref}`numba_ex3` both estimate $\pi$ by Monte Carlo from random samples in the unit square.
+
+We generate them here and store them in `u_draws` and `v_draws` so that we can use them in both exercises and compare results
+
+```{code-cell} ipython3
+n = 1_000_000
+rng = np.random.default_rng()
+u_draws = rng.uniform(size=n)
+v_draws = rng.uniform(size=n)
+```
+
 ```{exercise}
 :label: speed_ex1
 
@@ -454,11 +465,6 @@ Compare speed with and without Numba when the sample size is large.
 Here is one solution:
 
 ```{code-cell} ipython3
-n = 1_000_000
-rng = np.random.default_rng()
-u_draws = rng.uniform(size=n)
-v_draws = rng.uniform(size=n)
-
 @jit
 def calculate_pi(u_draws, v_draws):
     n = len(u_draws)
@@ -686,11 +692,6 @@ For the size of the Monte Carlo simulation, use something substantial, such as
 Here is one solution:
 
 ```{code-cell} ipython3
-n = 1_000_000
-rng = np.random.default_rng()
-u_draws = rng.uniform(size=n)
-v_draws = rng.uniform(size=n)
-
 @jit(parallel=True)
 def calculate_pi(u_draws, v_draws):
     n = len(u_draws)
