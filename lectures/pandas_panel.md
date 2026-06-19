@@ -401,7 +401,7 @@ plt.show()
 We can also specify a level of the `MultiIndex` (in the column axis)
 to aggregate over. 
 
-In the case of `groupby` we need to use `.T` to transpose the columns into rows as `pandas` has removed support for `axis=1` in the `groupby` method.
+In the case of `groupby`, we need to use `.T` to transpose the columns into rows, as `pandas` has removed support for `axis=1` in the `groupby` method.
 
 ```{code-cell} ipython3
 merged.T.groupby(level='Continent').mean().head()
