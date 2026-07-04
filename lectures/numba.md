@@ -438,7 +438,7 @@ For GPU-based parallelization, see our {doc}`lectures on JAX <jax_intro>`.
 
 {ref}`speed_ex1` and {ref}`numba_ex3` both estimate $\pi$ by Monte Carlo from random samples in the unit square.
 
-We generate them here and store them in `u_draws` and `v_draws` so that we can use them in both exercises and compare results
+We generate them here and store them in `u_draws` and `v_draws` so that we can use them in both exercises and compare results.
 
 ```{code-cell} ipython3
 n = 1_000_000
@@ -491,10 +491,10 @@ with qe.Timer():
     calculate_pi(u_draws, v_draws)
 ```
 
-If we switch off JIT compilation by removing `@jit`, the code takes around
-150 times as long on our machine.
+If we switch off JIT compilation by removing `@jit`, the code takes
+dramatically longer on our machine.
 
-So we get a speed gain of 2 orders of magnitude by adding four characters.
+So we get a large speed gain by adding four characters.
 
 The solution above takes one of two natural approaches: it *draws all the
 random points first*, stores them in `u_draws` and `v_draws`, and then lets the
@@ -521,20 +521,23 @@ with qe.Timer():
     calculate_pi_in_loop(rng, n)
 ```
 
+```{code-cell} ipython3
+with qe.Timer():
+    calculate_pi_in_loop(rng, n)
+```
+
 In this serial setting the two approaches give equally good estimates and run at
 similar speed, but they are not equivalent in *memory use*. 
 
-The first approach
-must hold all $2n$ draws in memory at once --- two arrays of `n` floating point
+The first approach must hold all $2n$ draws in memory at once --- two arrays of `n` floating point
 numbers, or about `16n` bytes (around $1.6$ GB when `n = 100_000_000`). 
 
-The
-second draws each point on demand and discards it, so its memory footprint does
+The second draws each point on demand and discards it, so its memory footprint does
 not grow with `n`.
 
 This might suggest that drawing inside the loop is the better default.
 
- But as we
+But as we
 will see in {ref}`numba_ex_race`, drawing inside the loop interacts
 badly with parallelization.
 
@@ -693,7 +696,7 @@ Here is one solution:
 
 ```{code-cell} ipython3
 @jit(parallel=True)
-def calculate_pi(u_draws, v_draws):
+def calculate_pi_parallel(u_draws, v_draws):
     n = len(u_draws)
     count = 0
     for i in prange(n):
@@ -710,22 +713,22 @@ Now let's see how fast it runs:
 
 ```{code-cell} ipython3
 with qe.Timer():
-    calculate_pi(u_draws, v_draws)
+    calculate_pi_parallel(u_draws, v_draws)
 ```
 
 ```{code-cell} ipython3
 with qe.Timer():
-    calculate_pi(u_draws, v_draws)
+    calculate_pi_parallel(u_draws, v_draws)
 ```
 
 By switching parallelization on and off (selecting `True` or
 `False` in the `@jit` annotation), we can test the speed gain that
 multithreading provides on top of JIT compilation.
 
-On our workstation, we find that parallelization increases execution speed by
-a factor of 2 or 3.
+On our workstation, we find that parallelization provides a modest but
+worthwhile speed gain here.
 
-(If you are executing locally, you will get different numbers, depending mainly
+(If you are executing locally, you will get different results, depending mainly
 on the number of CPUs on your machine.)
 
 Notice that we drew all of the random points *before* the loop and passed them in
@@ -773,7 +776,7 @@ n = 1_000_000
 rng = np.random.default_rng()
 
 @jit(parallel=True)
-def calculate_pi_in_loop(rng, n):
+def calculate_pi_in_loop_parallel(rng, n):
     count = 0
     for i in prange(n):
         u, v = rng.uniform(), rng.uniform()
@@ -782,7 +785,7 @@ def calculate_pi_in_loop(rng, n):
             count += 1
     return (count / n) * 4
 
-calculate_pi_in_loop(rng, n)
+calculate_pi_in_loop_parallel(rng, n)
 ```
 
 The code runs without error and returns something close to $\pi$.
@@ -810,7 +813,7 @@ Because of the data race, the order in which threads happen to touch the shared 
 
 ```{code-cell} ipython3
 for seed in (1, 1, 1):
-    print(calculate_pi_in_loop(np.random.default_rng(seed), n))
+    print(calculate_pi_in_loop_parallel(np.random.default_rng(seed), n))
 ```
 
 Each call uses the same seed, yet the answers differ.
@@ -842,7 +845,7 @@ num_reps = 20
 methods = [("per-thread state (correct)",
             lambda n: calculate_pi_legacy(n), 'C0'),
            ("shared generator in prange (data race)",
-            lambda n: calculate_pi_in_loop(np.random.default_rng(), n), 'C1')]
+            lambda n: calculate_pi_in_loop_parallel(np.random.default_rng(), n), 'C1')]
 
 fig, ax = plt.subplots()
 for label, estimate, color in methods:
@@ -893,7 +896,7 @@ rng = np.random.default_rng()
 with qe.Timer():
     u_draws = rng.uniform(size=n)
     v_draws = rng.uniform(size=n)
-    calculate_pi(u_draws, v_draws)
+    calculate_pi_parallel(u_draws, v_draws)
 ```
 
 ```{code-cell} ipython3
@@ -988,8 +991,17 @@ $$
 
 Using this fact, the solution can be written as follows.
 
-Note that random draws are kept inside the inner loop rather than pre-allocated,
-to avoid creating large shock arrays of size `M * n`.
+```{note}
+Here we keep the random draws inside the inner loop and use the legacy
+`np.random.randn()` API rather than a `Generator`.
+
+This is because Numba's support for `Generator` objects is not
+[thread-safe](https://numba.readthedocs.io/en/stable/reference/numpysupported.html#generator-objects)
+under parallel execution (`@jit(parallel=True)`).
+
+Pre-drawing the shocks into arrays of shape `(M, n)` would avoid this but is
+impractical here, since `M = 10_000_000` would require several GB of memory.
+```
 
 
 ```{code-cell} ipython3
