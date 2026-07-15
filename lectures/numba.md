@@ -492,7 +492,7 @@ with qe.Timer():
 ```
 
 If we switch off JIT compilation by removing `@jit`, the code takes
-dramatically longer on our machine.
+considerably longer on our machine.
 
 So we get a large speed gain by adding four characters.
 
