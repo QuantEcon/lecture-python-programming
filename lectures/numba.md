@@ -863,7 +863,7 @@ ax.legend()
 plt.show()
 ```
 
-Both bands are centered on $\pi$, but the band associated with the data race is much wider than the other one and narrows very slowly as the sample size grows.
+Both bands are centered on $\pi$, but the band associated with the data race is wider than the other one and narrows slowly as the sample size grows.
 
 The other safe option is the one from {ref}`numba_ex3`: draw the points before the loop so that the parallel loop only reads from memory.
 
