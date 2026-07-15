@@ -526,6 +526,20 @@ with qe.Timer():
     calculate_pi_in_loop(rng, n)
 ```
 
+The two cells timing the first approach measure only the loop --- its random
+points are drawn once in the shared setup block above and are never timed, while
+the second approach pays for its draws inside the timed function.
+
+To compare the two approaches fairly, we time the first approach end-to-end,
+including the cost of generating the arrays:
+
+```{code-cell} ipython3
+with qe.Timer():
+    u2 = rng.uniform(size=n)
+    v2 = rng.uniform(size=n)
+    calculate_pi(u2, v2)
+```
+
 In this serial setting the two approaches give equally good estimates and run at
 similar speed, but they are not equivalent in *memory use*. 
 
