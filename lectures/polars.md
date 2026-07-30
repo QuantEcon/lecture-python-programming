@@ -86,7 +86,7 @@ s
 Unlike {doc}`pandas <pandas>` Series, Polars Series have no row index.
 Polars is column-centric --- data access is managed through column expressions
 and boolean masks rather than row labels.
-See [this blog post](https://medium.com/@luca.basanisi/understand-polars-lack-of-indexes-526ea75e413) for more detail.
+See the [Polars migration guide for pandas users](https://docs.pola.rs/user-guide/migration/pandas/) for more detail.
 ```
 
 Polars `Series` are built on top of [Apache Arrow](https://arrow.apache.org/) arrays and support many familiar operations
@@ -658,9 +658,18 @@ def read_data_polars(ticker_list,
         result = result.join(
             df, on='Date', how='full', coalesce=True
         )
-    return result
+    return result.sort('Date')
 
 ticker = read_data_polars(ticker_list)
+```
+
+```{note}
+Polars joins do not guarantee the order of the output rows --- keys that match
+only one side are appended rather than slotted into place.
+This is the same "no index, no automatic alignment" theme from above: with no
+row labels to align on, ordering is something we ask for explicitly.
+Hence the `sort('Date')` before returning, which any later
+`first()`/`last()` calculation relies on.
 ```
 
 Complete the program to plot the result as a bar graph.
@@ -796,5 +805,3 @@ plt.show()
 
 ```{solution-end}
 ```
-
-[^mung]: Wikipedia defines munging as cleaning data from one raw form into a structured, purged one.

@@ -78,7 +78,6 @@ You can think of a `Series` as a "column" of data, such as a collection of obser
 
 A `DataFrame` is a two-dimensional object for storing related columns of data.
 
-(pd-series)=
 ## Series
 
 ```{index} single: Pandas; Series
