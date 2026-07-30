@@ -1,7 +1,7 @@
-# Sync Translations — Simplified Chinese
-# On merged PR, translate changed lectures into the zh-cn target repo.
+# Sync Translations — French
+# On merged PR, translate changed lectures into the French target repo.
 # Comment \translate-resync on a merged PR to re-trigger sync.
-name: Sync Translations (Simplified Chinese)
+name: Sync Translations (French)
 
 on:
   pull_request:
@@ -38,8 +38,8 @@ jobs:
       - uses: QuantEcon/action-translation@v0
         with:
           mode: sync
-          target-repo: QuantEcon/lecture-python-programming.zh-cn
-          target-language: zh-cn
+          target-repo: QuantEcon/lecture-python-programming.fr
+          target-language: fr
           source-language: en
           docs-folder: lectures
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}

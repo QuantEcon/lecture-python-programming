@@ -340,8 +340,9 @@ The following vectorized code uses NumPy, which we'll soon investigate in depth,
 to achieve the same thing.
 
 ```{code-cell} ipython
+rng = np.random.default_rng()
 with qe.Timer():
-    x = np.random.uniform(0, 1, n)
+    x = rng.uniform(0, 1, n)
     y = np.sum(x**2)
 ```
 

@@ -2,13 +2,13 @@ name: Build Project [using jupyter-book]
 on: [pull_request]
 jobs:
   preview:
-    runs-on: "runs-on=${{ github.run_id }}/family=g4dn.2xlarge/image=quantecon_ubuntu2404/disk=large"
+    runs-on: "runs-on=${{ github.run_id }}/family=g4dn.2xlarge/image=quantecon_ubuntu2404/volume=80gb/spot=false"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0  # Fetch full git history for changelog feature
       - name: Setup Anaconda
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
           auto-activate-base: true
@@ -45,7 +45,7 @@ jobs:
         shell: bash -l {0}
         run: pip list
       - name: Download "build" folder (cache)
-        uses: dawidd6/action-download-artifact@v20
+        uses: dawidd6/action-download-artifact@v21
         with:
           workflow: cache.yml
           branch: main
@@ -55,6 +55,18 @@ jobs:
       - name: Build Download Notebooks (sphinx-tojupyter)
         shell: bash -l {0}
         run: |
+          # This is the FIRST `jb build` in the workflow, and `execute_notebooks: "cache"`
+          # means only the first build actually executes notebooks — the later HTML build
+          # reads the cache. So this is the step where a CellExecutionError surfaces, and
+          # therefore the step that has to gate.
+          #
+          # `set -eo pipefail` is required as well as `-W`: `shell: bash -l {0}` is a
+          # custom shell spec, so GitHub does not inject `-eo pipefail` (it only does
+          # that for the bare `shell: bash` shorthand). Without it a failing `jb build`
+          # would be masked by the trailing mkdir/cp, whose exit code becomes the
+          # step's — and `--keep-going` guarantees the .ipynb files exist for `cp`
+          # to succeed on.
+          set -eo pipefail
           jb build lectures --path-output ./ --builder=custom --custom-builder=jupyter -n -W --keep-going
           mkdir -p _build/html/_notebooks
           cp -u _build/jupyter/*.ipynb _build/html/_notebooks
@@ -76,7 +88,7 @@ jobs:
           name: execution-reports
           path: _build/html/reports
       - name: Preview Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3
+        uses: nwtgck/actions-netlify@v4
         with:
           publish-dir: '_build/html/'
           production-branch: main
