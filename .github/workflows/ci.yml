@@ -2,9 +2,9 @@ name: Build Project [using jupyter-book]
 on: [pull_request]
 jobs:
   preview:
-    runs-on: "runs-on=${{ github.run_id }}/family=g4dn.2xlarge/image=quantecon_ubuntu2404/disk=large"
+    runs-on: "runs-on=${{ github.run_id }}/family=g4dn.2xlarge/image=quantecon_ubuntu2404/volume=80gb/spot=false"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v3
@@ -57,12 +57,12 @@ jobs:
         run: jupyter book build --html --execute
 
       - name: Upload build output
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           path: './lectures/_build/html'
 
       - name: Preview Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3
+        uses: nwtgck/actions-netlify@v4
         with:
           publish-dir: './lectures/_build/html'
           production-branch: main
