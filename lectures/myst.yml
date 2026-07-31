@@ -13,7 +13,10 @@ project:
         - Instructor for Ph.D. Advanced Macroeconomics, University of Minnesota.
       url: https://johnstachurski.net
       email: john.stachurski@gmail.com
-  github: https://github.com/QuantEcon/lecture-python-programming.myst
+  # The theme derives the notebook-launch repo from this (github + ".notebooks"),
+  # so it has to be the real repo name.
+  github: https://github.com/QuantEcon/lecture-python-programming
+  # Keep in sync with _toc.yml (the jupyter-book 1.x table of contents).
   toc:
     - file: intro.md
     - title: Introduction to Python
@@ -26,22 +29,23 @@ project:
         - file: oop_intro.md
         - file: names.md
         - file: python_oop.md
-        - file: workspace.md
-    - title: The Scientific Libraries
+    - title: Foundations of Scientific Computing
       children:
         - file: need_for_speed.md
         - file: numpy.md
         - file: matplotlib.md
         - file: scipy.md
-    - title: Working with Data
-      children:
-        - file: pandas.md
-        - file: pandas_panel.md
     - title: High Performance Computing
       children:
         - file: numba.md
         - file: jax_intro.md
         - file: numpy_vs_numba_vs_jax.md
+        - file: autodiff.md
+    - title: Working with Data
+      children:
+        - file: pandas.md
+        - file: pandas_panel.md
+        - file: polars.md
     - title: More Python Programming
       children:
         - file: writing_good_code.md
@@ -86,4 +90,7 @@ project:
 site:
   parts:
     footer: footer.md
-  template: https://github.com/QuantEcon/quantecon-theme/archive/refs/heads/main.zip
+  # Pinned theme release (see https://github.com/QuantEcon/quantecon-theme.mystmd/releases);
+  # bump the vX.Y.Z in this URL to take a new theme version. The old bundled
+  # QuantEcon/quantecon-theme repo is archived.
+  template: https://github.com/QuantEcon/quantecon-theme.mystmd/releases/download/v2.2.0/quantecon-theme.zip
