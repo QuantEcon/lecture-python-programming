@@ -1,4 +1,4 @@
-name: Build Project [using jupyter-book]
+name: Build Project [using QuantEcon/mystmd]
 on: [pull_request]
 jobs:
   preview:
@@ -42,9 +42,6 @@ jobs:
           pip install -U "jax[cuda13]"
           python scripts/test-jax-install.py
 
-      - name: Install jupyter book 2.0
-        run: pip install "jupyter-book>=2.0.0a0"
-
       - name: Install mystmd (QuantEcon fork)
         run: |
           git clone --branch main --depth 1 \
@@ -60,9 +57,14 @@ jobs:
       - name: Verify mystmd version
         run: myst --version
 
+      # Built with the fork's `myst` CLI rather than `jupyter book build`.
+      # jupyter-book 2.x is a Python shim that execs a mystmd bundle vendored
+      # inside its own wheel (jupyter_book/dist/jupyter-book.cjs) and offers no
+      # way to point it at another CLI — so `jupyter book build` silently
+      # ignored the fork we install above and built with upstream mystmd.
       - name: Build HTML
         working-directory: ./lectures
-        run: jupyter book build --html --execute
+        run: myst build --html --execute
 
       - name: Upload build output
         uses: actions/upload-artifact@v7
