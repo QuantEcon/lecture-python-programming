@@ -3,6 +3,7 @@ on:
   schedule:
     # UTC 17:00 is early morning in Australia
     - cron:  '0 15 * * 4'
+  workflow_dispatch:
 jobs:
   execution-tests-win:
     name: Execution Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -27,8 +28,10 @@ jobs:
           conda install anaconda
           conda install -c numba numba
           conda install -c numba llvmlite
-          pip install jupyter-book
-          pip install jupyter-book sphinx-multitoc-numbering quantecon-book-theme sphinxext-rediraffe sphinx-tojupyter sphinx-exercise sphinx-togglebutton
+          # jupyter-book pinned <2: the 2.x line drops the jb CLI (see #569);
+          # this repo stays on jupyter-book 1.x until a JB2-compatible theme
+          # exists (mirrors the <2.0 pin in environment.yml)
+          pip install "jupyter-book<2" sphinx-multitoc-numbering quantecon-book-theme sphinxext-rediraffe sphinx-tojupyter sphinx-exercise sphinx-togglebutton
       - name: Install Jax [CPU]
         shell: bash -l {0}
         run: |
