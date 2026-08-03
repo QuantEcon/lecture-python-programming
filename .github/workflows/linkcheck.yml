@@ -43,7 +43,10 @@ jobs:
           # lectures/_config.yml. Sphinx's built-in checker reads that list; this
           # checker scans the built HTML and never sees it, so the exemptions have
           # to be stated in both places. Same regex syntax, so entries move across
-          # unchanged -- update both when adding one.
+          # directly -- but the matching differs: Sphinx anchors a pattern at the
+          # start of the URL, this checker matches anywhere in it. A pattern
+          # copied here can therefore match more than it does there, never less.
+          # Update both when adding one, and anchor deliberately if it matters.
           ignore-patterns: |
             https://github.com/matplotlib/matplotlib/blob/v3.6.2/lib/matplotlib/axes/_axes.py#L1417-L1669
             https://ieeexplore.ieee.org/document/8757088
