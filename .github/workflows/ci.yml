@@ -6,12 +6,19 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # The key hashes everything cached execution outputs depend on: the
+      # lectures themselves, the Python requirements, and this workflow file
+      # (which pins the mystmd engine SHA, the JAX version and the XLA env).
+      # Hashing only the lectures is how the b9cc649 engine swap shipped
+      # green without ever executing a notebook: the cache replayed outputs
+      # from the old engine. Any engine/env/requirements change now forces a
+      # cold build automatically.
       - name: Cache Notebook Execution
         uses: actions/cache@v6
         id: cache-execution
         with:
           path: ./lectures/_build/execute
-          key: ${{ runner.os }}-execute-cache-${{ hashFiles('lectures/**/*.md') }}
+          key: ${{ runner.os }}-execute-cache-${{ hashFiles('lectures/**/*.md', 'myst_requirements.txt', '.github/workflows/ci.yml') }}
 
       # Node 24 matches the theme's .nvmrc (quantecon-theme.mystmd), which runs
       # as a Remix server during `myst build --html`.
@@ -34,12 +41,15 @@ jobs:
         run: python -m pip install -r myst_requirements.txt
 
       # The GPU lectures (jax_intro, autodiff, numpy_vs_numba_vs_jax) need JAX
-      # on the g4dn runner — same install as the jupyter-book 1.x workflow on
-      # main. Without it those notebooks execute to ModuleNotFoundError cells.
+      # on the g4dn runner. Without it those notebooks execute to
+      # ModuleNotFoundError cells. Pinned to the version validated on
+      # 2026-08-03; unpinned, the executed environment drifts between runs of
+      # the same commit. Bumping it here busts the execution cache (the key
+      # hashes this file), so the bump is validated by a cold build.
       - name: Install JAX
         if: steps.cache-execution.outputs.cache-hit != 'true'
         run: |
-          pip install -U "jax[cuda13]"
+          pip install "jax[cuda13]==0.11.0"
           python scripts/test-jax-install.py
 
       # Pinned to the exact SHA of the fork's main (unmoved since 2026-06-12,
@@ -65,10 +75,12 @@ jobs:
       - name: Verify mystmd version
         run: myst --version
 
-      # DIAGNOSIS (PR #363 cold-cache jax_intro kernel death): sample host
-      # RAM, top-RSS processes and GPU memory every 5s for the rest of the
-      # job. The nohup'd loop survives step boundaries; the runner reaps it
-      # at job end. Read back in the always() step after the build.
+      # Standing telemetry: sample host RAM, top-RSS processes and GPU memory
+      # every 5s for the rest of the job. The nohup'd loop survives step
+      # boundaries; the runner reaps it at job end. Read back in the always()
+      # step after the build. This is what diagnosed the 2026-08-03 jax_intro
+      # kernel death (GPU preallocation race — see the Build HTML env below);
+      # it costs nothing, so it stays for the next one.
       - name: Start memory monitor
         run: |
           nohup bash -c 'while true; do
@@ -101,9 +113,12 @@ jobs:
           XLA_PYTHON_CLIENT_PREALLOCATE: 'false'
         run: myst build --html --execute
 
-      # A kernel death with no Python traceback is consistent with a SIGKILL
-      # from the host OOM killer, but that has never been confirmed. dmesg
-      # covers the whole job because runs-on boots a fresh instance per run.
+      # Reads the telemetry back. dmesg covers the whole job because runs-on
+      # boots a fresh instance per run — an OOM-killed process appears there
+      # with its RSS, so this cleanly separates host OOM kills from in-process
+      # aborts (the 2026-08-03 death was the latter: dmesg was clean while the
+      # GPU sampler showed the preallocation collision). Start from this
+      # output for any future kernel death.
       - name: Execution diagnostics
         if: always()
         run: |
