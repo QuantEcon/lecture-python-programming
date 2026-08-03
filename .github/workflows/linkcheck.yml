@@ -9,6 +9,7 @@ jobs:
     name: QuantEcon AI link checking
     runs-on: "ubuntu-latest"
     permissions:
+      contents: read  # read latest release assets via gh api
       issues: write   # required for QuantEcon link-checker
     steps:
       # Download the latest release HTML archive (permanent, not subject to artifact expiry)
@@ -17,19 +18,39 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           ASSET_URL=$(gh api repos/${{ github.repository }}/releases/latest \
-            --jq '.assets[] | select(.name | endswith(".tar.gz")) | .browser_download_url')
-          echo "asset-url=$ASSET_URL" >> $GITHUB_OUTPUT
+            --jq '[.assets[] | select(.name | endswith(".tar.gz")) | .browser_download_url] | first // ""')
+          if [ -z "$ASSET_URL" ]; then
+            echo "::error::No .tar.gz asset found on the latest release"
+            exit 1
+          fi
+          echo "asset-url=$ASSET_URL" >> "$GITHUB_OUTPUT"
       - name: Download and extract release HTML
         run: |
+          set -euo pipefail
           mkdir -p _site
-          curl -sL "${{ steps.release.outputs.asset-url }}" | tar -xz -C _site
+          curl -fsSL "${{ steps.release.outputs.asset-url }}" | tar -xz -C _site
       - name: AI-Powered Link Checker
-        uses: QuantEcon/action-link-checker@main
+        uses: QuantEcon/action-link-checker@v1
         with:
           html-path: '_site'
           fail-on-broken: 'false'
           silent-codes: '403,503'
           ai-suggestions: 'true'
           create-issue: 'true'
-
+          # Known false positives, kept in step with the linkcheck_ignore list in
+          # lectures/_config.yml. Sphinx's built-in checker reads that list; this
+          # checker scans the built HTML and never sees it, so the exemptions have
+          # to be stated in both places. Same regex syntax, so entries move across
+          # unchanged -- update both when adding one.
+          ignore-patterns: |
+            https://github.com/matplotlib/matplotlib/blob/v3.6.2/lib/matplotlib/axes/_axes.py#L1417-L1669
+            https://ieeexplore.ieee.org/document/8757088
+            https://www.sciencedirect.com/science/article/pii/S1477388021000177
+            https://keras.io/
+            https://data.oecd.org/
+            https://www.reddit.com/
+            https://openai.com
+            https://chatgpt.com/
+            https://fred.stlouisfed.org/.*
