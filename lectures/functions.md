@@ -305,6 +305,8 @@ This is accomplished in the next program
 
 (funcloopprog)=
 ```{code-cell} python3
+rng = np.random.default_rng()
+
 def generate_data(n):
     ϵ_values = []
     for i in range(n):
@@ -334,6 +336,8 @@ This is achieved in the next piece of code.
 
 (funcloopprog2)=
 ```{code-cell} python3
+rng = np.random.default_rng()
+
 def generate_data(n, generator_type):
     ϵ_values = []
     for i in range(n):
@@ -366,6 +370,8 @@ To understand this, consider the following version.
 
 (test_program_6)=
 ```{code-cell} python3
+rng = np.random.default_rng()
+
 def generate_data(n, generator_type):
     ϵ_values = []
     for i in range(n):
