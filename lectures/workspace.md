@@ -362,7 +362,7 @@ As the 2nd task,
 1. Look into 'forking' GitHub repositories (forking means making your own copy of a GitHub repository, stored on GitHub).
 1. Fork [QuantEcon.py](https://github.com/QuantEcon/QuantEcon.py).
 1. Clone your fork to some local directory, make edits, commit them, and push them back up to your forked GitHub repo.
-1. If you made a valuable improvement, send us a [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)!
+1. If you made a valuable improvement, send us a [pull request](https://docs.github.com/en/pull-requests/reference/pull-requests)!
 
 For reading on these and other topics, try
 
