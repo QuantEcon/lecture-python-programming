@@ -42,11 +42,19 @@ jobs:
           pip install -U "jax[cuda13]"
           python scripts/test-jax-install.py
 
+      # Pinned to the exact SHA of the fork's main (unmoved since 2026-06-12,
+      # so this is the same engine the 2026-08-03 cold-run failures used).
+      # A branch name here makes the engine a moving target between runs of
+      # the same lecture commit, which makes failures impossible to bisect.
       - name: Install mystmd (QuantEcon fork)
         run: |
-          git clone --branch main --depth 1 \
-            https://github.com/QuantEcon/mystmd.git /tmp/qe-mystmd
+          mkdir -p /tmp/qe-mystmd
           cd /tmp/qe-mystmd
+          git init -q
+          git remote add origin https://github.com/QuantEcon/mystmd.git
+          git fetch -q --depth 1 origin 96ee78f550ff2e0410730f328352e98d3e29d338
+          git checkout -q FETCH_HEAD
+          git rev-parse HEAD
           bun install
           bun run build
           npm install -g /tmp/qe-mystmd/packages/mystmd
@@ -57,14 +65,48 @@ jobs:
       - name: Verify mystmd version
         run: myst --version
 
+      # DIAGNOSIS (PR #363 cold-cache jax_intro kernel death): sample host
+      # RAM, top-RSS processes and GPU memory every 5s for the rest of the
+      # job. The nohup'd loop survives step boundaries; the runner reaps it
+      # at job end. Read back in the always() step after the build.
+      - name: Start memory monitor
+        run: |
+          nohup bash -c 'while true; do
+            echo "=== $(date -u +%H:%M:%S)"
+            free -m | sed -n "2,3p"
+            ps -eo pid,rss,etime,comm --sort=-rss | head -8
+            nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader 2>/dev/null
+            sleep 5
+          done' >/tmp/memmon.log 2>&1 &
+          echo "monitor started"
+
       # Built with the fork's `myst` CLI rather than `jupyter book build`.
       # jupyter-book 2.x is a Python shim that execs a mystmd bundle vendored
-      # inside its own wheel (jupyter_book/dist/jupyter-book.cjs) and offers no
-      # way to point it at another CLI — so `jupyter book build` silently
-      # ignored the fork we install above and built with upstream mystmd.
+      # inside its own wheel (jupyter_book/dist/jupyter-book.cjs) and offers
+      # no supported way to point it at another CLI — so `jupyter book build`
+      # silently ignored the fork we install above and built with upstream
+      # mystmd (visible as 23 `unknown export output extension: *.ipynb`
+      # errors, since ipynb export is a fork-only capability).
       - name: Build HTML
         working-directory: ./lectures
         run: myst build --html --execute
+
+      # A kernel death with no Python traceback is consistent with a SIGKILL
+      # from the host OOM killer, but that has never been confirmed. dmesg
+      # covers the whole job because runs-on boots a fresh instance per run.
+      - name: Execution diagnostics
+        if: always()
+        run: |
+          echo "::group::memory timeline (5s samples)"
+          cat /tmp/memmon.log || true
+          echo "::endgroup::"
+          echo "::group::kernel log (OOM killer / segfaults)"
+          (sudo dmesg -T || dmesg -T) 2>/dev/null | grep -iE "out of memory|oom|killed process|segfault" || echo "no OOM/segfault records"
+          echo "::endgroup::"
+          echo "::group::final state"
+          free -m
+          nvidia-smi 2>/dev/null || true
+          echo "::endgroup::"
 
       - name: Upload build output
         uses: actions/upload-artifact@v7
