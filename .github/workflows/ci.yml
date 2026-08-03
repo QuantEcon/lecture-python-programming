@@ -89,6 +89,16 @@ jobs:
       # errors, since ipynb export is a fork-only capability).
       - name: Build HTML
         working-directory: ./lectures
+        env:
+          # Three JAX lectures (jax_intro, autodiff, numpy_vs_numba_vs_jax)
+          # execute concurrently on the g4dn's single T4. By default the first
+          # JAX process to touch the GPU preallocates 75% of it (11.3GiB of
+          # 15.3GiB); the 2026-08-03 diagnostics showed jax_intro's kernel then
+          # clamped to the ~3.4GiB remainder and aborted with no Python
+          # traceback once a later cell outgrew that pool (dmesg had no
+          # OOM-killer or segfault records — an XLA fatal, not a host kill).
+          # On-demand allocation lets the concurrent kernels share the GPU.
+          XLA_PYTHON_CLIENT_PREALLOCATE: 'false'
         run: myst build --html --execute
 
       # A kernel death with no Python traceback is consistent with a SIGKILL
