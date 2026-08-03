@@ -42,6 +42,9 @@ sphinx:
         - code: fa
           name: فارسی
           url: https://quantecon.github.io/lecture-python-programming.fa
+        - code: fr
+          name: Français
+          url: https://quantecon.github.io/lecture-python-programming.fr
         - code: zh-cn
           name: 中文
           url: https://quantecon.github.io/lecture-python-programming.zh-cn
