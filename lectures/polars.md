@@ -51,7 +51,7 @@ Polars is designed with performance and memory efficiency in mind, leveraging:
 
 * **Memory**: pandas typically needs 5--10x your dataset size in RAM; Polars needs only 2--4x
 * **Speed**: Polars is 10--100x faster for many common operations
-* **See**: [Polars TPC-H benchmarks](https://www.pola.rs/benchmarks/) for up-to-date performance comparisons
+* **See**: [Polars TPC-H benchmarks](https://pola.rs/benchmarks/) for up-to-date performance comparisons
 ```
 
 Throughout the lecture, we will assume that the following imports have taken place
