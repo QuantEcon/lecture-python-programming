@@ -723,27 +723,50 @@ def calculate_pi_parallel(u_draws, v_draws):
     return area_estimate * 4  # dividing by radius**2
 ```
 
-Now let's see how fast it runs:
+As the exercise statement suggests, parallelization pays off when each thread
+has a substantial amount of work to do, so we draw a fresh, much larger set of
+points rather than reusing the arrays from above.
+
+```{note}
+The two arrays below occupy about 1.6 GB of memory — reduce `n` if your
+machine is short on RAM.
+```
+
+```{code-cell} ipython3
+n = 100_000_000
+rng = np.random.default_rng()
+u_big = rng.uniform(size=n)
+v_big = rng.uniform(size=n)
+```
+
+Now let's see how fast it runs (the second call measures runtime without
+compilation time):
 
 ```{code-cell} ipython3
 with qe.Timer():
-    calculate_pi_parallel(u_draws, v_draws)
+    calculate_pi_parallel(u_big, v_big)
 ```
 
 ```{code-cell} ipython3
 with qe.Timer():
-    calculate_pi_parallel(u_draws, v_draws)
+    calculate_pi_parallel(u_big, v_big)
 ```
 
-By switching parallelization on and off (selecting `True` or
-`False` in the `@jit` annotation), we can test the speed gain that
-multithreading provides on top of JIT compilation.
+For comparison, here is the serial jitted version from {ref}`speed_ex1` on the
+same points:
 
-On our workstation, we find that parallelization provides a modest but
-worthwhile speed gain here.
+```{code-cell} ipython3
+with qe.Timer():
+    calculate_pi(u_big, v_big)
+```
+
+Comparing the last two timings, multithreading provides a substantial speed
+gain on top of JIT compilation — around 3x on our workstation.
 
 (If you are executing locally, you will get different results, depending mainly
-on the number of CPUs on your machine.)
+on the number of CPUs on your machine — and at small sample sizes the
+parallel version can even be slower, because the gains cannot cover the cost of
+distributing work across threads.)
 
 Notice that we drew all of the random points *before* the loop and passed them in
 as arrays, so the parallel loop only *reads* from memory.
