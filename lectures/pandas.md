@@ -380,7 +380,7 @@ df.apply(update_row, axis=1)
 
 ```{code-cell} ipython3
 # Round all decimal numbers to 2 decimal places
-df.map(lambda x : round(x,2) if type(x)!=str else x)
+df.map(lambda x : round(x,2) if not isinstance(x, str) else x)
 ```
 
 **Application: Missing Value Imputation**
@@ -403,8 +403,8 @@ We can use the `.map()` method again to replace all missing values with 0
 ```{code-cell} ipython3
 # replace all NaN values by 0
 def replace_nan(x):
-    if type(x)!=str:
-        return  0 if np.isnan(x) else x
+    if not isinstance(x, str):
+        return  0 if pd.isna(x) else x
     else:
         return x
 
@@ -536,7 +536,7 @@ In the second case, you can either
 * switch to another machine
 * solve your proxy problem by reading [the documentation](https://requests.readthedocs.io/en/latest/)
 
-Assuming that all is working, you can now proceed to use the `source` object returned by the call `requests.get('https://research.stlouisfed.org/fred2/series/UNRATE/downloaddata/UNRATE.csv')`
+Assuming that all is working, you can now proceed to build the `source` object from the data returned by the call `requests.get(url)`
 
 ```{code-cell} ipython3
 url = 'https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1318&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=UNRATE&scale=left&cosd=1948-01-01&coed=2024-06-01&line_color=%234572a7&link_values=false&line_style=solid&mark_type=none&mw=3&lw=2&ost=-99999&oet=99999&mma=0&fml=a&fq=Monthly&fam=avg&fgst=lin&fgsnd=2020-02-01&line_index=1&transformation=lin&vintage_date=2024-07-29&revision_date=2024-07-29&nd=1948-01-01'
