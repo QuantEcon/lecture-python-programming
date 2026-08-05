@@ -380,9 +380,9 @@ plt.plot(ϵ_values)
 plt.show()
 ```
 
-A while loop will keep executing the code block delimited by indentation until the condition (```i < ts_length```) is satisfied.
+A while loop will keep executing the code block delimited by indentation as long as the condition (`i < ts_length`) is satisfied.
 
-In this case, the program will keep adding values to the list ```ϵ_values``` until ```i``` equals ```ts_length```:
+In this case, the program will keep adding values to the list `ϵ_values` until `i` equals `ts_length`:
 
 ```{code-cell} python3
 i == ts_length #the ending condition for the while loop
