@@ -447,7 +447,7 @@ def x(t):
         return 2 * x(t-1)
 ```
 
-What happens here is that each successive call uses it's own *frame* in the *stack*
+What happens here is that each successive call uses its own *frame* in the *stack*
 
 * a frame is where the local variables of a given function call are held
 * stack is memory used to process function calls
