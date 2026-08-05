@@ -464,13 +464,13 @@ a grouped weighted average.
 
 ```{code-cell} ipython3
 n = 5_000_000
-rng = np.random.default_rng(42)
+bench_rng = np.random.default_rng(42)
 
-groups = rng.choice(['A', 'B', 'C', 'D'], n)
-values = rng.standard_normal(n)
-weights = rng.random(n)
-extra1 = rng.standard_normal(n)
-extra2 = rng.standard_normal(n)
+groups = bench_rng.choice(['A', 'B', 'C', 'D'], n)
+values = bench_rng.standard_normal(n)
+weights = bench_rng.random(n)
+extra1 = bench_rng.standard_normal(n)
+extra2 = bench_rng.standard_normal(n)
 
 big_pd = pd.DataFrame({
     'group': groups, 'value': values,
