@@ -723,10 +723,10 @@ def calculate_pi_parallel(u_draws, v_draws):
     return area_estimate * 4  # dividing by radius**2
 ```
 
-Parallelization pays off when each thread has enough work to overcome the overhead costs while 
-breaking the problem into parts for work to happen simultaneously. 
+Parallelization pays off when each thread has enough work to overcome the overhead costs while
+breaking the problem into parts for work to happen simultaneously.
 
-Lets draw a fresh, much larger set of points rather than reusing the arrays from above.
+Let's draw a fresh, much larger set of points rather than reusing the arrays from above.
 
 ```{note}
 The two arrays below occupy about 1.6 GB of memory — reduce `n` if your
@@ -768,6 +768,13 @@ gain on top of JIT compilation — around 3x on our workstation.
 on the number of CPUs on your machine — and at small sample sizes the
 parallel version can even be slower, because the gains cannot cover the cost of
 distributing work across threads.)
+
+These two arrays are large and we are finished with them, so we release the
+memory before moving on.
+
+```{code-cell} ipython3
+del u_big, v_big
+```
 
 Notice that we drew all of the random points *before* the loop and passed them in
 as arrays, so the parallel loop only *reads* from memory.
