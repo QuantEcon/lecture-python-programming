@@ -77,7 +77,7 @@ countries and assign it to `realwage`.
 The dataset can be accessed with the following link:
 
 ```{code-cell} ipython3
-url1 = 'https://github.com/QuantEcon/data-lectures/raw/main/lectures/realwage.csv'
+url1 = 'https://raw.githubusercontent.com/QuantEcon/data-lectures/main/lectures/realwage.csv'
 ```
 
 ```{code-cell} ipython3
@@ -197,7 +197,7 @@ function.
 The dataset can be accessed with the following link:
 
 ```{code-cell} ipython3
-url2 = 'https://github.com/QuantEcon/data-lectures/raw/main/lectures/countries.csv'
+url2 = 'https://raw.githubusercontent.com/QuantEcon/data-lectures/main/lectures/countries.csv'
 ```
 
 ```{code-cell} ipython3
@@ -506,7 +506,7 @@ in Europe by age and sex from [Eurostat](https://ec.europa.eu/eurostat/data/data
 The dataset can be accessed with the following link:
 
 ```{code-cell} ipython3
-url3 = 'https://github.com/QuantEcon/data-lectures/raw/main/lectures/employ.csv'
+url3 = 'https://raw.githubusercontent.com/QuantEcon/data-lectures/main/lectures/employ.csv'
 ```
 
 Reading in the CSV file returns a panel dataset in long format. Use `.pivot_table()` to construct

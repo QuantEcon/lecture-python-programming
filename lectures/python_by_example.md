@@ -173,19 +173,22 @@ Then it's harder for readers to know where `sqrt` came from, should they wish to
 
 ### Random Draws
 
-Returning to our program that plots white noise, the remaining three lines
+Returning to our program that plots white noise, the remaining four lines
 after the import statements are
 
 ```{code-cell} ipython
+rng = np.random.default_rng()
 ϵ_values = rng.standard_normal(100)
 plt.plot(ϵ_values)
 plt.show()
 ```
 
-The first line generates 100 (quasi) independent standard normals and stores
+The first line creates a random number generator `rng`.
+
+The second line generates 100 (quasi) independent standard normals and stores
 them in `ϵ_values`.
 
-The next two lines genererate the plot.
+The last two lines generate the plot.
 
 We can and will look at various ways to configure and improve this plot below.
 

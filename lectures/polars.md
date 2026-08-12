@@ -78,7 +78,8 @@ Let's start with Series.
 We begin by creating a series of four random observations
 
 ```{code-cell} ipython3
-s = pl.Series(name='daily returns', values=np.random.randn(4))
+rng = np.random.default_rng()
+s = pl.Series(name='daily returns', values=rng.standard_normal(4))
 s
 ```
 
@@ -114,7 +115,7 @@ For example, to associate ticker symbols with returns:
 ```{code-cell} ipython3
 df = pl.DataFrame({
     'company': ['AMZN', 'AAPL', 'MSFT', 'GOOG'],
-    'daily returns': np.random.randn(4)
+    'daily returns': rng.standard_normal(4)
 })
 df
 ```
@@ -463,13 +464,13 @@ a grouped weighted average.
 
 ```{code-cell} ipython3
 n = 5_000_000
-np.random.seed(42)
+rng = np.random.default_rng(42)
 
-groups = np.random.choice(['A', 'B', 'C', 'D'], n)
-values = np.random.randn(n)
-weights = np.random.rand(n)
-extra1 = np.random.randn(n)
-extra2 = np.random.randn(n)
+groups = rng.choice(['A', 'B', 'C', 'D'], n)
+values = rng.standard_normal(n)
+weights = rng.random(n)
+extra1 = rng.standard_normal(n)
+extra2 = rng.standard_normal(n)
 
 big_pd = pd.DataFrame({
     'group': groups, 'value': values,
@@ -685,7 +686,7 @@ Calculate percentage changes using Polars expressions:
 
 ```{code-cell} ipython3
 price_change = ticker.select([
-    ((pl.col(tick).last() / pl.col(tick).first() - 1) * 100)
+    ((pl.col(tick).drop_nulls().last() / pl.col(tick).drop_nulls().first() - 1) * 100)
     .alias(tick)
     for tick in ticker_list.keys()
 ]).transpose(

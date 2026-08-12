@@ -1252,7 +1252,11 @@ class DiscreteRV:
     def __init__(self, q, seed=None):
         """
         The argument q is a NumPy array, or array like, nonnegative and sums
-        to 1
+        to 1.
+
+        The argument seed sets the seed for the underlying random number
+        generator; with the default seed=None, draws are not reproducible
+        across runs.
         """
         self.q = q
         self.Q = cumsum(q)
@@ -1431,7 +1435,7 @@ print(A)
 
 **Part 2**: Move on to replicate the result of the following broadcasting operation. Meanwhile, compare the speeds of broadcasting and the `for` loop you implement.
 
-For this part of the exercise you can use the `tic`/`toc` functions from the `quantecon` library to time the execution. 
+For this part of the exercise you can use the `qe.Timer()` context manager from the `quantecon` library to time the execution. 
 
 Let's make sure this library is installed.
 
