@@ -687,19 +687,20 @@ effort to compute the constant $\pi$ by Monte Carlo.
 
 Now try adding parallelization and see if you get further speed gains.
 
-You should not expect huge gains here because, while there are many
-independent tasks (draw point and test if in circle), each one has low
-execution time.
+There are many independent tasks here (draw a point and test whether it falls
+in the circle), but each one has very low execution time.
 
-Generally speaking, parallelization is less effective when the individual
-tasks to be parallelized are very small relative to total execution time.
+Generally speaking, parallelization is less effective when the individual tasks
+are very small relative to the overheads of spreading them across multiple CPUs.
 
-This is due to overheads associated with spreading all of these small tasks across multiple CPUs.
+The way around this is to give each thread enough work to make those overheads
+worth paying.
 
-Nevertheless, with suitable hardware, it is possible to get nontrivial speed gains in this exercise.
+So, for the size of the Monte Carlo simulation, use something substantial, such
+as `n = 100_000_000`.
 
-For the size of the Monte Carlo simulation, use something substantial, such as
-`n = 100_000_000`.
+At that scale, and with suitable hardware, you should see a clear gain over the
+serial version.
 ```
 
 ```{solution-start} numba_ex3
@@ -762,7 +763,7 @@ with qe.Timer():
 ```
 
 Comparing the last two timings, multithreading provides a substantial speed
-gain on top of JIT compilation — around 3x on our workstation.
+gain on top of JIT compilation.
 
 (If you are executing locally, you will get different results, depending mainly
 on the number of CPUs on your machine — and at small sample sizes the
