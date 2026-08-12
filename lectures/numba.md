@@ -723,9 +723,10 @@ def calculate_pi_parallel(u_draws, v_draws):
     return area_estimate * 4  # dividing by radius**2
 ```
 
-As the exercise statement suggests, parallelization pays off when each thread
-has a substantial amount of work to do, so we draw a fresh, much larger set of
-points rather than reusing the arrays from above.
+Parallelization pays off when each thread has enough work to overcome the overhead costs while 
+breaking the problem into parts for work to happen simultaneously. 
+
+Lets draw a fresh, much larger set of points rather than reusing the arrays from above.
 
 ```{note}
 The two arrays below occupy about 1.6 GB of memory — reduce `n` if your
@@ -773,9 +774,7 @@ as arrays, so the parallel loop only *reads* from memory.
 
 Drawing the points *inside* the parallel loop instead is surprisingly delicate.
 
-
-We investigate why, and how to do it safely, in
-{ref}`numba_ex_race`.
+We investigate why, and how to do it safely, in {ref}`numba_ex_race`.
 
 ```{solution-end}
 ```
