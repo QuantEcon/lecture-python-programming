@@ -72,6 +72,15 @@ jobs:
           branch: main
           name: build-cache
           path: _build
+      # Prune the restored _build/html so files deleted from source stop being
+      # published: sphinx copies html_static_path in but never removes stale
+      # assets. `jb clean . --html` removes exactly _build/html, leaving
+      # .jupyter_cache (the expensive execution cache), _build/latex and
+      # _build/jupyter untouched. Must run BEFORE the PDF/notebook steps below,
+      # which stage output INTO _build/html.
+      - name: Prune restored HTML (drop stale assets deleted from source)
+        shell: bash -l {0}
+        run: jb clean . --html
       # Build Assets (Download Notebooks, PDF via LaTeX)
       - name: Build PDF from LaTeX
         shell: bash -l {0}
