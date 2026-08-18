@@ -158,9 +158,7 @@ As in {doc}`pandas`, let's work with data from the [Penn World Tables](https://w
 We read this in using `pl.read_csv`
 
 ```{code-cell} ipython3
-url = ('https://raw.githubusercontent.com/QuantEcon/'
-       'lecture-python-programming/main/lectures/_static/'
-       'lecture_specific/pandas/data/test_pwt.csv')
+url = 'https://github.com/QuantEcon/data-lectures/raw/main/lectures/test_pwt.csv'
 df = pl.read_csv(url)
 df
 ```
@@ -344,9 +342,7 @@ Instead of executing each operation immediately, lazy mode collects the full que
 
 ```{code-cell} ipython3
 # Reload the dataset
-url = ('https://raw.githubusercontent.com/QuantEcon/'
-       'lecture-python-programming/main/lectures/_static/'
-       'lecture_specific/pandas/data/test_pwt.csv')
+url = 'https://github.com/QuantEcon/data-lectures/raw/main/lectures/test_pwt.csv'
 df_full = pl.read_csv(url)
 ```
 
@@ -422,9 +418,7 @@ import pandas as pd
 import time
 
 # Small dataset -- Penn World Tables (~8 rows)
-url = ('https://raw.githubusercontent.com/QuantEcon/'
-       'lecture-python-programming/main/lectures/_static/'
-       'lecture_specific/pandas/data/test_pwt.csv')
+url = 'https://github.com/QuantEcon/data-lectures/raw/main/lectures/test_pwt.csv'
 small_pd = pd.read_csv(url)
 small_pl = pl.read_csv(url)
 ```

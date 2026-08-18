@@ -153,7 +153,7 @@ In essence, a `DataFrame` in pandas is analogous to a (highly optimized) Excel s
 
 Thus, it is a powerful tool for representing and analyzing data that are naturally organized into rows and columns, often with descriptive indexes for individual rows and individual columns.
 
-Let's look at an example that reads data from the CSV file `pandas/data/test_pwt.csv`, which is taken from the [Penn World Tables](https://www.rug.nl/ggdc/productivity/pwt/pwt-releases/pwt-7.0).
+Let's look at an example that reads data from the CSV file `test_pwt.csv`, which is taken from the [Penn World Tables](https://www.rug.nl/ggdc/productivity/pwt/pwt-releases/pwt-7.0).
 
 The dataset contains the following indicators 
 
@@ -169,7 +169,7 @@ The dataset contains the following indicators
 We'll read this in from a URL using the `pandas` function `read_csv`.
 
 ```{code-cell} ipython3
-df = pd.read_csv('https://raw.githubusercontent.com/QuantEcon/lecture-python-programming/main/lectures/_static/lecture_specific/pandas/data/test_pwt.csv')
+df = pd.read_csv('https://github.com/QuantEcon/data-lectures/raw/main/lectures/test_pwt.csv')
 type(df)
 ```
 
