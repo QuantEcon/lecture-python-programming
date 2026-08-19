@@ -26,7 +26,13 @@ jobs:
       - name: Install JAX and Numpyro
         shell: bash -l {0}
         run: |
-          pip install -U "jax[cuda13]"
+          # Pinned: jax 0.11.1 (2026-08-17) hangs numpy_vs_numba_vs_jax's
+          # lax.fori_loop cells -- they jit with device=cpu, so the CPU-path
+          # regression bites even on these GPU runners. Context is recorded in
+          # QuantEcon/workspace-lectures#49. With jax already present, the
+          # lecture's unpinned `!pip install quantecon jax` cell is satisfied
+          # and does not upgrade.
+          pip install "jax[cuda13]==0.11.0"
           pip install numpyro
           python scripts/test-jax-install.py
       - name: Install latex dependencies
