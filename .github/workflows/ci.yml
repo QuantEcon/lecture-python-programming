@@ -38,11 +38,12 @@ jobs:
       - name: Install latex dependencies
         timeout-minutes: 30
         run: |
-          # Retried with a per-attempt timeout: a stalled Ubuntu mirror otherwise
+          # Retried with per-command timeouts (timeout inside sudo, so the kill reaches
+          # apt-get and the dpkg lock is released): a stalled Ubuntu mirror otherwise
           # hangs this step for hours (two 358-minute hangs on 2026-08-18).
           pkgs="texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex latexmk xindy dvipng cm-super"
           for attempt in 1 2; do
-            timeout 14m sudo bash -c "apt-get -qq update && apt-get install -y $pkgs" && break
+            sudo timeout -k 30s 2m apt-get -qq update && sudo timeout -k 30s 12m apt-get install -y $pkgs && break
             if [ "$attempt" = 2 ]; then echo "apt-get failed after 2 attempts"; exit 1; fi
             echo "apt-get attempt $attempt failed; retrying in 30s"; sleep 30
           done
