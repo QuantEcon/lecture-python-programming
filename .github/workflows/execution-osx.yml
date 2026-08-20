@@ -36,8 +36,9 @@ jobs:
           # quadratic in n, so this -W build dies on CellTimeoutError. Matches
           # the pin already in cache/ci/publish.yml; evidence and the exposure
           # map are recorded in QuantEcon/workspace-lectures#49. With jax
-          # already present, the lecture's unpinned `!pip install quantecon
-          # jax` cell is satisfied and does not upgrade.
+          # already present, the lecture's unpinned
+          # `!pip install quantecon jax` cell is satisfied and does not
+          # upgrade.
           pip install "jax[CPU]==0.11.0"
       - name: Build Lectures (+ Execution Checks)
         shell: bash -l {0}
