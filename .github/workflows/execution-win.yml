@@ -35,7 +35,14 @@ jobs:
       - name: Install Jax [CPU]
         shell: bash -l {0}
         run: |
-          pip install "jax[CPU]"
+          # Pinned: jax 0.11.1 (2026-08-17) regresses XLA:CPU execution --
+          # numpy_vs_numba_vs_jax's lax.fori_loop and lax.scan cells go
+          # quadratic in n, so this -W build dies on CellTimeoutError. Matches
+          # the pin already in cache/ci/publish.yml; evidence and the exposure
+          # map are recorded in QuantEcon/workspace-lectures#49. With jax
+          # already present, the lecture's unpinned `!pip install quantecon
+          # jax` cell is satisfied and does not upgrade.
+          pip install "jax[CPU]==0.11.0"
       - name: Build Lectures (+ Execution Checks)
         shell: powershell
         run: jb build lectures --path-output=./ -W --keep-going
