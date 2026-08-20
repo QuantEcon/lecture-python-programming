@@ -93,4 +93,4 @@ site:
   # Pinned theme release (see https://github.com/QuantEcon/quantecon-theme.mystmd/releases);
   # bump the vX.Y.Z in this URL to take a new theme version. The old bundled
   # QuantEcon/quantecon-theme repo is archived.
-  template: https://github.com/QuantEcon/quantecon-theme.mystmd/releases/download/v2.2.0/quantecon-theme.zip
+  template: https://github.com/QuantEcon/quantecon-theme.mystmd/releases/download/v2.3.0/quantecon-theme.zip
