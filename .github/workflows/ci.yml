@@ -3,6 +3,10 @@ on: [pull_request]
 jobs:
   preview:
     runs-on: "runs-on=${{ github.run_id }}/family=g4dn.2xlarge/image=quantecon_ubuntu2404/volume=80gb/spot=false"
+    permissions:
+      contents: read
+      actions: read         # dawidd6/action-download-artifact reads the cache.yml build artifact
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
 
@@ -49,7 +53,14 @@ jobs:
       - name: Install JAX
         if: steps.cache-execution.outputs.cache-hit != 'true'
         run: |
+          # Pinned: jax 0.11.1 (2026-08-17) hangs numpy_vs_numba_vs_jax's
+          # lax.fori_loop cells -- they jit with device=cpu, so the CPU-path
+          # regression bites even on these GPU runners. Context is recorded in
+          # QuantEcon/workspace-lectures#49. With jax already present, the
+          # lecture's unpinned `!pip install quantecon jax` cell is satisfied
+          # and does not upgrade.
           pip install "jax[cuda13]==0.11.0"
+          pip install numpyro
           python scripts/test-jax-install.py
 
       # Pinned to the exact SHA of the fork's main (unmoved since 2026-06-12,

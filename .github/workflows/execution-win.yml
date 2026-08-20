@@ -3,6 +3,7 @@ on:
   schedule:
     # UTC 17:00 is early morning in Australia
     - cron:  '0 15 * * 4'
+  workflow_dispatch:
 jobs:
   execution-tests-win:
     name: Execution Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -27,12 +28,22 @@ jobs:
           conda install anaconda
           conda install -c numba numba
           conda install -c numba llvmlite
-          pip install jupyter-book
-          pip install jupyter-book sphinx-multitoc-numbering quantecon-book-theme sphinxext-rediraffe sphinx-tojupyter sphinx-exercise sphinx-togglebutton
+          # jupyter-book pinned <2: the 2.x line drops the jb CLI (see #569);
+          # this repo stays on jupyter-book 1.x until a JB2-compatible theme
+          # exists (mirrors the <2.0 pin in environment.yml)
+          pip install "jupyter-book<2" sphinx-multitoc-numbering quantecon-book-theme sphinxext-rediraffe sphinx-tojupyter sphinx-exercise sphinx-togglebutton
       - name: Install Jax [CPU]
         shell: bash -l {0}
         run: |
-          pip install "jax[CPU]"
+          # Pinned: jax 0.11.1 (2026-08-17) regresses XLA:CPU execution --
+          # numpy_vs_numba_vs_jax's lax.fori_loop and lax.scan cells go
+          # quadratic in n, so this -W build dies on CellTimeoutError. Matches
+          # the pin already in cache/ci/publish.yml; evidence and the exposure
+          # map are recorded in QuantEcon/workspace-lectures#49. With jax
+          # already present, the lecture's unpinned
+          # `!pip install quantecon jax` cell is satisfied and does not
+          # upgrade.
+          pip install "jax[CPU]==0.11.0"
       - name: Build Lectures (+ Execution Checks)
         shell: powershell
         run: jb build lectures --path-output=./ -W --keep-going

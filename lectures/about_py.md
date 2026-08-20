@@ -137,7 +137,7 @@ popularity of a single Python deep learning library
 
 ```{figure} /_static/lecture_specific/about_py/pytorch_vs_matlab.png
 ```
-Pytorch is just one of several Python libraries for deep learning and AI.
+PyTorch is just one of several Python libraries for deep learning and AI.
 
 
 
@@ -340,7 +340,7 @@ We will discuss the details later in the lecture series, where we cover NumPy in
 While NumPy is still the king of array processing in Python, there are now
 important competitors.
 
-Libraries such as [JAX](https://github.com/jax-ml/jax), [Pytorch](https://pytorch.org/), and [CuPy](https://cupy.dev/) also have
+Libraries such as [JAX](https://github.com/jax-ml/jax), [PyTorch](https://pytorch.org/), and [CuPy](https://cupy.dev/) also have
 built in array types and array operations that can be very fast and efficient.
 
 In fact these libraries are better at exploiting parallelization and fast hardware, as

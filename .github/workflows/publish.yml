@@ -17,7 +17,7 @@ concurrency:
 jobs:
   publish:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    runs-on: "runs-on=${{ github.run_id }}/family=g4dn.2xlarge/image=quantecon_ubuntu2404/volume=80gb"
+    runs-on: "runs-on=${{ github.run_id }}/family=g4dn.2xlarge/image=quantecon_ubuntu2404/volume=80gb/spot=false"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs['page-url'] }}
@@ -38,7 +38,13 @@ jobs:
       - name: Install JAX and Numpyro
         shell: bash -l {0}
         run: |
-          pip install -U "jax[cuda13]"
+          # Pinned: jax 0.11.1 (2026-08-17) hangs numpy_vs_numba_vs_jax's
+          # lax.fori_loop cells -- they jit with device=cpu, so the CPU-path
+          # regression bites even on these GPU runners. Context is recorded in
+          # QuantEcon/workspace-lectures#49. With jax already present, the
+          # lecture's unpinned `!pip install quantecon jax` cell is satisfied
+          # and does not upgrade.
+          pip install "jax[cuda13]==0.11.0"
           pip install numpyro
           python scripts/test-jax-install.py
       - name: Check nvidia drivers
@@ -72,6 +78,15 @@ jobs:
           branch: main
           name: build-cache
           path: _build
+      # Prune the restored _build/html so files deleted from source stop being
+      # published: sphinx copies html_static_path in but never removes stale
+      # assets. `jb clean . --html` removes exactly _build/html, leaving
+      # .jupyter_cache (the expensive execution cache), _build/latex and
+      # _build/jupyter untouched. Must run BEFORE the PDF/notebook steps below,
+      # which stage output INTO _build/html.
+      - name: Prune restored HTML (drop stale assets deleted from source)
+        shell: bash -l {0}
+        run: jb clean . --html
       # Build Assets (Download Notebooks, PDF via LaTeX)
       - name: Build PDF from LaTeX
         shell: bash -l {0}
@@ -104,7 +119,7 @@ jobs:
       # Deploy to GitHub Pages + publish release assets (html archive, checksum, manifest)
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: quantecon/actions/publish-gh-pages@v0.9.0
+        uses: quantecon/actions/publish-gh-pages@v0.11.1
         with:
           build-dir: _build/html
           cname: python-programming.quantecon.org

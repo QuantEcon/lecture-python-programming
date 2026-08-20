@@ -208,7 +208,7 @@ z
 See also `np.asarray`, which performs a similar function, but does not make
 a distinct copy of data already in a NumPy array.
 
-To read in the array data from a text file containing numeric data use `np.loadtxt` ---see [the documentation](https://numpy.org/doc/stable/reference/routines.io.html) for details.
+To read in the array data from a text file containing numeric data use `np.loadtxt` --- see [the documentation](https://numpy.org/doc/stable/reference/routines.io.html) for details.
 
 
 
@@ -1215,7 +1215,11 @@ class DiscreteRV:
     def __init__(self, q, seed=None):
         """
         The argument q is a NumPy array, or array like, nonnegative and sums
-        to 1
+        to 1.
+
+        The argument seed sets the seed for the underlying random number
+        generator; with the default seed=None, draws are not reproducible
+        across runs.
         """
         self.q = q
         self.Q = cumsum(q)
@@ -1234,7 +1238,7 @@ you will understand.
 
 There is a problem here, however.
 
-Suppose that `q` is altered after an instance of `discreteRV` is
+Suppose that `q` is altered after an instance of `DiscreteRV` is
 created, for example by
 
 ```{code-cell} python3
@@ -1369,11 +1373,11 @@ F.plot(ax)
 :label: np_ex4
 ```
 
-Recall that [broadcasting](broadcasting) in Numpy can help us conduct element-wise operations on arrays with different number of dimensions without using `for` loops.
+Recall that [broadcasting](broadcasting) in NumPy can help us conduct element-wise operations on arrays with different number of dimensions without using `for` loops.
 
 In this exercise, try to use `for` loops to replicate the result of the following broadcasting operations.
 
-**Part1**: Try to replicate this simple example using `for` loops and compare your results with the broadcasting operation below.
+**Part 1**: Try to replicate this simple example using `for` loops and compare your results with the broadcasting operation below.
 
 ```{code-cell} python3
 
@@ -1391,9 +1395,9 @@ Here is the output
 print(A)
 ```
 
-**Part2**: Move on to replicate the result of the following broadcasting operation. Meanwhile, compare the speeds of broadcasting and the `for` loop you implement.
+**Part 2**: Move on to replicate the result of the following broadcasting operation. Meanwhile, compare the speeds of broadcasting and the `for` loop you implement.
 
-For this part of the exercise you can use the `tic`/`toc` functions from the `quantecon` library to time the execution. 
+For this part of the exercise you can use the `qe.Timer()` context manager from the `quantecon` library to time the execution. 
 
 Let's make sure this library is installed.
 

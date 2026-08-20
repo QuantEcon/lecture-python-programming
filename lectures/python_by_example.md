@@ -169,19 +169,22 @@ Then it's harder for readers to know where `sqrt` came from, should they wish to
 
 ### Random Draws
 
-Returning to our program that plots white noise, the remaining three lines
+Returning to our program that plots white noise, the remaining four lines
 after the import statements are
 
 ```{code-cell} ipython
+rng = np.random.default_rng()
 ϵ_values = rng.standard_normal(100)
 plt.plot(ϵ_values)
 plt.show()
 ```
 
-The first line generates 100 (quasi) independent standard normals and stores
+The first line creates a random number generator `rng`.
+
+The second line generates 100 (quasi) independent standard normals and stores
 them in `ϵ_values`.
 
-The next two lines genererate the plot.
+The last two lines generate the plot.
 
 We can and will look at various ways to configure and improve this plot below.
 
@@ -367,9 +370,9 @@ plt.plot(ϵ_values)
 plt.show()
 ```
 
-A while loop will keep executing the code block delimited by indentation until the condition (```i < ts_length```) is satisfied.
+A while loop will keep executing the code block delimited by indentation as long as the condition (`i < ts_length`) is satisfied.
 
-In this case, the program will keep adding values to the list ```ϵ_values``` until ```i``` equals ```ts_length```:
+In this case, the program will keep adding values to the list `ϵ_values` until `i` equals `ts_length`:
 
 ```{code-cell} python3
 i == ts_length #the ending condition for the while loop
