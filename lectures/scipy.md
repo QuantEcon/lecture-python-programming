@@ -7,21 +7,19 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+exports:
+  - format: ipynb
+    markdown: commonmark
+    images: attachment
+    output: exports/scipy.ipynb
+downloads:
+  - file: ./scipy.md
+    title: Markdown (md)
+  - file: exports/scipy.ipynb
+    title: IPython (.ipynb)
 ---
 
-(sp)=
-```{raw} jupyter
-<div id="qe-notebook-header" align="right" style="text-align:right;">
-        <a href="https://quantecon.org/" title="quantecon.org">
-                <img style="width:250px;display:inline;" width="250px" src="https://assets.quantecon.org/img/qe-menubar-logo.svg" alt="QuantEcon">
-        </a>
-</div>
-```
-
-# {index}`SciPy <single: SciPy>`
-
-```{index} single: Python; SciPy
-```
+# SciPy
 
 In addition to what’s in Anaconda, this lecture will need the following libraries:
 
@@ -60,7 +58,7 @@ A more common approach is to get some idea of what's in the library and then loo
 
 In this lecture, we aim only to highlight some useful parts of the package.
 
-## {index}`SciPy <single: SciPy>` versus {index}`NumPy <single: NumPy>`
+## SciPy versus NumPy
 
 SciPy is a package that contains various tools that are built on top of NumPy, using its array data type and related functionality.
 
@@ -93,8 +91,6 @@ Let's explore some of the major sub-packages.
 
 ## Statistics
 
-```{index} single: SciPy; Statistics
-```
 
 The `scipy.stats` subpackage supplies
 
@@ -228,10 +224,7 @@ The unique root is approximately 0.408.
 
 Let's consider some numerical techniques for finding roots.
 
-### {index}`Bisection <single: Bisection>`
-
-```{index} single: SciPy; Bisection
-```
+### Bisection
 
 One of the most common algorithms for numerical root-finding is *bisection*.
 
@@ -250,8 +243,9 @@ Here's a simplistic implementation of the algorithm in Python.
 
 It works for all sufficiently well behaved increasing continuous functions with $f(a) < 0 < f(b)$
 
-(bisect_func)=
 ```{code-cell} python3
+:name: bisect_func
+
 def bisect(f, a, b, tol=10e-5):
     """
     Implements the bisection root finding algorithm, assuming that f is a
@@ -285,10 +279,7 @@ from scipy.optimize import bisect
 bisect(f, 0, 1)
 ```
 
-### The {index}`Newton-Raphson Method <single: Newton-Raphson Method>`
-
-```{index} single: SciPy; Newton-Raphson Method
-```
+### Newton-Raphson Method
 
 Another very common root-finding algorithm is the [Newton-Raphson method](https://en.wikipedia.org/wiki/Newton%27s_method).
 
@@ -349,8 +340,6 @@ with qe.Timer(unit="milliseconds"):
 
 ### Multivariate Root-Finding
 
-```{index} single: SciPy; Multivariate Root-Finding
-```
 
 Use `scipy.optimize.fsolve`, a wrapper for a hybrid method in MINPACK.
 
@@ -360,8 +349,6 @@ See the [documentation](https://docs.scipy.org/doc/scipy/reference/generated/sci
 
 A **fixed point** of a real function $f$ on $[a,b]$ is an $x \in [a, b]$ such that $f(x)=x$.
 
-```{index} single: SciPy; Fixed Points
-```
 
 SciPy has a function for finding (scalar) fixed points too
 
@@ -374,10 +361,7 @@ fixed_point(lambda x: x**2, 10.0)  # 10.0 is an initial guess
 If you don't get good results, you can always switch back to the `brentq` root finder, since
 the fixed point of a function $f$ is the root of $g(x) := x - f(x)$.
 
-## {index}`Optimization <single: Optimization>`
-
-```{index} single: SciPy; Optimization
-```
+## Optimization
 
 Most numerical packages provide only functions for *minimization*.
 
@@ -400,8 +384,6 @@ fminbound(lambda x: x**2, -1, 2)  # Search in [-1, 2]
 
 ### Multivariate Optimization
 
-```{index} single: Optimization; Multivariate
-```
 
 Multivariate local optimizers include `minimize`, `fmin`, `fmin_powell`, `fmin_cg`, `fmin_bfgs`, and `fmin_ncg`.
 
@@ -409,10 +391,8 @@ Constrained multivariate local optimizers include `fmin_l_bfgs_b`, `fmin_tnc`, `
 
 See the [documentation](https://docs.scipy.org/doc/scipy/reference/optimize.html) for details.
 
-## {index}`Integration <single: Integration>`
+## Integration
 
-```{index} single: SciPy; Integration
-```
 
 Most numerical integration methods work by computing the integral of an approximating polynomial.
 
@@ -439,10 +419,8 @@ There are also functions for multivariate integration.
 
 See the [documentation](https://docs.scipy.org/doc/scipy/reference/integrate.html) for more details.
 
-## {index}`Linear Algebra <single: Linear Algebra>`
+## Linear Algebra
 
-```{index} single: SciPy; Linear Algebra
-```
 
 We saw that NumPy provides a module for linear algebra called `linalg`.
 
@@ -590,9 +568,9 @@ print(f"The Monte Carlo option price is {P:3f}")
 ```{exercise}
 :label: sp_ex1
 
-In {ref}`this lecture <functions>`, we discussed the concept of {ref}`recursive function calls <recursive_functions>`.
+In [this lecture](functions.md), we discussed the concept of {ref}`recursive function calls <recursive_functions>`.
 
-Try to write a recursive implementation of the homemade bisection function {ref}`described above <bisect_func>`.
+Try to write a recursive implementation of the homemade bisection function {ref}`described above <bisect_func-code>`.
 
 Test it on the function {eq}`root_f`.
 ```

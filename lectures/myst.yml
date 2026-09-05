@@ -1,0 +1,96 @@
+version: 1
+project:
+  title: Python Programming for Economics and Finance
+  authors:
+    - name: Thomas J. Sargent
+      affiliations:
+        - Professor of Economics, New York University.
+        - Senior Fellow, Hoover Institution, Stanford, CA.
+      url: http://www.tomsargent.com
+    - name: John Stachurski
+      affiliations:
+        - Professor, Research School of Economics, ANU.
+        - Instructor for Ph.D. Advanced Macroeconomics, University of Minnesota.
+      url: https://johnstachurski.net
+      email: john.stachurski@gmail.com
+  # The theme derives the notebook-launch repo from this (github + ".notebooks"),
+  # so it has to be the real repo name.
+  github: https://github.com/QuantEcon/lecture-python-programming
+  # Keep in sync with _toc.yml (the jupyter-book 1.x table of contents).
+  toc:
+    - file: intro.md
+    - title: Introduction to Python
+      children:
+        - file: about_py.md
+        - file: getting_started.md
+        - file: python_by_example.md
+        - file: functions.md
+        - file: python_essentials.md
+        - file: oop_intro.md
+        - file: names.md
+        - file: python_oop.md
+    - title: Foundations of Scientific Computing
+      children:
+        - file: need_for_speed.md
+        - file: numpy.md
+        - file: matplotlib.md
+        - file: scipy.md
+    - title: High Performance Computing
+      children:
+        - file: numba.md
+        - file: jax_intro.md
+        - file: numpy_vs_numba_vs_jax.md
+        - file: autodiff.md
+    - title: Working with Data
+      children:
+        - file: pandas.md
+        - file: pandas_panel.md
+        - file: polars.md
+    - title: More Python Programming
+      children:
+        - file: writing_good_code.md
+        - file: workspace.md
+        - file: python_advanced_features.md
+        - file: debugging.md
+        - file: sympy.md
+    - title: Other
+      children:
+        - file: troubleshooting.md
+        - file: status.md
+  references:
+    intermediate: https://python.quantecon.org/
+    pyprog: https://python-programming.quantecon.org/
+    intro: https://intro.quantecon.org/
+    dle: https://quantecon.github.io/lecture-dle/
+    dps: https://quantecon.github.io/lecture-dps/
+    eqm: https://quantecon.github.io/lecture-eqm/
+    stats: https://quantecon.github.io/lecture-stats/
+    tools: https://quantecon.github.io/lecture-tools-techniques/
+    dynam: https://quantecon.github.io/lecture-dynamics/
+  numbering:
+    titles: true
+    headings: true
+    heading_1: false
+    figure:
+      template: Fig. %s
+  settings:
+    output_stderr: remove
+    output_matplotlib_strings: remove
+  error_rules:
+    - rule: reference-syntax-valid
+      severity: ignore
+  # exports:
+  #   - id: book-pdf
+  #     format: typst
+  #     template: https://github.com/rowanc1/typst-book.git
+  #     output: exports/quantecon-lecture-python.pdf
+  # downloads:
+  #   - id: book-pdf
+  #     title: Book (PDF)
+site:
+  parts:
+    footer: footer.md
+  # Pinned theme release (see https://github.com/QuantEcon/quantecon-theme.mystmd/releases);
+  # bump the vX.Y.Z in this URL to take a new theme version. The old bundled
+  # QuantEcon/quantecon-theme repo is archived.
+  template: https://github.com/QuantEcon/quantecon-theme.mystmd/releases/download/v2.5.0/quantecon-theme.zip

@@ -1,4 +1,4 @@
-name: Build Project [using jupyter-book]
+name: Build Project [using QuantEcon/mystmd]
 on: [pull_request]
 jobs:
   preview:
@@ -9,22 +9,49 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v7
+
+      # The key hashes everything cached execution outputs depend on: the
+      # lectures themselves, the Python requirements, and this workflow file
+      # (which pins the mystmd engine SHA, the JAX version and the XLA env).
+      # Hashing only the lectures is how the b9cc649 engine swap shipped
+      # green without ever executing a notebook: the cache replayed outputs
+      # from the old engine. Any engine/env/requirements change now forces a
+      # cold build automatically.
+      - name: Cache Notebook Execution
+        uses: actions/cache@v6
+        id: cache-execution
         with:
-          fetch-depth: 0  # Fetch full git history for changelog feature
-      - name: Setup Anaconda
-        uses: conda-incubator/setup-miniconda@v4
+          path: ./lectures/_build/execute
+          key: ${{ runner.os }}-execute-cache-${{ hashFiles('lectures/**/*.md', 'myst_requirements.txt', '.github/workflows/ci.yml') }}
+
+      # Node 24 matches the theme's .nvmrc (quantecon-theme.mystmd), which runs
+      # as a Remix server during `myst build --html`.
+      - uses: actions/setup-node@v7
         with:
-          auto-update-conda: true
-          auto-activate-base: true
-          miniconda-version: 'latest'
-          python-version: "3.13"
-          environment-file: environment.yml
-          activate-environment: quantecon
-      - name: Check nvidia Drivers
-        shell: bash -l {0}
-        run: nvidia-smi
-      - name: Install JAX and Numpyro
-        shell: bash -l {0}
+          node-version: '24'
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install Python
+        if: steps.cache-execution.outputs.cache-hit != 'true'
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'myst_requirements.txt'
+
+      - name: Install execution requirements
+        if: steps.cache-execution.outputs.cache-hit != 'true'
+        run: python -m pip install -r myst_requirements.txt
+
+      # The GPU lectures (jax_intro, autodiff, numpy_vs_numba_vs_jax) need JAX
+      # on the g4dn runner. Without it those notebooks execute to
+      # ModuleNotFoundError cells. Pinned to the version validated on
+      # 2026-08-03; unpinned, the executed environment drifts between runs of
+      # the same commit. Bumping it here busts the execution cache (the key
+      # hashes this file), so the bump is validated by a cold build.
+      - name: Install JAX
+        if: steps.cache-execution.outputs.cache-hit != 'true'
         run: |
           # Pinned: jax 0.11.1 (2026-08-17) hangs numpy_vs_numba_vs_jax's
           # lax.fori_loop cells -- they jit with device=cpu, so the CPU-path
@@ -35,81 +62,97 @@ jobs:
           pip install "jax[cuda13]==0.11.0"
           pip install numpyro
           python scripts/test-jax-install.py
-      - name: Install latex dependencies
+
+      # Pinned to the exact SHA of the fork's main (unmoved since 2026-06-12,
+      # so this is the same engine the 2026-08-03 cold-run failures used).
+      # A branch name here makes the engine a moving target between runs of
+      # the same lecture commit, which makes failures impossible to bisect.
+      - name: Install mystmd (QuantEcon fork)
         run: |
-          sudo apt-get -qq update
-          sudo apt-get install -y     \
-            texlive-latex-recommended \
-            texlive-latex-extra       \
-            texlive-fonts-recommended \
-            texlive-fonts-extra       \
-            texlive-xetex             \
-            latexmk                   \
-            xindy                     \
-            dvipng                    \
-            cm-super
-      - name: Display Conda Environment Versions
-        shell: bash -l {0}
-        run: conda list
-      - name: Display Pip Versions
-        shell: bash -l {0}
-        run: pip list
-      - name: Download "build" folder (cache)
-        uses: dawidd6/action-download-artifact@v23
-        with:
-          workflow: cache.yml
-          branch: main
-          name: build-cache
-          path: _build
-      # Prune the restored _build/html so files deleted from source stop being
-      # published: sphinx copies html_static_path in but never removes stale
-      # assets. `jb clean . --html` removes exactly _build/html, leaving
-      # .jupyter_cache (the expensive execution cache), _build/latex and
-      # _build/jupyter untouched. Must run BEFORE the PDF/notebook steps below,
-      # which stage output INTO _build/html.
-      - name: Prune restored HTML (drop stale assets deleted from source)
-        shell: bash -l {0}
-        run: jb clean . --html
-      # Build Assets (Download Notebooks and PDF via LaTeX)
-      - name: Build Download Notebooks (sphinx-tojupyter)
-        shell: bash -l {0}
+          mkdir -p /tmp/qe-mystmd
+          cd /tmp/qe-mystmd
+          git init -q
+          git remote add origin https://github.com/QuantEcon/mystmd.git
+          git fetch -q --depth 1 origin 96ee78f550ff2e0410730f328352e98d3e29d338
+          git checkout -q FETCH_HEAD
+          git rev-parse HEAD
+          bun install
+          bun run build
+          npm install -g /tmp/qe-mystmd/packages/mystmd
+
+      - name: Log QuantEcon/mystmd build identifier
+        run: cat /tmp/qe-mystmd/quantecon/VERSION.yml
+
+      - name: Verify mystmd version
+        run: myst --version
+
+      # Standing telemetry: sample host RAM, top-RSS processes and GPU memory
+      # every 5s for the rest of the job. The nohup'd loop survives step
+      # boundaries; the runner reaps it at job end. Read back in the always()
+      # step after the build. This is what diagnosed the 2026-08-03 jax_intro
+      # kernel death (GPU preallocation race — see the Build HTML env below);
+      # it costs nothing, so it stays for the next one.
+      - name: Start memory monitor
         run: |
-          # This is the FIRST `jb build` in the workflow, and `execute_notebooks: "cache"`
-          # means only the first build actually executes notebooks — the later HTML build
-          # reads the cache. So this is the step where a CellExecutionError surfaces, and
-          # therefore the step that has to gate.
-          #
-          # `set -eo pipefail` is required as well as `-W`: `shell: bash -l {0}` is a
-          # custom shell spec, so GitHub does not inject `-eo pipefail` (it only does
-          # that for the bare `shell: bash` shorthand). Without it a failing `jb build`
-          # would be masked by the trailing mkdir/cp, whose exit code becomes the
-          # step's — and `--keep-going` guarantees the .ipynb files exist for `cp`
-          # to succeed on.
-          set -eo pipefail
-          jb build lectures --path-output ./ --builder=custom --custom-builder=jupyter -n -W --keep-going
-          mkdir -p _build/html/_notebooks
-          cp -u _build/jupyter/*.ipynb _build/html/_notebooks
-      - name: Build PDF from LaTeX
-        shell: bash -l {0}
-        run: |
-          jb build lectures --builder pdflatex --path-output ./ -n -W --keep-going
-          mkdir _build/html/_pdf
-          cp -u _build/latex/*.pdf _build/html/_pdf
-      # Final Build of HTML
+          nohup bash -c 'while true; do
+            echo "=== $(date -u +%H:%M:%S)"
+            free -m | sed -n "2,3p"
+            ps -eo pid,rss,etime,comm --sort=-rss | head -8
+            nvidia-smi --query-gpu=memory.used,memory.total --format=csv,noheader 2>/dev/null
+            sleep 5
+          done' >/tmp/memmon.log 2>&1 &
+          echo "monitor started"
+
+      # Built with the fork's `myst` CLI rather than `jupyter book build`.
+      # jupyter-book 2.x is a Python shim that execs a mystmd bundle vendored
+      # inside its own wheel (jupyter_book/dist/jupyter-book.cjs) and offers
+      # no supported way to point it at another CLI — so `jupyter book build`
+      # silently ignored the fork we install above and built with upstream
+      # mystmd (visible as 23 `unknown export output extension: *.ipynb`
+      # errors, since ipynb export is a fork-only capability).
       - name: Build HTML
-        shell: bash -l {0}
+        working-directory: ./lectures
+        env:
+          # Three JAX lectures (jax_intro, autodiff, numpy_vs_numba_vs_jax)
+          # execute concurrently on the g4dn's single T4. By default the first
+          # JAX process to touch the GPU preallocates 75% of it (11.3GiB of
+          # 15.3GiB); the 2026-08-03 diagnostics showed jax_intro's kernel then
+          # clamped to the ~3.4GiB remainder and aborted with no Python
+          # traceback once a later cell outgrew that pool (dmesg had no
+          # OOM-killer or segfault records — an XLA fatal, not a host kill).
+          # On-demand allocation lets the concurrent kernels share the GPU.
+          XLA_PYTHON_CLIENT_PREALLOCATE: 'false'
+        run: myst build --html --execute
+
+      # Reads the telemetry back. dmesg covers the whole job because runs-on
+      # boots a fresh instance per run — an OOM-killed process appears there
+      # with its RSS, so this cleanly separates host OOM kills from in-process
+      # aborts (the 2026-08-03 death was the latter: dmesg was clean while the
+      # GPU sampler showed the preallocation collision). Start from this
+      # output for any future kernel death.
+      - name: Execution diagnostics
+        if: always()
         run: |
-          jb build lectures --path-output ./ -n -W --keep-going
-      - name: Upload Execution Reports
+          echo "::group::memory timeline (5s samples)"
+          cat /tmp/memmon.log || true
+          echo "::endgroup::"
+          echo "::group::kernel log (OOM killer / segfaults)"
+          (sudo dmesg -T || dmesg -T) 2>/dev/null | grep -iE "out of memory|oom|killed process|segfault" || echo "no OOM/segfault records"
+          echo "::endgroup::"
+          echo "::group::final state"
+          free -m
+          nvidia-smi 2>/dev/null || true
+          echo "::endgroup::"
+
+      - name: Upload build output
         uses: actions/upload-artifact@v7
-        if: failure()
         with:
-          name: execution-reports
-          path: _build/html/reports
+          path: './lectures/_build/html'
+
       - name: Preview Deploy to Netlify
         uses: nwtgck/actions-netlify@v4
         with:
-          publish-dir: '_build/html/'
+          publish-dir: './lectures/_build/html'
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Preview Deploy from GitHub Actions"

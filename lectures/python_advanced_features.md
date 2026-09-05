@@ -7,16 +7,17 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+exports:
+  - format: ipynb
+    markdown: commonmark
+    images: attachment
+    output: exports/python_advanced_features.ipynb
+downloads:
+  - file: ./python_advanced_features.md
+    title: Markdown (md)
+  - file: exports/python_advanced_features.ipynb
+    title: IPython (.ipynb)
 ---
-
-(python_advanced_features)=
-```{raw} jupyter
-<div id="qe-notebook-header" align="right" style="text-align:right;">
-        <a href="https://quantecon.org/" title="quantecon.org">
-                <img style="width:250px;display:inline;" width="250px" src="https://assets.quantecon.org/img/qe-menubar-logo.svg" alt="QuantEcon">
-        </a>
-</div>
-```
 
 # More Language Features
 
@@ -33,8 +34,6 @@ A variety of topics are treated in the lecture, including iterators, type hints,
 
 ## Iterables and iterators
 
-```{index} single: Python; Iteration
-```
 
 We've {ref}`already said something <iterating_version_1>` about iterating in Python.
 
@@ -43,8 +42,6 @@ Now let's look more closely at how it all works, focusing in Python's implementa
 (iterators)=
 ### Iterators
 
-```{index} single: Python; Iterators
-```
 
 Iterators are a uniform interface to stepping through elements in a collection.
 
@@ -54,7 +51,7 @@ Formally, an *iterator* is an object with a `__next__` method.
 
 For example, file objects are iterators .
 
-To see this, let's have another look at the {ref}`US cities data <us_cities_data>`,
+To see this, let's have another look at the {ref}`US cities data <us_cities_data-code>`,
 which is written to the present working directory in the following cell
 
 ```{code-cell} ipython
@@ -132,8 +129,6 @@ next(nikkei_data)
 
 ### Iterators in for loops
 
-```{index} single: Python; Iterators
-```
 
 All iterators can be placed to the right of the `in` keyword in `for` loop statements.
 
@@ -171,8 +166,6 @@ This continues until a `StopIteration` error occurs.
 
 ### Iterables
 
-```{index} single: Python; Iterables
-```
 
 You already know that we can put a Python list to the right of `in` in a `for` loop
 
@@ -191,9 +184,8 @@ type(x)
 ```
 
 ```{code-cell} python3
----
-tags: [raises-exception]
----
+:tags: raises-exception
+
 next(x)
 ```
 
@@ -224,9 +216,8 @@ next(y)
 ```
 
 ```{code-cell} python3
----
-tags: [raises-exception]
----
+:tags: raises-exception
+
 next(y)
 ```
 
@@ -235,9 +226,8 @@ Many other objects are iterable, such as dictionaries and tuples.
 Of course, not all objects are iterable
 
 ```{code-cell} python3
----
-tags: [raises-exception]
----
+:tags: raises-exception
+
 iter(42)
 ```
 
@@ -247,9 +237,6 @@ To conclude our discussion of `for` loops
 * In the second case, the iterable is converted into an iterator before the loop starts.
 
 ### Iterators and built-ins
-
-```{index} single: Python; Iterators
-```
 
 Some built-in functions that act on sequences also work with iterables
 
@@ -280,9 +267,8 @@ max(y)
 ```
 
 ```{code-cell} python3
----
-tags: [raises-exception]
----
+:tags: raises-exception
+
 max(y)
 ```
 
@@ -563,12 +549,6 @@ For now, the main benefit of type hints in day-to-day Python is *clarity and too
 
 ## Decorators and descriptors
 
-```{index} single: Python; Decorators
-```
-
-```{index} single: Python; Descriptors
-```
-
 Let's look at some special syntax elements that are routinely used by Python developers.
 
 You might not need the following concepts immediately, but you will see them
@@ -578,8 +558,6 @@ Hence you need to understand them at some stage of your Python education.
 
 ### Decorators
 
-```{index} single: Python; Decorators
-```
 
 Decorators are a bit of syntactic sugar that, while easily avoided, have turned out to be popular.
 
@@ -680,8 +658,6 @@ At the same time, the test logic is written only once.
 
 #### Enter decorators
 
-```{index} single: Python; Decorators
-```
 
 The last version of our code is still not ideal.
 
@@ -736,8 +712,6 @@ In the opinion of many people, this makes the decorator syntax a significant imp
 (descriptors)=
 ### Descriptors
 
-```{index} single: Python; Descriptors
-```
 
 Descriptors solve a common problem regarding management of variables.
 
@@ -850,11 +824,6 @@ method is triggered --- in this case `set_miles`.
 
 #### Decorators and properties
 
-```{index} single: Python; Decorators
-```
-
-```{index} single: Python; Properties
-```
 
 These days its very common to see the `property` function used via a decorator.
 
@@ -893,9 +862,6 @@ For further information you can refer to the [descriptor documentation](https://
 
 (paf_generators)=
 ## Generators
-
-```{index} single: Python; Generators
-```
 
 A generator is a kind of iterator (i.e., it works with a `next` function).
 
@@ -959,8 +925,6 @@ sum(x * x for x in range(10))
 
 ### Generator functions
 
-```{index} single: Python; Generator Functions
-```
 
 The most flexible way to create generator objects is to use generator functions.
 
@@ -1003,9 +967,8 @@ next(gen)
 ```
 
 ```{code-cell} python3
----
-tags: [raises-exception]
----
+:tags: raises-exception
+
 next(gen)
 ```
 
@@ -1068,9 +1031,8 @@ next(gen)
 ```
 
 ```{code-cell} python3
----
-tags: [raises-exception]
----
+:tags: raises-exception
+
 next(gen)
 ```
 
@@ -1126,9 +1088,8 @@ This uses lots of memory and is very slow.
 If we make `n` even bigger then this happens
 
 ```{code-cell} python3
----
-tags: [raises-exception]
----
+:tags: raises-exception
+
 n = 100000000
 draws = [random.uniform(0, 1) < 0.5 for i in range(n)]
 ```

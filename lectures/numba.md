@@ -9,16 +9,17 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+exports:
+  - format: ipynb
+    markdown: commonmark
+    images: attachment
+    output: exports/numba.ipynb
+downloads:
+  - file: ./numba.md
+    title: Markdown (md)
+  - file: exports/numba.ipynb
+    title: IPython (.ipynb)
 ---
-
-(numba_lecture)=
-```{raw} jupyter
-<div id="qe-notebook-header" align="right" style="text-align:right;">
-        <a href="https://quantecon.org/" title="quantecon.org">
-                <img style="width:250px;display:inline;" width="250px" src="https://assets.quantecon.org/img/qe-menubar-logo.svg" alt="QuantEcon">
-        </a>
-</div>
-```
 
 # Numba
 
@@ -31,7 +32,7 @@ In addition to what's in Anaconda, this lecture will need the following librarie
 ```
 
 Please also make sure that you have the latest version of Anaconda, since old
-versions are a {doc}`common source of errors <troubleshooting>`.
+versions are a [common source of errors](troubleshooting.md).
 
 Let's start with some imports:
 
@@ -77,10 +78,8 @@ good at what it does.
 
 
 (numba_link)=
-## {index}`Compiling Functions <single: Compiling Functions>`
+## Compiling Functions
 
-```{index} single: Python; Numba
-```
 
 
 (quad_map_eg)=
@@ -187,7 +186,7 @@ by the [LLVM Project](https://llvm.org/).
 
 It does this by inferring type information on the fly.
 
-(See our {doc}`earlier lecture <need_for_speed>` on scientific computing for a discussion of types.)
+(See our [earlier lecture](need_for_speed.md) on scientific computing for a discussion of types.)
 
 The basic idea is this:
 
@@ -572,8 +571,7 @@ Suppose that the volatility of returns on an asset can be in one of two regimes 
 
 The transition probabilities across states are as follows
 
-```{image} /_static/lecture_specific/sci_libs/nfs_ex1.png
-:align: center
+```{figure} /_static/lecture_specific/sci_libs/nfs_ex1.png
 ```
 
 For example, let the period length be one day, and suppose the current state is high.
