@@ -63,17 +63,21 @@ jobs:
           pip install numpyro
           python scripts/test-jax-install.py
 
-      # Pinned to the exact SHA of the fork's main (unmoved since 2026-06-12,
-      # so this is the same engine the 2026-08-03 cold-run failures used).
-      # A branch name here makes the engine a moving target between runs of
-      # the same lecture commit, which makes failures impossible to bisect.
+      # Pinned to an exact SHA rather than a branch: a branch name makes the
+      # engine a moving target between runs of the same lecture commit, which
+      # makes failures impossible to bisect. Bumping it is deliberate.
+      #
+      # This SHA is the fork's main as of 2026-09-10, `qe-v10`. It replaced
+      # 96ee78f5 (2026-06-12, `qe-v8`), which had fallen 40 commits behind, so
+      # the HTML build was running a materially older engine than
+      # build-ipynb.yml -- that workflow clones `main` and so tracks latest.
       - name: Install mystmd (QuantEcon fork)
         run: |
           mkdir -p /tmp/qe-mystmd
           cd /tmp/qe-mystmd
           git init -q
           git remote add origin https://github.com/QuantEcon/mystmd.git
-          git fetch -q --depth 1 origin 96ee78f550ff2e0410730f328352e98d3e29d338
+          git fetch -q --depth 1 origin c1f274b8a27e150474bf2b70bd120627e1bb31ba
           git checkout -q FETCH_HEAD
           git rev-parse HEAD
           bun install
