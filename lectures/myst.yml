@@ -13,8 +13,9 @@ project:
         - Instructor for Ph.D. Advanced Macroeconomics, University of Minnesota.
       url: https://johnstachurski.net
       email: john.stachurski@gmail.com
-  # The theme derives the notebook-launch repo from this (github + ".notebooks"),
-  # so it has to be the real repo name.
+  # Commit and "edit this page" links target this repo. The notebook-launch
+  # repository is no longer derived from it: from theme v3.0.0 it is named
+  # explicitly by `launch_notebook_repo` under `site.options`.
   github: https://github.com/QuantEcon/lecture-python-programming
   # Keep in sync with _toc.yml (the jupyter-book 1.x table of contents).
   toc:
@@ -88,9 +89,23 @@ project:
   #   - id: book-pdf
   #     title: Book (PDF)
 site:
-  parts:
-    footer: footer.md
+  # No `parts.footer`: from theme v3.0.0 the licence notice and the QuantEcon
+  # credit are rendered by default, and declaring a footer part replaces that
+  # whole block. Only a site under other terms supplies one.
+  #
   # Pinned theme release (see https://github.com/QuantEcon/quantecon-theme.mystmd/releases);
   # bump the vX.Y.Z in this URL to take a new theme version. The old bundled
   # QuantEcon/quantecon-theme repo is archived.
-  template: https://github.com/QuantEcon/quantecon-theme.mystmd/releases/download/v2.7.0/quantecon-theme.zip
+  template: https://github.com/QuantEcon/quantecon-theme.mystmd/releases/download/v3.0.0/quantecon-theme.zip
+  options:
+    # The site's public URL, which the theme needs for the canonical link,
+    # og:url and an absolute og:image. Carried over from the Sphinx build's
+    # `html.baseurl`.
+    site_url: https://python-programming.quantecon.org/
+    # Launch is opt-in from theme v3.0.0: the notebook repository is named
+    # here rather than derived from `project.github`. These two carry over
+    # from the Sphinx build's `nb_repository_url` and `path_to_docs`; the
+    # branch defaults to `main`, so it is left unset.
+    launch_notebook_repo: QuantEcon/lecture-python-programming.notebooks
+    launch_notebook_source_dir: lectures
+    launch_colab: true
