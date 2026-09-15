@@ -9,6 +9,16 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+exports:
+  - format: ipynb
+    markdown: commonmark
+    images: attachment
+    output: exports/jax_intro.ipynb
+downloads:
+  - file: ./jax_intro.md
+    title: Markdown (md)
+  - file: exports/jax_intro.ipynb
+    title: IPython (.ipynb)
 ---
 
 # JAX
@@ -909,8 +919,7 @@ autodiff <autodiff>`.
 :label: jax_intro_ex2
 ```
 
-In the Exercise section of {doc}`our lecture on Numba <numba>`, we {ref}`used Monte
-Carlo to price a European call option <numba_ex4>`.
+In the Exercise section of {doc}`our lecture on Numba <numba>`, we {ref}`used Monte Carlo to price a European call option <numba_ex4>`.
 
 The code was accelerated by Numba-based multithreading.
 

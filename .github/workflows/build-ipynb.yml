@@ -1,0 +1,94 @@
+name: Build ipynb [using QuantEcon/mystmd]
+on:
+  push:
+    branches: [jb2]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build-ipynb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Node 24 matches the theme's .nvmrc (quantecon-theme.mystmd), which runs
+      # as a Remix server during `myst build --html`.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'myst_requirements.txt'
+
+      - name: Install execution requirements
+        run: python -m pip install -r myst_requirements.txt
+
+      - name: Install mystmd (QuantEcon fork)
+        run: |
+          git clone --branch main --depth 1 \
+            https://github.com/QuantEcon/mystmd.git /tmp/qe-mystmd
+          cd /tmp/qe-mystmd
+          bun install
+          bun run build
+          npm install -g /tmp/qe-mystmd/packages/mystmd
+
+      - name: Log QuantEcon/mystmd build identifier
+        run: cat /tmp/qe-mystmd/quantecon/VERSION.yml
+
+      - name: Verify mystmd version
+        run: myst --version
+
+      - name: Build HTML with custom mystmd
+        working-directory: ./lectures
+        run: myst build --html
+
+      - name: Build ipynb exports with custom mystmd
+        working-directory: ./lectures
+        run: myst build --ipynb
+
+      - name: Audit notebooks for MyST syntax leaks
+        working-directory: ./lectures
+        run: |
+          python3 -c "
+          import json, glob, re, sys
+          PATTERNS = [
+              (r'^\s*:::', 'directive fence'),
+              (r'\{math\}\`', 'math role'),
+              (r'^\+\+\+', 'block marker'),
+              (r'\{doc\}\`', 'doc role'),
+              (r'\{index\}', 'index directive'),
+              (r'\`\`\`\{', 'fenced directive'),
+              (r'^\([a-z_][a-z0-9_-]*\)=\$', 'target label'),
+          ]
+          issues = 0
+          for nb_path in sorted(glob.glob('exports/*.ipynb')):
+              with open(nb_path) as f:
+                  nb = json.load(f)
+              for i, cell in enumerate(nb.get('cells', []), 1):
+                  if cell.get('cell_type') != 'markdown':
+                      continue
+                  source = ''.join(cell.get('source', []))
+                  for line in source.split('\n'):
+                      for pat, desc in PATTERNS:
+                          if re.search(pat, line.strip()):
+                              print(f'{nb_path} cell {i}: [{desc}] {line.strip()[:80]}')
+                              issues += 1
+          if issues:
+              print(f'\n{issues} MyST syntax leaks found!')
+              sys.exit(1)
+          else:
+              print(f'All {len(glob.glob(\"exports/*.ipynb\"))} notebooks clean.')
+          "
+
+      - name: Upload ipynb exports
+        uses: actions/upload-artifact@v7
+        with:
+          name: ipynb-exports
+          path: './lectures/exports/'
+
+
