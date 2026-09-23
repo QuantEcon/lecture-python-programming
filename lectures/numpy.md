@@ -434,9 +434,6 @@ In particular, `A * B` is *not* the matrix product, it is an element-wise produc
 ```{index} single: NumPy; Matrix Multiplication
 ```
 
-```{index} single: NumPy; Matrix Multiplication
-```
-
 We use the `@` symbol for matrix multiplication, as follows:
 
 ```{code-cell} python3
