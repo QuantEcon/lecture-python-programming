@@ -155,7 +155,7 @@ Before we do so, in order to indicate some of the power of Classes, we'll define
 
 ```{code-cell} python3
 def earn(w,y):
-    "Consumer with inital wealth w earns y"
+    "Consumer with initial wealth w earns y"
     return w+y
 
 def spend(w,x):
@@ -186,7 +186,7 @@ print("w0,w1,w2,w3,w4 = ", w0,w1,w2,w3,w4)
 
 A *Class* bundles a set of data tied to a particular *instance* together with a collection of functions that operate on the data.
 
-In our example, an *instance* will be the name of  particular *person* whose *instance data* consist solely of its wealth.
+In our example, an *instance* will be the name of a particular *person* whose *instance data* consist solely of its wealth.
 
 (In other examples *instance data* will consist of a vector of data.)
 
@@ -206,7 +206,7 @@ We'll build a `Consumer` class with
 
 Admittedly a little contrived, this example of a class helps us internalize some peculiar syntax.
 
-Here how we set up our Consumer class.
+Here's how we set up our Consumer class.
 
 ```{code-cell} python3
 class Consumer:
@@ -223,7 +223,7 @@ class Consumer:
         "The consumer spends x dollars if feasible"
         new_wealth = self.wealth - x
         if new_wealth < 0:
-            print("Insufficent funds")
+            print("Insufficient funds")
         else:
             self.wealth = new_wealth
 ```
@@ -240,7 +240,7 @@ The `earn` and `spend` methods deploy the functions we described earlier and tha
 
 The `__init__` method is a *constructor method*.
 
-Whenever we create an instance of the class, the `__init_` method will be called automatically.
+Whenever we create an instance of the class, the `__init__` method will be called automatically.
 
 Calling `__init__` sets up a "namespace" to hold the instance data --- more on this soon.
 
