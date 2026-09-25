@@ -25,7 +25,7 @@ kernelspec:
 
 ## Overview
 
-Functions are an extremely useful construct provided by almost all programming.
+Functions are an extremely useful construct provided by almost all programming languages.
 
 We have already met several functions, such as
 
@@ -35,7 +35,7 @@ We have already met several functions, such as
 In this lecture we'll 
 
 1. treat functions systematically and cover syntax and use-cases, and
-2. learn to do is build our own user-defined functions.
+2. learn how to build our own user-defined functions.
 
 We will use the following imports.
 
@@ -360,7 +360,7 @@ Notes
 
 Now, there are several ways that we can simplify the code above.
 
-For example, we can get rid of the conditionals all together by just passing the desired generator type as a function, method, or other [callable](https://typing.python.org/en/latest/spec/callables.html) object.
+For example, we can get rid of the conditionals altogether by just passing the desired generator type as a function, method, or other [callable](https://typing.python.org/en/latest/spec/callables.html) object.
 
 To understand this, consider the following version.
 
@@ -417,7 +417,7 @@ your programming career.
 
 Basically, a recursive function is a function that calls itself.
 
-For example, consider the problem of computing $x_t$ for some t when
+For example, consider the problem of computing $x_t$ for some $t$ when
 
 ```{math}
 :label: xseqdoub
@@ -669,7 +669,7 @@ print([x(i) for i in range(10)])
 :label: func_ex5
 ```
 
-Rewrite the function `factorial()` in from [Exercise 1](factorial_exercise) using recursion.
+Rewrite the function `factorial()` from [Exercise 1](factorial_exercise) using recursion.
 
 ```{exercise-end}
 ```
