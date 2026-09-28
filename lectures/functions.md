@@ -669,7 +669,7 @@ print([x(i) for i in range(10)])
 :label: func_ex5
 ```
 
-Rewrite the function `factorial()` in from [Exercise 1](factorial_exercise) using recursion.
+Rewrite the function `factorial()` from [Exercise 1](factorial_exercise) using recursion.
 
 ```{exercise-end}
 ```
