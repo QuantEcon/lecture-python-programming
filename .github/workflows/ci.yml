@@ -114,6 +114,27 @@ jobs:
       # silently ignored the fork we install above and built with upstream
       # mystmd (visible as 23 `unknown export output extension: *.ipynb`
       # errors, since ipynb export is a fork-only capability).
+      # Build the theme from per-page-thebe (adds enable_thebe/disable_thebe/
+      # default_thebe support). Remove this step once the feature ships in a
+      # tagged release and the template URL below is bumped to that release.
+      - name: Build theme (per-page-thebe)
+        run: |
+          git clone --depth 1 --branch per-page-thebe \
+            https://github.com/QuantEcon/quantecon-theme.mystmd.git /tmp/qe-theme
+          cd /tmp/qe-theme && npm ci && make build-theme
+          # Patch myst.yml to use the local build instead of the release zip.
+          python -c "
+          import re
+          path = 'lectures/myst.yml'
+          txt = open(path).read()
+          txt = re.sub(
+              r'template: https://github\.com/QuantEcon/quantecon-theme\.mystmd/releases/download/[^\n]+',
+              'template: /tmp/qe-theme/.deploy/quantecon-theme',
+              txt
+          )
+          open(path, 'w').write(txt)
+          "
+
       - name: Build HTML
         working-directory: ./lectures
         env:

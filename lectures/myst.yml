@@ -80,6 +80,8 @@ project:
   error_rules:
     - rule: reference-syntax-valid
       severity: ignore
+  jupyter:
+    lite: true
   # exports:
   #   - id: book-pdf
   #     format: typst
@@ -109,3 +111,6 @@ site:
     launch_notebook_repo: QuantEcon/lecture-python-programming.notebooks
     launch_notebook_source_dir: lectures
     launch_colab: true
+    # Opt-in mode: Power toggle is hidden site-wide; only pages that set
+    # `site: enable_thebe: true` in their frontmatter show it.
+    default_thebe: false
