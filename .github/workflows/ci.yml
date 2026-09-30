@@ -124,8 +124,8 @@ jobs:
           cd /tmp/qe-theme && npm ci && make build-theme
           # Patch myst.yml to use the local build instead of the release zip.
           python -c "
-          import re
-          path = 'lectures/myst.yml'
+          import re, os
+          path = os.path.join(os.environ['GITHUB_WORKSPACE'], 'lectures/myst.yml')
           txt = open(path).read()
           txt = re.sub(
               r'template: https://github\.com/QuantEcon/quantecon-theme\.mystmd/releases/download/[^\n]+',
