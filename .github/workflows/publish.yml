@@ -119,7 +119,7 @@ jobs:
       # Deploy to GitHub Pages + publish release assets (html archive, checksum, manifest)
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: quantecon/actions/publish-gh-pages@v0.11.1
+        uses: quantecon/actions/publish-gh-pages@v0.12.0
         with:
           build-dir: _build/html
           cname: python-programming.quantecon.org
