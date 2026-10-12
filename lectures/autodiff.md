@@ -19,8 +19,8 @@ kernelspec:
 
 ## Overview
 
-This lecture gives a more thorough introduction to automatic differentiation
-using Google JAX, building on {doc}`our brief preview <jax_intro>`.
+This lecture gives an introduction to automatic differentiation using Google
+JAX.
 
 Automatic differentiation is one of the key elements of modern machine learning
 and artificial intelligence.
