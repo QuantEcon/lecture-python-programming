@@ -30,7 +30,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v4
         with:
           auto-update-conda: true
-          auto-activate-base: true
+          auto-activate: true
           miniconda-version: 'latest'
           python-version: "3.13"
           environment-file: environment.yml
