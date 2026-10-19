@@ -310,7 +310,7 @@ Recall that Python maintains a concept of the present working directory (pwd) th
 
 If a path is not specified, then this is where Python writes to.
 
-We can also use Python to read the contents of `newline.txt` as follows
+We can also use Python to read the contents of `newfile.txt` as follows
 
 ```{code-cell} python3
 f = open('newfile.txt', 'r')
