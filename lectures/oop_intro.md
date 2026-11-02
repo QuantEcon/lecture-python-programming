@@ -192,7 +192,7 @@ When Python creates this integer object, it stores with it various auxiliary inf
 
 Any name following a dot is called an *attribute* of the object to the left of the dot.
 
-* e.g.,``imag`` and `__class__` are attributes of `x`.
+* e.g., `imag` and `__class__` are attributes of `x`.
 
 We see from this example that objects have attributes that contain auxiliary information.
 
@@ -299,7 +299,7 @@ The answer is related to the fact that Python aims for readability and consisten
 In Python, it is common for users to build custom objects --- we discuss how to
 do this {doc}`later <python_oop>`.
 
-It's quite common for users to add methods to their that measure the length of
+It's quite common for users to add methods to their objects that measure the length of
 the object, suitably defined.
 
 When naming such a method, natural choices are `len()` and `length()`.
@@ -343,7 +343,7 @@ This includes not just lists, strings, etc., but also less obvious things, such 
 * files opened for reading or writing
 * integers, etc.
 
-Remember that everything is an object will help you interact with your programs
+Remembering that everything is an object will help you interact with your programs
 and write clear Pythonic code.
 
 ## Exercises
