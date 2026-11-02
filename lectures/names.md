@@ -226,7 +226,7 @@ To check this, we can look at the current module name via the value of `__name__
 print(__name__)
 ```
 
-When we run a script using IPython's `run` command, the contents of the file are executed as part of `__main__` too.
+When we run a script using IPython's `%run` command, the contents of the file are executed as part of `__main__` too.
 
 To see this, let's create a file `mod.py` that prints its own `__name__` attribute
 
@@ -333,7 +333,7 @@ We have been using various built-in functions, such as `max(), dir(), str(), lis
 
 How does access to these names work?
 
-* These definitions are stored in a module called `__builtin__`.
+* These definitions are provided by the `builtins` module.
 * They have their own namespace called `__builtins__`.
 
 ```{code-cell} python3
