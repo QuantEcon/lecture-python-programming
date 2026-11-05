@@ -17,6 +17,8 @@ downloads:
     title: Markdown (md)
   - file: exports/matplotlib.ipynb
     title: IPython (.ipynb)
+site:
+  enable_thebe: true
 ---
 
 # Matplotlib

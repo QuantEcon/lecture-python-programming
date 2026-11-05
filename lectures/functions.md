@@ -17,6 +17,8 @@ downloads:
     title: Markdown (md)
   - file: exports/functions.ipynb
     title: IPython (.ipynb)
+site:
+  enable_thebe: true
 ---
 
 # Functions
