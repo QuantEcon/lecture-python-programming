@@ -79,7 +79,7 @@ sphinx:
     mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
     rediraffe_redirects:
       index_toc.md: intro.md
-    tojupyter_static_file_path: ["source/_static", "_static"]
+    tojupyter_static_file_path: ["_static"]
     tojupyter_target_html: true
     tojupyter_urlpath: "https://python-programming.quantecon.org/"
     tojupyter_image_urlpath: "https://python-programming.quantecon.org/_static/"
