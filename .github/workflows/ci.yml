@@ -100,12 +100,19 @@ jobs:
         shell: bash -l {0}
         run: |
           jb build lectures --path-output ./ -n -W --keep-going
+      # Notebooks execute in whichever `jb build` runs them first, and each build
+      # writes its execution reports under its own output directory. Since the
+      # tojupyter build gates (see above), a CellExecutionError stops the job there
+      # and its traceback is only in _build/jupyter/reports, so upload all three.
       - name: Upload Execution Reports
         uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: execution-reports
-          path: _build/html/reports
+          path: |
+            _build/jupyter/reports
+            _build/latex/reports
+            _build/html/reports
       - name: Preview Deploy to Netlify
         uses: nwtgck/actions-netlify@v4
         with:
