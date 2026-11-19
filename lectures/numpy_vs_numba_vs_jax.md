@@ -45,7 +45,7 @@ In addition to what's in Anaconda, this lecture will need the following librarie
 ---
 tags: [hide-output]
 ---
-!pip install quantecon "jax==0.11.0"
+!pip install quantecon "jax==0.12.1"
 ```
 
 ```{include} _admonition/gpu.md
